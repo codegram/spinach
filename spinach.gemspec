@@ -9,6 +9,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "http://github.com/codegram/spinach"
 
   gem.add_runtime_dependency 'gherkin'
+  gem.add_runtime_dependency 'minitest'
   gem.add_development_dependency 'purdytest'
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
