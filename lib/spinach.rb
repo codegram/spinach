@@ -17,7 +17,7 @@ module Spinach
 
   def self.find_feature(name)
     @@features.detect do |feature|
-      feature.feature_name == name
+      feature.feature_name.to_s == name.to_s
     end
   end
 end

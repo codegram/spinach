@@ -1,14 +1,25 @@
 module Spinach
   class Runner
-    def run(data)
-      klass = Spinach.find_feature(data['name'])
+    def initialize(data)
+      @feature_name = data['name']
+      @scenarios = data['elements']
+    end
 
+    def feature
+      @feature ||= Spinach.find_feature(@feature_name)
+    end
+
+    def scenarios
+      @scenarios
+    end
+
+    def run
       step_count = 0
       reports = []
 
-      data['elements'].each do |element|
-        instance = klass.new
-        element['steps'].each do |step|
+      scenarios.each do |scenario|
+        instance = feature.new
+        scenario['steps'].each do |step|
           begin
             instance.send(step['name'])
             print "\e[32m."
