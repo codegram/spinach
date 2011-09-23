@@ -11,6 +11,10 @@ module Spinach
     @@features
   end
 
+  def self.reset_features
+    @@features = []
+  end
+
   def self.find_feature(name)
     @@features.detect do |feature|
       feature.feature_name == name
