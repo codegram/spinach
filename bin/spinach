@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+begin
+  require 'spinach'
+rescue LoadError
+  require_relative '../lib/spinach'
+end
+
+ARGV.each do |file|
+  parsed = Spinach::Parser.new(file).parse
+  Spinach::Runner.new.run(parsed)
+end
