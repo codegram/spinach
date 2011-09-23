@@ -10,7 +10,14 @@ class UserLogsIn < Spinach::Feature
   end
 
   Then 'I should be logged in' do
-    @a.must_equal 'heyo'
+    user.must_equal 'heyo'
   end
+
+  private
+
+  def user
+    @user ||= User.make
+  end
+
 end
 
