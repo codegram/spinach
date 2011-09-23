@@ -1,9 +1,19 @@
-require "spinach/version"
-require 'spinach/runner'
-require 'spinach/parser'
-require 'spinach/dsl'
-require 'spinach/feature'
+require_relative 'spinach/version'
+require_relative 'spinach/runner'
+require_relative 'spinach/parser'
+require_relative 'spinach/dsl'
+require_relative 'spinach/feature'
 
 module Spinach
-  # Your code goes here...
+  @@features = []
+
+  def self.features
+    @@features
+  end
+
+  def self.find_feature(name)
+    @@features.detect do |feature|
+      feature.feature_name == name
+    end
+  end
 end

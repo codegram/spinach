@@ -4,6 +4,7 @@ begin
   require 'spinach'
 rescue LoadError
   require_relative '../lib/spinach'
+  require_relative '../examples/steps/user_logs_in.rb'
 end
 
 ARGV.each do |file|

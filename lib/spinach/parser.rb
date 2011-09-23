@@ -12,7 +12,7 @@ module Spinach
 
     def parse
       @parser.parse(@file, @filename, __LINE__-1)
-      formatter.gherkin_object
+      @formatter.gherkin_object
     end
   end
 end
