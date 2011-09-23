@@ -7,11 +7,14 @@ module Spinach
       @filename = filename
       @formatter = Gherkin::Formatter::JSONFormatter.new(nil)
       @parser = Gherkin::Parser::Parser.new(@formatter)
-      @file = File.read(@filename)
+    end
+
+    def content
+      File.read(@filename)
     end
 
     def parse
-      @parser.parse(@file, @filename, __LINE__-1)
+      @parser.parse(content, @filename, __LINE__-1)
       @formatter.gherkin_object
     end
   end
