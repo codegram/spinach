@@ -1,4 +1,5 @@
 require_relative 'spinach/version'
+require_relative 'spinach/config'
 require_relative 'spinach/runner'
 require_relative 'spinach/parser'
 require_relative 'spinach/dsl'
