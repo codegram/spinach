@@ -6,7 +6,7 @@ require_relative 'spinach/dsl'
 require_relative 'spinach/feature'
 require_relative 'spinach/reporter'
 
-# Spinach is a BDD framework in top of cucumber. It's main goals are:
+# Spinach is a BDD framework in top of gherkin. Its main goals are:
 #   * No magic: All features are implemented using actual classes.
 #   * Reusability: Steps are methods, so they can be put inside modules.
 #   * Proper encapsulation: No conflicts between steps from different
