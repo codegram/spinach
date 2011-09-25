@@ -31,7 +31,7 @@ describe Spinach::Reporter do
         out = capture_stdout do
           @reporter.feature "User authentication"
         end
-        out.string.must_equal "\nFeature: User authentication\n"
+        out.string.must_include "\nFeature: User authentication"
       end
     end
     describe "#scenario" do
@@ -39,7 +39,7 @@ describe Spinach::Reporter do
         out = capture_stdout do
           @reporter.scenario "User logs in"
         end
-        out.string.must_equal "\tScenario: User logs in\n"
+        out.string.must_include "\tScenario: User logs in"
       end
     end
     describe "#step" do
@@ -48,7 +48,7 @@ describe Spinach::Reporter do
           out = capture_stdout do
             @reporter.step "Given I say goodbye", :success
           end
-          out.string.must_equal "\t\tGiven I say goodbye\n"
+          out.string.must_include "\t\tGiven I say goodbye"
         end
       end
       describe "when failing" do
@@ -56,7 +56,7 @@ describe Spinach::Reporter do
           out = capture_stdout do
             @reporter.step "Given I say goodbye", :failure
           end
-          out.string.must_equal "\t\tF! Given I say goodbye\n"
+          out.string.must_include "\t\tF! Given I say goodbye"
         end
       end
     end

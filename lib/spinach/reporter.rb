@@ -1,3 +1,5 @@
+require 'colorize'
+
 module Spinach
   # Spinach reporter collects information from Runner hooks and outputs the
   # results
@@ -37,13 +39,13 @@ module Spinach
       # Prints the feature name to the standard output
       #
       def feature(name)
-        puts "\nFeature: #{name}"
+        puts "\nFeature: #{name}".green
       end
 
       # Prints the scenario name to the standard ouput
       #
       def scenario(name)
-        puts "\tScenario: #{name}"
+        puts "\tScenario: #{name}".green
       end
 
       # Prints the step name to the standard output. If failed, it puts an
@@ -54,9 +56,9 @@ module Spinach
         connector = words.shift
         phrase = words.join(" ")
         if result == :success
-          puts "\t\t#{connector} #{phrase}"
+          puts "\t\t#{connector} #{phrase}".green
         else
-          puts "\t\tF! #{connector} #{phrase}"
+          puts "\t\tF! #{connector} #{phrase}".red
         end
       end
     end
