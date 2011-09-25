@@ -21,7 +21,7 @@ module Spinach
     #   this runner's feature
     #
     def feature
-      @feature ||= Spinach.find_feature(@feature_name)
+      @feature ||= Spinach.find_feature(@feature_name).new
     end
 
     # @return [Hash]
@@ -40,12 +40,11 @@ module Spinach
       reporter.feature(@feature_name)
 
       scenarios.each do |scenario|
-        instance = feature.new
         reporter.scenario(scenario['name'])
         scenario['steps'].each do |step|
           begin
-            step_name = "#{step['keyword']} #{step['name']}"
-            instance.send(step_name)
+            step_name = "#{step['keyword'].strip} #{step['name']}"
+            feature.send(step_name)
             reporter.step(step_name, :success)
           rescue MiniTest::Assertion=>e
             reporter.step(step_name, :failure)

@@ -6,17 +6,20 @@ describe Spinach::Runner do
     @feature = Class.new(Spinach::Feature) do
       feature "A new feature"
       When "I say hello" do
+        @when_called = true
       end
       Then "you say goodbye" do
+        @then_called = true
         true.must_equal false
       end
+      attr_accessor :when_called, :then_called
     end
     data = {
       'name' => "A new feature",
       'elements' => [
         {'name' => 'First scenario', 'steps' => [
-          {'keyword' => 'When', 'name' => "I say hello"},
-          {'keyword' => 'Then', 'name' => "you say goodbye"}]
+          {'keyword' => 'When ', 'name' => "I say hello"},
+          {'keyword' => 'Then ', 'name' => "you say goodbye"}]
         }
       ]
     }
@@ -24,21 +27,28 @@ describe Spinach::Runner do
   end
   describe "#feature" do
     it "returns a Spinach feature" do
-      @runner.feature.name == @feature.name
+      @runner.feature.is_a? @feature
     end
   end
   describe "#scenarios" do
     it "should return the scenarios" do
       @runner.scenarios.must_equal [
         {'name' => 'First scenario', 'steps' => [
-          {'keyword' => 'When', 'name' => "I say hello"},
-          {'keyword' => 'Then', 'name' => "you say goodbye"} ]
+          {'keyword' => 'When ', 'name' => "I say hello"},
+          {'keyword' => 'Then ', 'name' => "you say goodbye"} ]
         }
       ]
     end
   end
   describe "#run" do
     it "should call every step on the feature" do
+      @runner.stubs(reporter: stub_everything)
+      feature = @runner.feature
+      @runner.run
+      feature.when_called.must_equal true
+      feature.then_called.must_equal true
+    end
+    it "should hook into the reporter" do
       reporter = @runner.reporter
       reporter.expects(:feature).with("A new feature")
       reporter.expects(:scenario).with("First scenario")
