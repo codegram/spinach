@@ -27,7 +27,7 @@ describe Spinach::Runner do
   end
   describe "#feature" do
     it "returns a Spinach feature" do
-      @runner.feature.is_a? @feature
+      @runner.feature.must_be_kind_of @feature
     end
   end
   describe "#scenarios" do
