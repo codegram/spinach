@@ -39,13 +39,13 @@ module Spinach
       # Prints the feature name to the standard output
       #
       def feature(name)
-        puts "\nFeature: #{name}".green
+        puts "\nFeature: #{name}".white.underline
       end
 
       # Prints the scenario name to the standard ouput
       #
       def scenario(name)
-        puts "\tScenario: #{name}".green
+        puts "  Scenario: #{name}".white
       end
 
       # Prints the step name to the standard output. If failed, it puts an
@@ -56,9 +56,9 @@ module Spinach
         connector = words.shift
         phrase = words.join(" ")
         if result == :success
-          puts "\t\t#{connector} #{phrase}".green
+          puts "    #{connector} #{phrase}".green
         else
-          puts "\t\tF! #{connector} #{phrase}".red
+          puts "    F! #{connector} #{phrase}".red
         end
       end
     end
