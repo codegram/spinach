@@ -51,6 +51,9 @@ module Spinach
           end
         end
       end
+
+      reporter.end
+
     end
 
   end

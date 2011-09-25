@@ -54,6 +54,7 @@ describe Spinach::Runner do
       reporter.expects(:scenario).with("First scenario")
       reporter.expects(:step).once.with("When I say hello", :success)
       reporter.expects(:step).once.with("Then you say goodbye", :failure)
+      reporter.expects(:end).once
       @runner.run
     end
   end

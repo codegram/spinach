@@ -21,6 +21,13 @@ describe Spinach::Reporter do
         }.must_raise RuntimeError
       end
     end
+    describe "#end" do
+      it "raises an error" do
+        Proc.new{
+          @reporter.end
+        }.must_raise RuntimeError
+      end
+    end
   end
   describe Spinach::Reporter::Stdout do
     before do
@@ -58,6 +65,14 @@ describe Spinach::Reporter do
           end
           out.string.must_include "    F! Given I say goodbye"
         end
+      end
+    end
+    describe "#end" do
+      it "outputs a blank line" do
+        out = capture_stdout do
+          @reporter.end
+        end
+        out.string.must_include "\n"
       end
     end
   end

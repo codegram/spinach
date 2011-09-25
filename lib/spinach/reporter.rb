@@ -32,6 +32,12 @@ module Spinach
       raise "Abstract method!"
     end
 
+    # Receives this hook when a feature reaches its end
+    #
+    def end
+      raise "Abstract method!"
+    end
+
     # The Stdout reporter outputs the runner results to the standard output
     #
     class Stdout < Reporter
@@ -60,6 +66,12 @@ module Spinach
         else
           puts "    F! #{connector} #{phrase}".red
         end
+      end
+
+      # Prints a blank line at the end
+      #
+      def end
+        puts ""
       end
     end
   end
