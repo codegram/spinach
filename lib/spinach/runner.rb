@@ -20,6 +20,13 @@ module Spinach
       @feature ||= Spinach.find_feature(@feature_name)
     end
 
+    # @return [Hash]
+    #   the parsed scenarios for this runner's feature
+    #
+    def scenarios
+      @scenarios
+    end
+
     # Runs this runner and outputs the results in a colorful manner.
     #
     def run
@@ -45,12 +52,6 @@ module Spinach
         puts "* #{report.message}\n\t"
         puts report.backtrace.reverse.join("\n")
       end
-    end
-
-  private
-
-    def scenarios
-      @scenarios
     end
 
   end
