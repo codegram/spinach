@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'colorize'
 
 module Spinach
@@ -62,9 +63,9 @@ module Spinach
         connector = words.shift
         phrase = words.join(" ")
         if result == :success
-          puts "    #{connector} #{phrase}".green
+          puts "  ✔  #{connector} #{phrase}".green
         else
-          puts "    F! #{connector} #{phrase}".red
+          puts "  ✘  #{connector} #{phrase}".red
         end
       end
 

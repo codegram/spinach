@@ -1,3 +1,4 @@
+# encoding: utf-8
 require_relative '../test_helper'
 
 describe Spinach::Reporter do
@@ -55,15 +56,17 @@ describe Spinach::Reporter do
           out = capture_stdout do
             @reporter.step "Given I say goodbye", :success
           end
-          out.string.must_include "    Given I say goodbye"
+          out.string.must_include "✔"
+          out.string.must_include "Given I say goodbye"
         end
       end
       describe "when failing" do
-        it "outputs the step name with an F!" do
+        it "outputs the step name with a failure mark" do
           out = capture_stdout do
             @reporter.step "Given I say goodbye", :failure
           end
-          out.string.must_include "    F! Given I say goodbye"
+          out.string.must_include "✘"
+          out.string.must_include "Given I say goodbye"
         end
       end
     end
