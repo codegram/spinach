@@ -4,6 +4,7 @@ require_relative 'spinach/runner'
 require_relative 'spinach/parser'
 require_relative 'spinach/dsl'
 require_relative 'spinach/feature'
+require_relative 'spinach/reporter'
 
 # Spinach is a BDD framework in top of cucumber. It's main goals are:
 #   * No magic: All features are implemented using actual classes.

@@ -10,7 +10,11 @@ module Spinach
     def initialize(data)
       @feature_name = data['name']
       @scenarios = data['elements']
+      @reporter = Spinach::config.default_reporter.new
     end
+
+    # The default reporter associated to this run
+    attr_reader :reporter
 
     # Returns the feature class for the provided feature data
     # @return [Spinach::Feature] feature
@@ -33,24 +37,20 @@ module Spinach
       step_count = 0
       reports = []
 
+      reporter.feature(@feature_name)
+
       scenarios.each do |scenario|
         instance = feature.new
+        reporter.scenario(scenario['name'])
         scenario['steps'].each do |step|
           begin
-            instance.send(step['name'])
-            print "\e[32m."
+            step_name = "#{step['keyword']} #{step['name']}"
+            instance.send(step_name)
+            reporter.step(step_name, :success)
           rescue MiniTest::Assertion=>e
-            reports << e
-            print "\e[31mF"
+            reporter.step(step_name, :failure)
           end
         end
-      end
-
-      print "\e[0m\n"
-      puts
-      reports.each do |report|
-        puts "* #{report.message}\n\t"
-        puts report.backtrace.reverse.join("\n")
       end
     end
 
