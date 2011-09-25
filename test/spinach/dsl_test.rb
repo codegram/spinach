@@ -6,12 +6,14 @@ describe Spinach::DSL do
       extend Spinach::DSL
     end
   end
-  describe "#When" do
-    it "should define a method with the step name" do
-      @feature.When("I say goodbye") do
-        "You say hello"
+  %w{When Given Then And But}.each do |connector|
+    describe "##{connector}" do
+      it "should define a method with the step name" do
+        @feature.send(connector, "I say goodbye") do
+          "You say hello"
+        end
+        @feature.new.send("#{connector} I say goodbye").must_equal "You say hello"
       end
-      @feature.new.send("I say goodbye").must_equal "You say hello"
     end
   end
   describe "#Given, #Then, #And, #But" do

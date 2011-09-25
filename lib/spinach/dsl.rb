@@ -18,13 +18,11 @@ module Spinach
     #     end
     #   end
     #
-    def When(string, &block)
-      define_method(string, &block)
+    %w{When Given Then And But}.each do |connector|
+      define_method connector do |string, &block|
+        define_method("#{connector} #{string}", &block)
+      end
     end
-    alias_method :Given, :When
-    alias_method :Then, :When
-    alias_method :And, :When
-    alias_method :But, :When
 
     # Defines this feature's name
     #
