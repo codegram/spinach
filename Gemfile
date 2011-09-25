@@ -3,6 +3,16 @@ source 'http://rubygems.org'
 # Specify your gem's dependencies in spinach.gemspec
 gemspec
 
+group :test do
+  gem 'guard'
+  gem 'guard-minitest'
+end
+
+group :darwin do
+  gem 'rb-fsevent'
+  gem 'growl'
+end
+
 group :docs do
   gem 'yard'
 end
