@@ -14,5 +14,12 @@ module Spinach
     def self.inherited(base)
       Spinach.features << base
     end
+
+    # Returns the feature class name
+    #
+    # @returns String
+    def class_name
+      self.class.name
+    end
   end
 end
