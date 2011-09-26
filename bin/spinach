@@ -4,11 +4,12 @@ begin
   require 'spinach'
 rescue LoadError
   require_relative '../lib/spinach'
-  Dir.glob(
-    File.expand_path File.join(Spinach.config[:step_definitions_path], '**', '*.rb')
-  ).each do |file|
-    require file
-  end
+end
+
+Dir.glob(
+  File.expand_path File.join(Spinach.config[:step_definitions_path], '**', '*.rb')
+).each do |file|
+  require file
 end
 
 ARGV.each do |file|
