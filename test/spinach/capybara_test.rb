@@ -17,7 +17,10 @@ describe Spinach::Feature::Capybara do
       end
     end.new
   end
-  it "goes to a capybara page" do
+  it "includes capybara into all features" do
+    @feature.kind_of? Capybara
+  end
+  it "goes to a capybara page and returns its result" do
     page = @feature.go_home
     page.has_content?('Hello world').must_equal true
   end
