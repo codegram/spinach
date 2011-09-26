@@ -12,6 +12,12 @@ Dir.glob(
   require file
 end
 
+Dir.glob(
+  File.expand_path File.join(Spinach.config[:support_path], '**', '*.rb')
+).each do |file|
+  require file
+end
+
 ARGV.each do |file|
   Spinach::Runner.new(
     Spinach::Parser.new(file).parse

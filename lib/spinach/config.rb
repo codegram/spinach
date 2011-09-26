@@ -20,13 +20,20 @@ module Spinach
   # to run.
   #
   class Config
-    attr_writer :step_definitions_path, :default_reporter
+    attr_writer :step_definitions_path, :default_reporter, :support_path
 
     # The "step definitions path" helds the place where your feature classes
     # will be searched for. Defaults to 'features/steps'
     #
     def step_definitions_path
       @step_definitions_path || 'features/steps'
+    end
+
+    # The "support path" helds the place where your can put your configuration
+    # files
+    #
+    def support_path
+      @support_path || 'features/support'
     end
 
     # The default reporter is the reporter spinach will use if there's no other
