@@ -69,6 +69,15 @@ describe Spinach::Reporter do
           out.string.must_include "Given I say goodbye"
         end
       end
+      describe "when skipping" do
+        it "outputs the step name with a failure mark" do
+          out = capture_stdout do
+            @reporter.step "Given I say nothing", :skip
+          end
+          out.string.must_include "~"
+          out.string.must_include "Given I say nothing"
+        end
+      end
     end
     describe "#end" do
       it "outputs a blank line" do

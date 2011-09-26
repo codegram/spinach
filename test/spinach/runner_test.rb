@@ -51,13 +51,13 @@ describe Spinach::Runner do
   end
   describe Spinach::Runner::Scenario do
     before do
-      data = {'name' => 'First scenario', 'steps' => [
+      @data = {'name' => 'First scenario', 'steps' => [
         {'keyword' => 'When ', 'name' => "I say hello"},
         {'keyword' => 'Then ', 'name' => "you say goodbye"}]
       }
       @reporter = stub_everything
       @runner = stub(reporter: @reporter, feature: @feature)
-      @scenario = Spinach::Runner::Scenario.new(@runner, data)
+      @scenario = Spinach::Runner::Scenario.new(@runner, @data)
     end
     it "should call every step on the feature" do
       @scenario.run
@@ -69,6 +69,24 @@ describe Spinach::Runner do
       @reporter.expects(:step).once.with("When I say hello", :success)
       @reporter.expects(:step).once.with("Then you say goodbye", :failure)
       @scenario.run
+    end
+    it "stops the run when finds an error" do
+      @feature = Class.new(Spinach::Feature) do
+        feature "A new feature"
+        When "I say hello" do
+          @when_called = true
+          true.must_equal false
+        end
+        Then "you say goodbye" do
+          @then_called = true
+        end
+        attr_accessor :when_called, :then_called
+      end
+      @runner.stubs(feature: @feature)
+      @scenario = Spinach::Runner::Scenario.new(@runner, @data)
+      @scenario.run
+      @scenario.feature.when_called.must_equal true
+      @scenario.feature.then_called.wont_equal true
     end
   end
 end

@@ -64,8 +64,10 @@ module Spinach
         phrase = words.join(" ")
         if result == :success
           puts "  ✔  #{connector} #{phrase}".green
-        else
+        elsif result == :failure
           puts "  ✘  #{connector} #{phrase}".red
+        elsif result == :skip
+          puts "  ~  #{connector} #{phrase}".yellow
         end
       end
 

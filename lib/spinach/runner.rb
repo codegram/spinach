@@ -65,12 +65,17 @@ module Spinach
         reporter.scenario(name)
         feature.send(:before)
         steps.each do |step|
-          begin
-            step_name = "#{step['keyword'].strip} #{step['name']}"
-            feature.send(step_name)
-            reporter.step(step_name, :success)
-          rescue MiniTest::Assertion=>e
-            reporter.step(step_name, :failure)
+          step_name = "#{step['keyword'].strip} #{step['name']}"
+          unless @failed
+            begin
+              feature.send(step_name)
+              reporter.step(step_name, :success)
+            rescue MiniTest::Assertion=>e
+              reporter.step(step_name, :failure)
+              @failed = true
+            end
+          else
+            reporter.step(step_name, :skip)
           end
         end
         feature.send(:after)
