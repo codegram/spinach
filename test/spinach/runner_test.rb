@@ -25,11 +25,13 @@ describe Spinach::Runner do
     }
     @runner = Spinach::Runner.new(data)
   end
+
   describe "#feature" do
     it "returns a Spinach feature" do
       @runner.feature.ancestors.must_include @feature
     end
   end
+
   describe "#scenarios" do
     it "should return the scenarios" do
       @runner.scenarios.must_equal [
@@ -40,6 +42,7 @@ describe Spinach::Runner do
       ]
     end
   end
+
   describe "#run" do
     it "should hook into the reporter" do
       reporter = stub_everything
