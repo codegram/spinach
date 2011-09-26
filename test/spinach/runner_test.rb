@@ -27,7 +27,7 @@ describe Spinach::Runner do
   end
   describe "#feature" do
     it "returns a Spinach feature" do
-      @runner.feature.must_be_kind_of @feature
+      @runner.feature.ancestors.must_include @feature
     end
   end
   describe "#scenarios" do
@@ -41,21 +41,34 @@ describe Spinach::Runner do
     end
   end
   describe "#run" do
-    it "should call every step on the feature" do
-      @runner.stubs(reporter: stub_everything)
-      feature = @runner.feature
-      @runner.run
-      feature.when_called.must_equal true
-      feature.then_called.must_equal true
-    end
     it "should hook into the reporter" do
-      reporter = @runner.reporter
+      reporter = stub_everything
+      @runner.stubs(reporter: reporter)
       reporter.expects(:feature).with("A new feature")
-      reporter.expects(:scenario).with("First scenario")
-      reporter.expects(:step).once.with("When I say hello", :success)
-      reporter.expects(:step).once.with("Then you say goodbye", :failure)
       reporter.expects(:end).once
       @runner.run
+    end
+  end
+  describe Spinach::Runner::Scenario do
+    before do
+      data = {'name' => 'First scenario', 'steps' => [
+        {'keyword' => 'When ', 'name' => "I say hello"},
+        {'keyword' => 'Then ', 'name' => "you say goodbye"}]
+      }
+      @reporter = stub_everything
+      @runner = stub(reporter: @reporter, feature: @feature)
+      @scenario = Spinach::Runner::Scenario.new(@runner, data)
+    end
+    it "should call every step on the feature" do
+      @scenario.run
+      @scenario.feature.when_called.must_equal true
+      @scenario.feature.then_called.must_equal true
+    end
+    it "calls the appropiate methods of the reporter" do
+      @reporter.expects(:scenario).with("First scenario")
+      @reporter.expects(:step).once.with("When I say hello", :success)
+      @reporter.expects(:step).once.with("Then you say goodbye", :failure)
+      @scenario.run
     end
   end
 end

@@ -21,7 +21,7 @@ module Spinach
     #   this runner's feature
     #
     def feature
-      @feature ||= Spinach.find_feature(@feature_name).new
+      @feature ||= Spinach.find_feature(@feature_name)
     end
 
     # @return [Hash]
@@ -40,8 +40,31 @@ module Spinach
       reporter.feature(@feature_name)
 
       scenarios.each do |scenario|
-        reporter.scenario(scenario['name'])
-        scenario['steps'].each do |step|
+        Scenario.new(self, scenario).run
+      end
+      reporter.end
+
+    end
+
+    class Scenario
+      attr_reader :name, :steps
+
+      def initialize(runner, data)
+        @name = data['name']
+        @steps = data['steps']
+        @runner = runner
+      end
+
+      def reporter; @runner.reporter; end;
+
+      def feature
+        @feature ||= @runner.feature.new
+      end
+
+      def run
+        reporter.scenario(name)
+        feature.send(:before)
+        steps.each do |step|
           begin
             step_name = "#{step['keyword'].strip} #{step['name']}"
             feature.send(step_name)
@@ -50,10 +73,8 @@ module Spinach
             reporter.step(step_name, :failure)
           end
         end
+        feature.send(:after)
       end
-
-      reporter.end
-
     end
 
   end

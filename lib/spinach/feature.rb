@@ -8,6 +8,9 @@ module Spinach
     extend DSL
     include MiniTest::Assertions
 
+    def before; end;
+    def after; end;
+
     def self.inherited(base)
       Spinach.features << base
     end
