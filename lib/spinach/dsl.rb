@@ -37,8 +37,6 @@ module Spinach
 
     # @return [String] this feature's name
     #
-    def feature_name
-      @feature_name
-    end
+    attr_reader :feature_name
   end
 end
