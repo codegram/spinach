@@ -6,6 +6,7 @@ require 'ostruct'
 require 'purdytest'
 
 require 'spinach'
+require 'spinach/capybara'
 
 require 'stringio'
 
