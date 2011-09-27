@@ -1,6 +1,4 @@
 class FeatureNameGuessing < Spinach::Feature
-  feature "Feature name guessing"
-
   Given 'I am writing a feature called "Feature name guessing"' do
   end
   And 'I write a class named "FeatureNameGuessing"' do

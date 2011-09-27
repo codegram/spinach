@@ -5,7 +5,7 @@ describe Spinach do
     @feature1 = OpenStruct.new(feature_name: "User authentication")
     @feature2 = OpenStruct.new(feature_name: "Slip management")
     @feature3 = OpenStruct.new(feature_name: "File attachments")
-    @feature4 = OpenStruct.new(class_name: "UserSendsAMessage")
+    @feature4 = OpenStruct.new(name: "UserSendsAMessage")
     [@feature1, @feature2, @feature3, @feature4].each do |feature|
       Spinach.features << feature
     end
@@ -46,7 +46,7 @@ describe Spinach do
         }.must_raise Spinach::FeatureNotFoundException
         puts exception.inspect
 
-        exception.message.must_equal 'Could not find class for `This feature does not exist` feature. Please create a ThisFeatureDoesNotExist.rb file at feature/steps'
+        exception.message.must_equal 'Could not find class for `This feature does not exist` feature. Please create a ThisFeatureDoesNotExist.rb file at features/steps'
       end
     end
   end

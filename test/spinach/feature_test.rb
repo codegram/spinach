@@ -23,18 +23,4 @@ describe Spinach::Feature do
       end
     end
   end
-
-  describe 'instance methods' do
-    describe '#class_name' do
-      it 'returns its class name as a string' do
-        @feature = Class.new(Spinach::Feature) do
-          def self.name
-            'UserAuthentication'
-          end
-        end.new
-
-        @feature.class_name.must_equal 'UserAuthentication'
-      end
-    end
-  end
 end

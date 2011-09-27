@@ -8,7 +8,7 @@ module Spinach
     end
 
     def message
-      "Could not find class for `#{@feature}` feature. Please create a #{@not_found_class}.rb file at feature/steps"
+      "Could not find class for `#{@feature}` feature. Please create a #{@not_found_class}.rb file at #{Spinach.config[:step_definitions_path]}"
     end
   end
 end

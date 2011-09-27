@@ -41,7 +41,7 @@ module Spinach
     klass = Spinach::Support.camelize(name)
     @@features.detect do |feature|
       feature.feature_name.to_s == name.to_s ||
-      feature.class_name == klass
+      feature.name == klass
     end || raise(Spinach::FeatureNotFoundException, [klass, name])
   end
 end
