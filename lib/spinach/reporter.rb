@@ -66,6 +66,8 @@ module Spinach
           puts "    ✔  #{connector} #{phrase}".green
         elsif result == :failure
           puts "    ✘  #{connector} #{phrase}".red
+        elsif result == :undefined_step
+          puts "    ?  #{connector} #{phrase}".yellow
         elsif result == :skip
           puts "    ~  #{connector} #{phrase}".cyan
         end
