@@ -4,7 +4,7 @@ Feature: Feature name guessing
   I want the names of the features to be guessed from the feature class name
 
   Scenario: Basic guess
-    Given I am writing a feature called "Feature name guessing"
-    And I write a class named "FeatureNameGuessing"
+    Given I am writing a feature called "My cool feature"
+    And I write a class named "MyCoolFeature"
     When I run spinach
-    Then I want "FeatureNameGuessing" class to be used to run it
+    Then I want "MyCoolFeature" class to be used to run it

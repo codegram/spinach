@@ -48,6 +48,16 @@ describe Spinach do
 
         exception.message.must_equal 'Could not find class for `This feature does not exist` feature. Please create a ThisFeatureDoesNotExist.rb file at features/steps'
       end
+
+      it 'uses Spinach.config[:step_definitions_path] to tell the user where to wirte the steps' do
+        Spinach.config.stubs(:step_definitions_path).returns('my/path/')
+
+        exception = proc {
+          Spinach.find_feature('This feature does not exist')
+        }.must_raise Spinach::FeatureNotFoundException
+
+        exception.message.must_match %r{my/path}
+      end
     end
   end
 end
