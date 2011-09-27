@@ -106,6 +106,9 @@ module Spinach
             rescue MiniTest::Assertion=>e
               reporter.step(step_name, :failure)
               @failed = true
+            rescue NoMethodError
+              reporter.step(step_name, :undefined_step)
+              @failed = true
             end
           else
             reporter.step(step_name, :skip)
