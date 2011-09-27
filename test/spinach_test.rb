@@ -44,7 +44,6 @@ describe Spinach do
         exception = proc {
           Spinach.find_feature('This feature does not exist')
         }.must_raise Spinach::FeatureNotFoundException
-        puts exception.inspect
 
         exception.message.must_equal 'Could not find class for `This feature does not exist` feature. Please create a ThisFeatureDoesNotExist.rb file at features/steps'
       end
