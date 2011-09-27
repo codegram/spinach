@@ -26,6 +26,32 @@ describe Spinach::Runner do
     @runner = Spinach::Runner.new(data)
   end
 
+  describe "#initialize" do
+    it 'sets a default step_definition_path' do
+      @runner.step_definitions_path.must_equal Spinach.config.step_definitions_path
+    end
+
+    it 'sets a default support_path' do
+      @runner.support_path.must_equal Spinach.config.support_path
+    end
+
+    it 'allows to customize a step_definition_path' do
+      @runner = Spinach::Runner.new(stub_everything, step_definitions_path: 'my/path')
+
+      @runner.step_definitions_path.must_equal 'my/path'
+    end
+
+    it 'allows to customize a support_path' do
+      @runner = Spinach::Runner.new(stub_everything, support_path: 'my/path')
+
+      @runner.support_path.must_equal 'my/path'
+    end
+
+    it 'sets a default reporter' do
+      @runner.reporter.must_be_kind_of Spinach::Reporter
+    end
+  end
+
   describe "#feature" do
     it "returns a Spinach feature" do
       @runner.feature.ancestors.must_include @feature
@@ -52,6 +78,7 @@ describe Spinach::Runner do
       @runner.run
     end
   end
+
   describe Spinach::Runner::Scenario do
     before do
       @data = {'name' => 'First scenario', 'steps' => [
@@ -62,17 +89,20 @@ describe Spinach::Runner do
       @runner = stub(reporter: @reporter, feature: @feature)
       @scenario = Spinach::Runner::Scenario.new(@runner, @data)
     end
+
     it "should call every step on the feature" do
       @scenario.run
       @scenario.feature.when_called.must_equal true
       @scenario.feature.then_called.must_equal true
     end
+
     it "calls the appropiate methods of the reporter" do
       @reporter.expects(:scenario).with("First scenario")
       @reporter.expects(:step).once.with("When I say hello", :success)
       @reporter.expects(:step).once.with("Then you say goodbye", :failure)
       @scenario.run
     end
+
     it "stops the run when finds an error" do
       @feature = Class.new(Spinach::Feature) do
         feature "A new feature"
