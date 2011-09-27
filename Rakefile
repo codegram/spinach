@@ -9,4 +9,8 @@ Rake::TestTask.new do |t|
   t.loader = :direct
 end
 
-task :default => [:test]
+task :spinach do
+  exec "bundle exec spinach"
+end
+
+task :default => [:test, :spinach]
