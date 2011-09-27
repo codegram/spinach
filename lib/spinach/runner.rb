@@ -17,7 +17,7 @@ module Spinach
       @support_path = options.delete(:support_path ) ||
         Spinach.config.support_path
 
-      @reporter = Spinach::config.default_reporter.new
+      @reporter = Spinach::config.default_reporter
     end
 
     # The default reporter associated to this run

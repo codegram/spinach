@@ -41,7 +41,7 @@ module Spinach
     # output to the standard output
     #
     def default_reporter
-      @default_reporter || Spinach::Reporter::Stdout
+      @default_reporter || Spinach::Reporter::Stdout.new
     end
 
     # Allows you to read the config object using a hash-like syntax.
