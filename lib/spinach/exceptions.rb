@@ -13,7 +13,10 @@ module Spinach
   end
 
   # This class represents the step raised when Spinach can't find a step for a
-  # Scenario. TODO: Refactor to do nice things inside
+  # Scenario.
+  #
+  # TODO: Refactor to do nice things inside
+  #
   class StepNotDefinedException < StandardError ; end
 
 end
