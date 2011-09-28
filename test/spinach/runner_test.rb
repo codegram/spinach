@@ -63,7 +63,7 @@ describe Spinach::Runner do
       @runner.scenarios.must_equal [
         {'name' => 'First scenario', 'steps' => [
           {'keyword' => 'When ', 'name' => "I say hello"},
-          {'keyword' => 'Then ', 'name' => "you say goodbye"} ]
+          {'keyword' => 'Then ', 'name' => "you say goodbye"}]
         }
       ]
     end
@@ -83,7 +83,8 @@ describe Spinach::Runner do
     before do
       @data = {'name' => 'First scenario', 'steps' => [
         {'keyword' => 'When ', 'name' => "I say hello"},
-        {'keyword' => 'Then ', 'name' => "you say goodbye"}]
+        {'keyword' => 'Then ', 'name' => "you say goodbye"},
+        {'keyword' => 'And ', 'name' => "get the fuck out"}]
       }
       @reporter = stub_everything
       @runner = stub(reporter: @reporter, feature: @feature)
@@ -96,10 +97,26 @@ describe Spinach::Runner do
       @scenario.feature.then_called.must_equal true
     end
 
-    it "calls the appropiate methods of the reporter" do
+    it "calls the appropiate methods of the reporter, included a failure" do
       @reporter.expects(:scenario).with("First scenario")
       @reporter.expects(:step).once.with("When I say hello", :success)
       @reporter.expects(:step).once.with("Then you say goodbye", :failure)
+      @reporter.expects(:step).once.with("And get the fuck out", :skip)
+      @scenario.run
+    end
+
+    it "calls the appropiate methods of the reporter, included an undefined step" do
+      @data = {'name' => 'First scenario', 'steps' => [
+        {'keyword' => 'When ', 'name' => "I say hello"},
+        {'keyword' => 'Then ', 'name' => "you fart"},
+        {'keyword' => 'And ', 'name' => "get the fuck out"}]
+      }
+      @scenario = Spinach::Runner::Scenario.new(@runner, @data)
+
+      @reporter.expects(:scenario).with("First scenario")
+      @reporter.expects(:step).once.with("When I say hello", :success)
+      @reporter.expects(:step).once.with("Then you fart", :undefined_step)
+      @reporter.expects(:step).once.with("And get the fuck out", :skip)
       @scenario.run
     end
 
