@@ -1,23 +1,17 @@
 module Spinach
   class Runner
     class Scenario
-      attr_reader :name, :steps
+      attr_reader :name, :feature, :steps, :reporter
 
-      def initialize(runner, data)
+      def initialize(feature, data, reporter)
         @name = data['name']
         @steps = data['steps']
-        @runner = runner
-      end
-
-      def reporter; @runner.reporter; end;
-
-      def feature
-        @feature ||= @runner.feature.new
+        @reporter = reporter
+        @feature = feature
       end
 
       def run
         reporter.scenario(name)
-        feature.send(:before)
         steps.each do |step|
           step_name = "#{step['keyword'].strip} #{step['name']}"
           unless @failed
@@ -37,7 +31,6 @@ module Spinach
             reporter.step(step_name, :skip)
           end
         end
-        feature.send(:after)
       end
     end
   end
