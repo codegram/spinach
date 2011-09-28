@@ -60,6 +60,15 @@ describe Spinach::Reporter do
           out.string.must_include "Given I say goodbye"
         end
       end
+      describe "when undefined" do
+        it "outputs the step name with a question mark" do
+          out = capture_stdout do
+            @reporter.step "Given I say goodbye", :undefined_step
+          end
+          out.string.must_include "?"
+          out.string.must_include "Given I say goodbye"
+        end
+      end
       describe "when failing" do
         it "outputs the step name with a failure mark" do
           out = capture_stdout do
