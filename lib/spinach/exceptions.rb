@@ -11,4 +11,12 @@ module Spinach
       "Could not find class for `#{@feature}` feature. Please create a #{@not_found_class}.rb file at #{Spinach.config[:step_definitions_path]}"
     end
   end
+
+  # This class represents the step raised when Spinach can't find a step for a
+  # Scenario.
+  #
+  # TODO: Refactor to do nice things inside
+  #
+  class StepNotDefinedException < StandardError ; end
+
 end

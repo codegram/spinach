@@ -14,5 +14,16 @@ module Spinach
     def self.inherited(base)
       Spinach.features << base
     end
+
+    # Execute a passed step from runner and returns step response or raises an
+    # Exception if something goes wrong
+    #
+    def execute_step(step)
+      if self.respond_to?(step)
+        self.send(step)
+      else
+        raise Spinach::StepNotDefinedException.new
+      end
+    end
   end
 end
