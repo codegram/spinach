@@ -43,7 +43,7 @@ describe Spinach::Feature do
       it 'raises an exception if step is not defined' do
         Proc.new {
           @feature.execute_step "Given I am lost"
-        }.must_raise Spinach::Feature::StepNotDefined
+        }.must_raise Spinach::StepNotDefinedException
       end
     end
   end

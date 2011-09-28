@@ -107,7 +107,7 @@ module Spinach
               @failed = false
             rescue MiniTest::Assertion=>e
               reporter.step(step_name, :failure)
-            rescue Feature::StepNotDefined=>e
+            rescue Spinach::StepNotDefinedException=>e
               reporter.step(step_name, :undefined_step)
             rescue StandardError=>e
               reporter.step(step_name, :error)
