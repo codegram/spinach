@@ -23,4 +23,28 @@ describe Spinach::Feature do
       end
     end
   end
+
+  describe 'instance methods' do
+    before do
+      @feature = Class.new(Spinach::Feature) do
+        When "I go to the toilet" do
+          @pee = true
+        end
+        attr_reader :pee
+      end.new
+    end
+
+    describe 'execute_step' do
+      it 'runs defined step correctly' do
+        @feature.execute_step('When I go to the toilet')
+        @feature.pee.must_equal true
+      end
+
+      it 'raises an exception if step is not defined' do
+        Proc.new {
+          @feature.execute_step "Given I am lost"
+        }.must_raise Spinach::Feature::StepNotDefined
+      end
+    end
+  end
 end
