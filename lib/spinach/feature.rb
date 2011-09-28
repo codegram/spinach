@@ -14,5 +14,15 @@ module Spinach
     def self.inherited(base)
       Spinach.features << base
     end
+
+    def execute_step(step)
+      if self.respond_to?(step)
+        self.send(step)
+      else
+        raise StepNotDefined.new
+      end
+    end
+
+    class StepNotDefined < StandardError ; end
   end
 end
