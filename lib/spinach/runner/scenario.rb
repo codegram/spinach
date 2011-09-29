@@ -35,11 +35,11 @@ module Spinach
               reporter.step(keyword, name, :success)
               @failed = false
             rescue MiniTest::Assertion => e
-              reporter.step(keyword, name, :failure)
+              reporter.step(keyword, name, :failure, e)
             rescue Spinach::StepNotDefinedException => e
-              reporter.step(keyword, name, :undefined_step)
+              reporter.step(keyword, name, :undefined_step, e)
             rescue StandardError => e
-              reporter.step(keyword, name, :error)
+              reporter.step(keyword, name, :error, e)
             end
           else
             reporter.step(keyword, name, :skip)

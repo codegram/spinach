@@ -21,15 +21,21 @@ module Spinach
       # Prints the step name to the standard output. If failed, it puts an
       # F! before
       #
-      def step(keyword, name, result)
-        if result == :success
-          puts "    ✔  #{keyword} #{name}".green
-        elsif result == :failure
-          puts "    ✘  #{keyword} #{name}".red
-        elsif result == :undefined_step
-          puts "    ?  #{keyword} #{name}".yellow
-        elsif result == :skip
-          puts "    ~  #{keyword} #{name}".cyan
+      def step(keyword, name, result, exception=nil)
+        case result
+          when :success
+            puts "    ✔  #{keyword} #{name}".green
+          when :undefined_step
+            puts "    ?  #{keyword} #{name}".yellow
+            report_exception exception
+          when :failure
+            puts "    ✘  #{keyword} #{name}".red
+            report_exception exception
+          when :error
+            puts "    !  #{keyword} #{name}".red
+            report_exception exception
+          when :skip
+            puts "    ~  #{keyword} #{name}".cyan
         end
       end
 
@@ -37,6 +43,10 @@ module Spinach
       #
       def end
         puts ""
+      end
+
+      def report_exception(exception)
+        puts "      #{exception}\n"
       end
 
     end

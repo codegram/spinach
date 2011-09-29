@@ -26,6 +26,9 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe "#step" do
+    before do
+      @feature = stubs(name: "Some cool feature")
+    end
     describe "when succeeding" do
       it "outputs the step name" do
         out = capture_stdout do
@@ -39,7 +42,9 @@ describe Spinach::Reporter::Stdout do
     describe "when undefined" do
       it "outputs the step name with a question mark" do
         out = capture_stdout do
-          @reporter.step "Given", "I say goodbye", :undefined_step
+          @reporter.step "Given", "I say goodbye", :undefined_step,
+            Spinach::StepNotDefinedException.new(
+              @feature, "Given", "I say goodbye")
         end
         out.string.must_include "?"
         out.string.must_include "Given I say goodbye"
@@ -49,9 +54,21 @@ describe Spinach::Reporter::Stdout do
     describe "when failing" do
       it "outputs the step name with a failure mark" do
         out = capture_stdout do
-          @reporter.step "Given", "I say goodbye", :failure
+          @reporter.step "Given", "I say goodbye", :failure,
+            MiniTest::Assertion.new
         end
         out.string.must_include "✘"
+        out.string.must_include "Given I say goodbye"
+      end
+    end
+
+    describe "when failing" do
+      it "outputs the step name with a failure mark" do
+        out = capture_stdout do
+          @reporter.step "Given", "I say goodbye", :error,
+            RuntimeError.new
+        end
+        out.string.must_include "!"
         out.string.must_include "Given I say goodbye"
       end
     end

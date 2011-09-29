@@ -63,8 +63,14 @@ module Spinach
         if self.respond_to?(step)
           self.send(step)
         else
-          raise Spinach::StepNotDefinedException.new
+          raise Spinach::StepNotDefinedException.new(
+            self, keyword, step
+          )
         end
+      end
+
+      def name
+        self.class.feature_name
       end
     end
   end
