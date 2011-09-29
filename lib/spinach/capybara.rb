@@ -22,6 +22,7 @@ module Spinach
           include InstanceMethods
 
           def after
+            super
             ::Capybara.current_session.reset! if ::Capybara.app
           end
         end
