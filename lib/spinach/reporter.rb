@@ -29,7 +29,7 @@ module Spinach
     # @param [Symbol] result
     #   the step name and its finishing state. May be :success or :failure
     #
-    def step(name, result)
+    def step(keyword, name, result)
       raise "Abstract method!"
     end
 

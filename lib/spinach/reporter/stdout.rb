@@ -21,18 +21,15 @@ module Spinach
       # Prints the step name to the standard output. If failed, it puts an
       # F! before
       #
-      def step(name, result)
-        words = name.split(" ")
-        connector = words.shift
-        phrase = words.join(" ")
+      def step(keyword, name, result)
         if result == :success
-          puts "    ✔  #{connector} #{phrase}".green
+          puts "    ✔  #{keyword} #{name}".green
         elsif result == :failure
-          puts "    ✘  #{connector} #{phrase}".red
+          puts "    ✘  #{keyword} #{name}".red
         elsif result == :undefined_step
-          puts "    ?  #{connector} #{phrase}".yellow
+          puts "    ?  #{keyword} #{name}".yellow
         elsif result == :skip
-          puts "    ~  #{connector} #{phrase}".cyan
+          puts "    ~  #{keyword} #{name}".cyan
         end
       end
 

@@ -6,6 +6,10 @@ module Spinach
   # needed from the plain feature definition.
   #
   class Parser
+
+    # @param [String] filename
+    #   the file to parse
+    #
     def initialize(filename)
       @filename = filename
       @formatter = Gherkin::Formatter::JSONFormatter.new(nil)

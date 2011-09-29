@@ -3,13 +3,22 @@ module Spinach
   # actual calls to the feature classes.
   #
   class Runner
+
     # Initializes the runner with a parsed feature
-    # @param [Hash] data
-    #   the parsed feature data
     #
-    def initialize(data, options = {})
-      @feature_name = data['name']
-      @scenarios = data['elements']
+    # @param [Array<String>] filenames
+    #   an array of feature filenames to run
+    #
+    # @param [Hash] options
+    #
+    # @option options [String] :step_definitions_path
+    #   The path in which step definitions are found
+    #
+    # @option options [String] :support_path
+    #   The path with the support ruby files
+    #
+    def initialize(filenames, options = {})
+      @filenames = filenames
 
       @step_definitions_path = options.delete(:step_definitions_path ) ||
         Spinach.config.step_definitions_path
@@ -17,11 +26,13 @@ module Spinach
       @support_path = options.delete(:support_path ) ||
         Spinach.config.support_path
 
-      @reporter = Spinach::config.default_reporter
     end
 
-    # The default reporter associated to this run
-    attr_reader :reporter
+    def reporter
+      @reporter ||= Spinach::config.default_reporter
+    end
+
+    attr_reader :filenames
 
     # The default path where the steps are located
     attr_reader :step_definitions_path
@@ -29,57 +40,48 @@ module Spinach
     # The default path where the support files are located
     attr_reader :support_path
 
-    # Returns the feature class for the provided feature data
-    # @return [Spinach::Feature] feature
-    #   this runner's feature
-    #
-    def feature
-      @feature ||= Spinach.find_feature(@feature_name)
-    end
-
-    # @return [Hash]
-    #   the parsed scenarios for this runner's feature
-    #
-    def scenarios
-      @scenarios
-    end
-
     # Runs this runner and outputs the results in a colorful manner.
     #
     def run
-      require_steps
+      require_dependencies
 
-      step_count = 0
-      reports = []
-
-      reporter.feature(@feature_name)
-
-      scenarios.each do |scenario|
-        Scenario.new(self, scenario).run
+      filenames.each do |filename|
+        Feature.new(filename, reporter).run
       end
       reporter.end
 
     end
 
-    def require_steps
+    # Requires step definitions and support files
+    #
+    def require_dependencies
+      (support_files + step_definition_files).each do |file|
+        require file
+      end
+    end
+
+    # List of step definition files
+    #
+    # @return [Array<String>] files
+    #
+    def step_definition_files
       Dir.glob(
         File.expand_path File.join(step_definitions_path, '**', '*.rb')
-      ).each do |file|
-        require file
-      end
+      )
     end
-    private :require_steps
 
-    def require_support
+    # List of support files
+    #
+    # @return [Array<String>] files
+    #
+    def support_files
       Dir.glob(
         File.expand_path File.join(support_path, '**', '*.rb')
-      ).each do |file|
-        require file
-      end
+      )
     end
-    private :require_steps
 
   end
 end
 
+require_relative 'runner/feature'
 require_relative 'runner/scenario'

@@ -19,7 +19,7 @@ describe Spinach::Reporter do
     describe "#step" do
       it "raises an error" do
         Proc.new{
-          @reporter.step("arbitrary name", :success)
+          @reporter.step("Given", "arbitrary name", :success)
         }.must_raise RuntimeError
       end
     end

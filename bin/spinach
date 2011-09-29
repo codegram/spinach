@@ -6,16 +6,10 @@ rescue LoadError
   require_relative '../lib/spinach'
 end
 
-if ARGV.any?
-  ARGV.each do |file|
-    Spinach::Runner.new(
-      Spinach::Parser.new(file).parse
-    ).run
-  end
+features = if ARGV.any?
+  ARGV
 else
-  Dir.glob('features/**/*.feature').each do |file|
-    Spinach::Runner.new(
-      Spinach::Parser.new(file).parse
-    ).run
-  end
+  Dir.glob(File.join 'features', '**', '*.feature')
 end
+
+Spinach::Runner.new(features).run

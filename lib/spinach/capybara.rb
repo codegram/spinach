@@ -21,8 +21,6 @@ module Spinach
           include ::Capybara::DSL
           include InstanceMethods
 
-          def before
-          end
           def after
             ::Capybara.current_session.reset! if ::Capybara.app
           end
