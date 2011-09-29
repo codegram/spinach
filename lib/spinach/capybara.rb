@@ -24,6 +24,7 @@ module Spinach
           def before
           end
           def after
+            super
             ::Capybara.current_session.reset! if ::Capybara.app
           end
         end
