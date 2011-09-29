@@ -16,10 +16,11 @@ module Spinach
       @support_path = options.delete(:support_path ) ||
         Spinach.config.support_path
 
-      @reporter = Spinach::config.default_reporter
     end
 
-    attr_reader :reporter
+    def reporter
+      @reporter ||= Spinach::config.default_reporter
+    end
 
     attr_reader :filenames
 
@@ -32,7 +33,7 @@ module Spinach
     # Runs this runner and outputs the results in a colorful manner.
     #
     def run
-      require_steps
+      require_dependencies
 
       filenames.each do |filename|
         Feature.new(filename, reporter).run
@@ -41,23 +42,23 @@ module Spinach
 
     end
 
-    def require_steps
+    def require_dependencies
+      (support_files + step_definition_files).each do
+        require file
+      end
+    end
+
+    def step_definition_files
       Dir.glob(
         File.expand_path File.join(step_definitions_path, '**', '*.rb')
-      ).each do |file|
-        require file
-      end
+      )
     end
-    private :require_steps
 
-    def require_support
+    def support_files
       Dir.glob(
         File.expand_path File.join(support_path, '**', '*.rb')
-      ).each do |file|
-        require file
-      end
+      )
     end
-    private :require_steps
 
   end
 end
