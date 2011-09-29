@@ -7,7 +7,7 @@ describe Spinach::Feature do
     end
 
     it "should be extended by the DSL" do
-      (class << Spinach::Feature; self; end).ancestors.must_include Spinach::DSL
+      Spinach::Feature.ancestors.must_include Spinach::DSL
     end
   end
 
