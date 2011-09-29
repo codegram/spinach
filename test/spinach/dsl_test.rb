@@ -3,7 +3,7 @@ require_relative '../test_helper'
 describe Spinach::DSL do
   before do
     @feature = Class.new do
-      extend Spinach::DSL
+      include Spinach::DSL
     end
   end
   %w{When Given Then And But}.each do |connector|

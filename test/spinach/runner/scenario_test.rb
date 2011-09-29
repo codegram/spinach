@@ -2,73 +2,55 @@ require_relative '../../test_helper'
 
 describe Spinach::Runner::Scenario do
   before do
-    Spinach.reset_features
-    @feature = Class.new(Spinach::Feature) do
-      feature "A new feature"
-      When "I say hello" do
-        @when_called = true
-      end
-      Then "you say goodbye" do
-        @then_called = true
-        true.must_equal false
-      end
-      attr_accessor :when_called, :then_called
-    end
-    @data = {'name' => 'First scenario', 'steps' => [
-      {'keyword' => 'When ', 'name' => "I say hello"},
-      {'keyword' => 'Then ', 'name' => "you say goodbye"},
-      {'keyword' => 'And ', 'name' => "get the fuck out"}]
+    @data = {
+      'name' => "A cool scenario",
+      'steps' => [
+        {'keyword' => "Given", 'name' => "I herd you like steps"},
+        {'keyword' => "When", 'name' => "I test steps"},
+        {'keyword' => "Then", 'name' => "I go step by step"}
+      ]
     }
+    @feature = stub_everything
     @reporter = stub_everything
-    @runner = stub(reporter: @reporter, feature: @feature)
-    @scenario = Spinach::Runner::Scenario.new(@runner, @data)
+    @scenario = Spinach::Runner::Scenario.new(@feature, @data, @reporter)
   end
-
-  it "should call every step on the feature" do
-    @scenario.run
-    @scenario.feature.when_called.must_equal true
-    @scenario.feature.then_called.must_equal true
-  end
-
-  it "calls the appropiate methods of the reporter, included a failure" do
-    @reporter.expects(:scenario).with("First scenario")
-    @reporter.expects(:step).once.with("When I say hello", :success)
-    @reporter.expects(:step).once.with("Then you say goodbye", :failure)
-    @reporter.expects(:step).once.with("And get the fuck out", :skip)
-    @scenario.run
-  end
-
-  it "calls the appropiate methods of the reporter, included an undefined step" do
-    @data = {'name' => 'First scenario', 'steps' => [
-      {'keyword' => 'When ', 'name' => "I say hello"},
-      {'keyword' => 'Then ', 'name' => "you fart"},
-      {'keyword' => 'And ', 'name' => "get the fuck out"}]
-    }
-    @scenario = Spinach::Runner::Scenario.new(@runner, @data)
-
-    @reporter.expects(:scenario).with("First scenario")
-    @reporter.expects(:step).once.with("When I say hello", :success)
-    @reporter.expects(:step).once.with("Then you fart", :undefined_step)
-    @reporter.expects(:step).once.with("And get the fuck out", :skip)
-    @scenario.run
-  end
-
-  it "stops the run when finds an error" do
-    @feature = Class.new(Spinach::Feature) do
-      feature "A new feature"
-      When "I say hello" do
-        @when_called = true
-        true.must_equal false
-      end
-      Then "you say goodbye" do
-        @then_called = true
-      end
-      attr_accessor :when_called, :then_called
+  describe "#initialize" do
+    it "initializes a scenario name" do
+      @scenario.name.must_equal "A cool scenario"
     end
-    @runner.stubs(feature: @feature)
-    @scenario = Spinach::Runner::Scenario.new(@runner, @data)
-    @scenario.run
-    @scenario.feature.when_called.must_equal true
-    @scenario.feature.then_called.wont_equal true
+    it "lists all the steps" do
+      @scenario.steps.count.must_equal 3
+    end
+    it "sets the reporter" do
+      @scenario.reporter.must_equal @reporter
+    end
+    it "sets the feature" do
+      @scenario.feature.must_equal @feature
+    end
+  end
+  describe "#run" do
+    it "calls the appropiate feature steps" do
+      @feature.expects(:execute_step).with("Given", "I herd you like steps")
+      @feature.expects(:execute_step).with("When", "I test steps")
+      @feature.expects(:execute_step).with("Then", "I go step by step")
+      @scenario.run
+    end
+    describe "rescues exceptions" do
+      it "rescues a MiniTest::Assertion" do
+        @feature.expects(:execute_step).raises(MiniTest::Assertion)
+        @reporter.expects(:step).with(anything, anything, :failure)
+        @scenario.run
+      end
+      it "rescues a Spinach::StepNotDefinedException" do
+        @feature.expects(:execute_step).raises(Spinach::StepNotDefinedException)
+        @reporter.expects(:step).with(anything, anything, :undefined_step)
+        @scenario.run
+      end
+      it "rescues any other error " do
+        @feature.expects(:execute_step).raises
+        @reporter.expects(:step).with(anything, anything, :error)
+        @scenario.run
+      end
+    end
   end
 end

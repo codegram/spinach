@@ -7,7 +7,7 @@ describe Spinach::Feature do
     end
 
     it "should be extended by the DSL" do
-      (class << Spinach::Feature; self; end).ancestors.must_include Spinach::DSL
+      Spinach::Feature.ancestors.must_include Spinach::DSL
     end
   end
 
@@ -36,13 +36,13 @@ describe Spinach::Feature do
 
     describe 'execute_step' do
       it 'runs defined step correctly' do
-        @feature.execute_step('When I go to the toilet')
+        @feature.execute_step("When", "I go to the toilet")
         @feature.pee.must_equal true
       end
 
       it 'raises an exception if step is not defined' do
         Proc.new {
-          @feature.execute_step "Given I am lost"
+          @feature.execute_step "Given", "I am lost"
         }.must_raise Spinach::StepNotDefinedException
       end
     end

@@ -29,7 +29,7 @@ describe Spinach::Reporter::Stdout do
     describe "when succeeding" do
       it "outputs the step name" do
         out = capture_stdout do
-          @reporter.step "Given I say goodbye", :success
+          @reporter.step "Given", "I say goodbye", :success
         end
         out.string.must_include "✔"
         out.string.must_include "Given I say goodbye"
@@ -39,7 +39,7 @@ describe Spinach::Reporter::Stdout do
     describe "when undefined" do
       it "outputs the step name with a question mark" do
         out = capture_stdout do
-          @reporter.step "Given I say goodbye", :undefined_step
+          @reporter.step "Given", "I say goodbye", :undefined_step
         end
         out.string.must_include "?"
         out.string.must_include "Given I say goodbye"
@@ -49,7 +49,7 @@ describe Spinach::Reporter::Stdout do
     describe "when failing" do
       it "outputs the step name with a failure mark" do
         out = capture_stdout do
-          @reporter.step "Given I say goodbye", :failure
+          @reporter.step "Given", "I say goodbye", :failure
         end
         out.string.must_include "✘"
         out.string.must_include "Given I say goodbye"
@@ -59,7 +59,7 @@ describe Spinach::Reporter::Stdout do
     describe "when skipping" do
       it "outputs the step name with a failure mark" do
         out = capture_stdout do
-          @reporter.step "Given I say nothing", :skip
+          @reporter.step "Given", "I say nothing", :skip
         end
         out.string.must_include "~"
         out.string.must_include "Given I say nothing"
