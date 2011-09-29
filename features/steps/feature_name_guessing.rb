@@ -25,6 +25,7 @@ class FeatureNameGuessing < Spinach::Feature
 
   When 'I run spinach'do
     run_feature 'features/my_cool_feature.feature'
+    false.must_equal true
   end
 
   Then 'I want "MyCoolFeature" class to be used to run it' do

@@ -46,7 +46,10 @@ module Spinach
       end
 
       def report_exception(exception)
-        puts "      #{exception}\n"
+        output = exception.to_s.split("\n").map{ |line|
+          "        #{line}"
+        }.join("\n")
+        puts "#{output}\n\n"
       end
 
     end
