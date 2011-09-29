@@ -42,6 +42,7 @@ describe Spinach::Runner do
   describe "#run" do
     it "instantiates a new Feature and runs it with every file" do
       feature = stub(run: nil)
+      @runner.stubs(reporter: stub_everything) 
       @filenames.each do |filename|
         Spinach::Runner::Feature.expects(:new).
           with(filename, anything).
@@ -50,5 +51,4 @@ describe Spinach::Runner do
       @runner.run
     end
   end
-
 end
