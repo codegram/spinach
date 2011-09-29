@@ -1,8 +1,19 @@
 module Spinach
   class Runner
+    # A Scenario Runner handles a particular scenario run.
+    #
     class Scenario
       attr_reader :name, :feature, :steps, :reporter
 
+      # @param [Spinach::Feature] feature
+      #   the feature that contains the steps
+      #
+      # @param [Hash] data
+      #   the parsed feature data
+      #
+      # @param [Spinach::Reporter]
+      #   the reporter
+      #
       def initialize(feature, data, reporter)
         @name = data['name']
         @steps = data['steps']
@@ -10,6 +21,8 @@ module Spinach
         @feature = feature
       end
 
+      # Runs this scenario and signals the reporter
+      #
       def run
         reporter.scenario(name)
         steps.each do |step|

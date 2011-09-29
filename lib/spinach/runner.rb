@@ -3,9 +3,19 @@ module Spinach
   # actual calls to the feature classes.
   #
   class Runner
+
     # Initializes the runner with a parsed feature
-    # @param [Hash] data
-    #   the parsed feature data
+    #
+    # @param [Array<String>] filenames
+    #   an array of feature filenames to run
+    #
+    # @param [Hash] options
+    #
+    # @option options [String] :step_definitions_path
+    #   The path in which step definitions are found
+    #
+    # @option options [String] :support_path
+    #   The path with the support ruby files
     #
     def initialize(filenames, options = {})
       @filenames = filenames
@@ -42,18 +52,28 @@ module Spinach
 
     end
 
+    # Requires step definitions and support files
+    #
     def require_dependencies
       (support_files + step_definition_files).each do |file|
         require file
       end
     end
 
+    # List of step definition files
+    #
+    # @return [Array<String>] files
+    #
     def step_definition_files
       Dir.glob(
         File.expand_path File.join(step_definitions_path, '**', '*.rb')
       )
     end
 
+    # List of support files
+    #
+    # @return [Array<String>] files
+    #
     def support_files
       Dir.glob(
         File.expand_path File.join(support_path, '**', '*.rb')

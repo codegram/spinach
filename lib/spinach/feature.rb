@@ -15,8 +15,14 @@ module Spinach
       Spinach.features << base
     end
 
-    # Execute a passed step from runner and returns step response or raises an
-    # Exception if something goes wrong
+    # Execute a given step.
+    #
+    # @param [String] keyword
+    #   the connector keyword. It usually is "Given", "Then", "When", "And"
+    #   or "But"
+    #
+    # @param [String] step
+    #   the step to execute
     #
     def execute_step(keyword, step)
       method = "#{keyword} #{step}"
