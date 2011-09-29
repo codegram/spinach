@@ -43,7 +43,7 @@ module Spinach
     end
 
     def require_dependencies
-      (support_files + step_definition_files).each do
+      (support_files + step_definition_files).each do |file|
         require file
       end
     end

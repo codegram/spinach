@@ -18,9 +18,10 @@ module Spinach
     # Execute a passed step from runner and returns step response or raises an
     # Exception if something goes wrong
     #
-    def execute_step(step)
-      if self.respond_to?(step)
-        self.send(step)
+    def execute_step(keyword, step)
+      method = "#{keyword} #{step}"
+      if self.respond_to?(method)
+        self.send(method)
       else
         raise Spinach::StepNotDefinedException.new
       end

@@ -39,5 +39,16 @@ describe Spinach::Runner do
       @runner.reporter.wont_equal nil
     end
   end
+  describe "#run" do
+    it "instantiates a new Feature and runs it with every file" do
+      feature = stub(run: nil)
+      @filenames.each do |filename|
+        Spinach::Runner::Feature.expects(:new).
+          with(filename, anything).
+          returns(feature)
+      end
+      @runner.run
+    end
+  end
 
 end

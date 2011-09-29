@@ -13,22 +13,23 @@ module Spinach
       def run
         reporter.scenario(name)
         steps.each do |step|
-          step_name = "#{step['keyword'].strip} #{step['name']}"
+          keyword = step['keyword'].strip
+          name = step['name'].strip
           unless @failed
             @failed = true
             begin
-              feature.execute_step(step_name)
-              reporter.step(step_name, :success)
+              feature.execute_step(keyword, name)
+              reporter.step(keyword, name, :success)
               @failed = false
             rescue MiniTest::Assertion => e
-              reporter.step(step_name, :failure)
+              reporter.step(keyword, name, :failure)
             rescue Spinach::StepNotDefinedException => e
-              reporter.step(step_name, :undefined_step)
+              reporter.step(keyword, name, :undefined_step)
             rescue StandardError => e
-              reporter.step(step_name, :error)
+              reporter.step(keyword, name, :error)
             end
           else
-            reporter.step(step_name, :skip)
+            reporter.step(keyword, name, :skip)
           end
         end
       end
