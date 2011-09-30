@@ -11,8 +11,9 @@ describe Spinach::Runner::Scenario do
       ]
     }
     @feature = stub_everything
+    @feature_name = "My feature"
     @reporter = stub_everything
-    @scenario = Spinach::Runner::Scenario.new(@feature, @data, @reporter)
+    @scenario = Spinach::Runner::Scenario.new(@feature_name, @feature, @data, @reporter)
   end
 
   describe '#initialize' do
@@ -49,7 +50,7 @@ describe Spinach::Runner::Scenario do
       end
 
       it 'rescues a Spinach::StepNotDefinedException' do
-        @feature.expects(:execute_step).raises(Spinach::StepNotDefinedException)
+        @feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
         @reporter.expects(:step).with(anything, anything, :undefined_step)
         @scenario.run
       end

@@ -91,7 +91,16 @@ describe Spinach::Runner::Feature do
       })
       @feature.stubs(feature: stub_everything)
 
-      Spinach::Runner::Scenario.expects(:new).with(anything, @feature.scenarios[1], anything).once.returns(stub_everything)
+      Spinach::Runner::Scenario.expects(:new).with(anything, anything, @feature.scenarios[1], anything).once.returns(stub_everything)
+      @feature.run
+    end
+
+    it "calls an error summary if there are any failures" do
+      failure = stub('failure')
+      scenario = stub(run: failure)
+      Spinach::Runner::Scenario.stubs(:new).returns scenario
+
+      @reporter.expects(:error_summary).with [failure, failure, failure]
 
       @feature.run
     end
