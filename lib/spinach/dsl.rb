@@ -27,11 +27,14 @@ module Spinach
       #     end
       #   end
       #
-      %w{When Given Then And But}.each do |connector|
-        define_method connector do |string, &block|
-          define_method("#{connector} #{string}", &block)
-        end
+      def Given(string, &block)
+        define_method(string, &block)
       end
+
+      alias_method :When, :Given
+      alias_method :Then, :Given
+      alias_method :And, :Given
+      alias_method :But, :Given
 
       # Defines this feature's name
       #
@@ -53,22 +56,16 @@ module Spinach
 
       # Execute a given step.
       #
-      # @param [String] keyword
-      #   the connector keyword. It usually is "Given", "Then", "When", "And"
-      #   or "But"
-      #
       # @param [String] step
       #   the step to execute
       #
-      def execute_step(keyword, step)
-        method = "#{keyword} #{step}"
-        if self.respond_to?(method)
-          self.send(method)
+      def execute_step(step)
+        if self.respond_to?(step)
+          self.send(step)
         else
           raise Spinach::StepNotDefinedException.new
         end
       end
-
     end
   end
 end
