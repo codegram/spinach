@@ -1,3 +1,6 @@
+env:
+ - RBXOPT=-X19
+ - RUBYOPT=--1.9
 rvm:
   - 1.9.2
   - 1.9.3
