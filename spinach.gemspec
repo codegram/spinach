@@ -3,7 +3,8 @@ require File.expand_path('../lib/spinach/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Josep Jaume Rey", "Josep M. Bach", "Oriol Gual", "Marc Divins Castellvi"]
-  gem.email         = ["info@codegram.com"]
+  gem.email         = ["info@codegram.com", "josep.m.bach@gmail.com",
+    "oriolgual@gmail.com", "josepjaume@gmail.com", "marcdivc@gmail.com"]
   gem.description   = %q{Spinach is a BDD framework on top of gherkin}
   gem.summary       = %q{Spinach is a BDD framework on top of gherkin}
   gem.homepage      = "http://github.com/codegram/spinach"
