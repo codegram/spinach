@@ -3,7 +3,7 @@ module Spinach
     # A Scenario Runner handles a particular scenario run.
     #
     class Scenario
-      attr_reader :name, :feature, :steps, :reporter
+      attr_reader :name, :feature, :feature_name, :steps, :reporter
 
       # @param [Spinach::Feature] feature
       #   the feature that contains the steps
@@ -14,7 +14,8 @@ module Spinach
       # @param [Spinach::Reporter]
       #   the reporter
       #
-      def initialize(feature, data, reporter)
+      def initialize(feature_name, feature, data, reporter)
+        @feature_name = feature_name
         @name = data['name']
         @steps = data['steps']
         @reporter = reporter
@@ -28,23 +29,26 @@ module Spinach
         steps.each do |step|
           keyword = step['keyword'].strip
           name = step['name'].strip
-          unless @failed
-            @failed = true
+          line = step['line']
+          unless @failure
             begin
               feature.execute_step(name)
               reporter.step(keyword, name, :success)
-              @failed = false
             rescue MiniTest::Assertion => e
-              reporter.step(keyword, name, :failure, e)
+              @failure = [e, name, line, self]
+              reporter.step(keyword, name, :failure)
             rescue Spinach::StepNotDefinedException => e
-              reporter.step(keyword, name, :undefined_step, e)
+              @failure = [e, name, line, self]
+              reporter.step(keyword, name, :undefined_step)
             rescue StandardError => e
-              reporter.step(keyword, name, :error, e)
+              @failure = [e, name, line, self]
+              reporter.step(keyword, name, :error)
             end
           else
             reporter.step(keyword, name, :skip)
           end
         end
+        @failure
       end
     end
   end

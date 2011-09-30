@@ -6,6 +6,10 @@ module Spinach
   # results
   #
   class Reporter
+    # Initialize a reporter with an empty error container.
+    def initialize
+      @errors = []
+    end
 
     # Receives this hook when a feature is invoked
     # @param [String] name

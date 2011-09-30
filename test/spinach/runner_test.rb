@@ -2,7 +2,7 @@ require_relative '../test_helper'
 
 describe Spinach::Runner do
   before do
-    @filenames = 
+    @filenames =
       %w{features/cool_feature.feature features/great_feature.feature}
 
     @runner = Spinach::Runner.new(@filenames)
@@ -42,7 +42,7 @@ describe Spinach::Runner do
   describe "#run" do
     it "instantiates a new Feature and runs it with every file" do
       feature = stub(run: nil)
-      @runner.stubs(reporter: stub_everything) 
+      @runner.stubs(reporter: stub_everything)
       @filenames.each do |filename|
         Spinach::Runner::Feature.expects(:new).
           with(filename, anything).

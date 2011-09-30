@@ -11,8 +11,9 @@ describe Spinach::Runner::Scenario do
       ]
     }
     @feature = stub_everything
+    @feature_name = "My feature"
     @reporter = stub_everything
-    @scenario = Spinach::Runner::Scenario.new(@feature, @data, @reporter)
+    @scenario = Spinach::Runner::Scenario.new(@feature_name, @feature, @data, @reporter)
   end
 
   describe '#initialize' do
