@@ -31,7 +31,7 @@ module Spinach
           unless @failed
             @failed = true
             begin
-              feature.execute_step(keyword, name)
+              feature.execute_step(name)
               reporter.step(keyword, name, :success)
               @failed = false
             rescue MiniTest::Assertion => e
