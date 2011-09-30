@@ -50,7 +50,7 @@ describe Spinach::Runner::Scenario do
       end
 
       it 'rescues a Spinach::StepNotDefinedException' do
-        @feature.expects(:execute_step).raises(Spinach::StepNotDefinedException)
+        @feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
         @reporter.expects(:step).with(anything, anything, :undefined_step)
         @scenario.run
       end

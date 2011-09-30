@@ -17,11 +17,10 @@ module Spinach
   #
   class StepNotDefinedException < StandardError
 
-    attr_reader :feature, :keyword, :step
+    attr_reader :feature, :step
 
-    def initialize(feature, keyword, step)
+    def initialize(feature, step)
       @feature = feature
-      @keyword = keyword
       @step = step
     end
   end

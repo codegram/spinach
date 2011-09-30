@@ -64,7 +64,7 @@ module Spinach
           self.send(step)
         else
           raise Spinach::StepNotDefinedException.new(
-            self, keyword, step
+            self, step
           )
         end
       end
