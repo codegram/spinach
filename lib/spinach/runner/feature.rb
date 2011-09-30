@@ -5,13 +5,15 @@ module Spinach
     class Feature
 
       # @param [String] filename
-      #   path to the feature file
+      #   path to the feature file. Scenario line could be passed to run just
+      #   that scenario.
+      #   @example feature/a_cool_feature.feature:12
       #
       # @param [Spinach::Reporter] reporter
       #   the reporter that will log this run
       #
       def initialize(filename, reporter)
-        @filename = filename
+        @filename, @scenario_line = filename.split(':')
         @reporter = reporter
       end
 
@@ -51,9 +53,11 @@ module Spinach
       def run
         reporter.feature(feature_name)
         scenarios.each do |scenario|
-          feature.send(:before)
-          Scenario.new(feature, scenario, reporter).run
-          feature.send(:after)
+          if !@scenario_line || scenario['line'].to_s == @scenario_line
+            feature.send(:before)
+            Scenario.new(feature, scenario, reporter).run
+            feature.send(:after)
+          end
         end
       end
 

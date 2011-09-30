@@ -2,7 +2,7 @@
 require File.expand_path('../lib/spinach/version', __FILE__)
 
 Gem::Specification.new do |gem|
-  gem.authors       = ["Josep Jaume Rey", "Josep M. Bach", "Oriol Gual"]
+  gem.authors       = ["Josep Jaume Rey", "Josep M. Bach", "Oriol Gual", "Marc Divins Castellvi"]
   gem.email         = ["info@codegram.com"]
   gem.description   = %q{Spinach is a BDD framework on top of gherkin}
   gem.summary       = %q{Spinach is a BDD framework on top of gherkin}
@@ -18,6 +18,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'sinatra'
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'aruba'
+  gem.add_development_dependency 'pry'
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
