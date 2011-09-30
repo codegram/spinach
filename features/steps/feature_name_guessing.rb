@@ -1,5 +1,6 @@
 require 'aruba/api'
-class FeatureNameGuessing < Spinach::Feature
+
+Feature "Feature name guessing" do
   include Aruba::Api
 
   Given 'I am writing a feature called "My cool feature"' do
@@ -14,7 +15,7 @@ class FeatureNameGuessing < Spinach::Feature
 
   And 'I write a class named "MyCoolFeature"' do
     write_file('features/steps/my_cool_feature.rb',
-               'class MyCoolFeature < Spinach::Feature
+               'Feature "My cool feature" do
                   When "this is so meta" do
                   end
 
