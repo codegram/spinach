@@ -22,14 +22,17 @@ module Spinach
       # F! before
       #
       def step(keyword, name, result)
-        if result == :success
-          puts "    ✔  #{keyword} #{name}".green
-        elsif result == :failure
-          puts "    ✘  #{keyword} #{name}".red
-        elsif result == :undefined_step
-          puts "    ?  #{keyword} #{name}".yellow
-        elsif result == :skip
-          puts "    ~  #{keyword} #{name}".cyan
+        case result
+          when :success
+            puts "    ✔  #{keyword} #{name}".green
+          when :undefined_step
+            puts "    ?  #{keyword} #{name}".yellow
+          when :failure
+            puts "    ✘  #{keyword} #{name}".red
+          when :error
+            puts "    !  #{keyword} #{name}".red
+          when :skip
+            puts "    ~  #{keyword} #{name}".cyan
         end
       end
 
@@ -37,6 +40,34 @@ module Spinach
       #
       def end
         puts ""
+      end
+
+      def error_summary(errors)
+        puts
+        puts "    #{"Error summary".underline}"
+        puts
+        errors.each do |error, step, line, scenario|
+          step_file = error.backtrace.detect do |f|
+            f =~ /<class:#{scenario.feature.class}>/
+          end
+          step_file = step_file.split(':')[0..1].join(':') if step_file
+
+          puts
+          puts "    #{scenario.feature_name.light_white} :: #{scenario.name.light_blue} :: #{step.light_green} (line #{line})"
+          puts "    #{step_file}" if step_file
+          puts
+          puts "    * #{error.message}".red
+          puts error.backtrace.map {|e| "      #{e}"}
+          puts
+        end
+      end
+
+      def report_exception(exception)
+        @errors << exception
+        output = exception.message.split("\n").map{ |line|
+          "        #{line}"
+        }.join("\n")
+        puts "#{output}\n\n"
       end
 
     end

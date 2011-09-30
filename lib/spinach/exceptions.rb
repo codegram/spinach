@@ -15,6 +15,14 @@ module Spinach
   # This class represents the step raised when Spinach can't find a step for a
   # Scenario.
   #
-  class StepNotDefinedException < StandardError ; end
+  class StepNotDefinedException < StandardError
+
+    attr_reader :feature, :step
+
+    def initialize(feature, step)
+      @feature = feature
+      @step = step
+    end
+  end
 
 end
