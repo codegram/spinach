@@ -16,3 +16,10 @@ module Spinach
     end
   end
 end
+
+Object.send(:define_method, :Feature) do |name, &block|
+  Class.new(Spinach::Feature) do
+    feature name
+    class_eval &block
+  end
+end
