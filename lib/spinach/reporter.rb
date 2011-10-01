@@ -7,9 +7,12 @@ module Spinach
   #
   class Reporter
     # Initialize a reporter with an empty error container.
-    def initialize
+    def initialize(options = {})
       @errors = []
+      @options = options
     end
+
+    attr_accessor :options
 
     # Receives this hook when a feature is invoked
     # @param [String] name
