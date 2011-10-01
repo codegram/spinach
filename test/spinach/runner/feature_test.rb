@@ -80,6 +80,20 @@ describe Spinach::Runner::Feature do
       @feature.run
     end
 
+    it "returns true if the execution succeeds" do
+      @feature.stubs(reporter: stub_everything)
+      Spinach::Runner::Scenario.any_instance.
+        expects(run: nil).times(3)
+      @feature.run.must_equal true
+    end
+
+    it "returns false if the execution fails" do
+      @feature.stubs(reporter: stub_everything)
+      Spinach::Runner::Scenario.any_instance.
+        expects(run: stub_everything).times(3)
+      @feature.run.must_equal false
+    end
+
     it 'calls only the given scenario' do
       @filename = 'feature/a_cool_feature.feature:12'
       @feature = Spinach::Runner::Feature.new(@filename, @reporter)

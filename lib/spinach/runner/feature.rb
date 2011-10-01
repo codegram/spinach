@@ -64,6 +64,9 @@ module Spinach
 
         unless failures.length.zero?
           reporter.error_summary(failures)
+          return false
+        else
+          return true
         end
       end
 

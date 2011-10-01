@@ -40,14 +40,21 @@ describe Spinach::Runner do
     end
   end
   describe "#run" do
-    it "instantiates a new Feature and runs it with every file" do
-      feature = stub(run: nil)
+    before do
+      @feature = stub
       @runner.stubs(reporter: stub_everything)
       @filenames.each do |filename|
         Spinach::Runner::Feature.expects(:new).
           with(filename, anything).
-          returns(feature)
+          returns(@feature)
       end
+    end
+    it "instantiates a new Feature and runs it with every file" do
+      @feature.stubs(run: true)
+      @runner.run.must_equal true
+    end
+    it "returns false if it fails" do
+      @feature.stubs(run: false)
       @runner.run
     end
   end

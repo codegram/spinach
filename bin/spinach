@@ -6,4 +6,4 @@ rescue LoadError
   require_relative '../lib/spinach'
 end
 
-Spinach::Cli.new(ARGV).run
+exit Spinach::Cli.new(ARGV).run
