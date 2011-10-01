@@ -1,11 +1,20 @@
 require 'optparse'
 
 module Spinach
+  # The cli is a class responsible of handling all the command line interface
+  # logic
+  #
   class Cli
+    # @param [Array<String>] arguments
+    #   the command line arguments
     def initialize(args = ARGV)
       @args = args
     end
 
+    # Runs all the feature
+    #
+    # @return [Boolean]
+    #   the exit status - true for success, false for failure
     def run
       init_reporter
       parse_options
@@ -17,10 +26,25 @@ module Spinach
       Spinach::Runner.new(features).run
     end
 
+    # Inits the reporter with a default one
     def init_reporter
       Spinach.config.default_reporter =
         Spinach::Reporter::Stdout.new(options[:reporter])
     end
+
+    # Returns a hash of options, separated by its type:
+    #
+    # @example
+    #   {
+    #     reporter: { backtrace: true }
+    #   }
+    #
+    # @return [Hash]
+    def options
+      @options ||= parse_options
+    end
+
+  private
 
     def parse_options
       reporter_options = {}
@@ -38,9 +62,6 @@ module Spinach
       {reporter: reporter_options}
     end
 
-    def options
-      @options ||= parse_options
-    end
 
   end
 end
