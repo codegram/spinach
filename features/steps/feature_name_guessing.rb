@@ -15,7 +15,7 @@ Feature "Feature name guessing" do
 
   And 'I write a class named "MyCoolFeature"' do
     write_file('features/steps/my_cool_feature.rb',
-               'Feature "My cool feature" do
+               'class MyCoolFeature < Spinach::Feature
                   When "this is so meta" do
                   end
 
