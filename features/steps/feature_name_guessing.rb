@@ -1,7 +1,5 @@
-require 'aruba/api'
-
 Feature "Feature name guessing" do
-  include Aruba::Api
+  include Integration::SpinachRunner
 
   Given 'I am writing a feature called "My cool feature"' do
     write_file('features/my_cool_feature.feature',
@@ -32,9 +30,4 @@ Feature "Feature name guessing" do
     all_stderr.must_be_empty
   end
 
-  private
-
-  def run_feature(command)
-    run "../../bin/spinach #{command}"
-  end
 end

@@ -57,7 +57,9 @@ module Spinach
           puts "    #{step_file}" if step_file
           puts
           puts "    * #{error.message}".red
-          puts error.backtrace.map {|e| "      #{e}"}
+          if options[:backtrace]
+            puts error.backtrace.map {|e| "      #{e}"}
+          end
           puts
         end
       end

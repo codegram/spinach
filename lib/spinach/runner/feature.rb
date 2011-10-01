@@ -45,7 +45,7 @@ module Spinach
       #   the parsed scenarios for this runner's feature
       #
       def scenarios
-        @scenarios ||= data['elements']
+        @scenarios ||= (data['elements'] || [])
       end
 
       # Runs this feature
