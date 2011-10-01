@@ -46,10 +46,11 @@ module Spinach
       require_dependencies
 
       filenames.each do |filename|
-        Feature.new(filename, reporter).run
+        success = Feature.new(filename, reporter).run
+        @failed = true unless success
       end
       reporter.end
-
+      @failed ? false : true
     end
 
     # Requires step definitions and support files
