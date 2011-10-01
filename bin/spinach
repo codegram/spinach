@@ -6,10 +6,4 @@ rescue LoadError
   require_relative '../lib/spinach'
 end
 
-features = if ARGV.any?
-  ARGV
-else
-  Dir.glob(File.join 'features', '**', '*.feature')
-end
-
-Spinach::Runner.new(features).run
+Spinach::Cli.new(ARGV).run
