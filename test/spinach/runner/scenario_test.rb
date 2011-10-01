@@ -42,7 +42,7 @@ describe Spinach::Runner::Scenario do
       @scenario.run
     end
 
-    describe 'rescues exceptions' do
+    describe 'when throwing exceptions' do
       it 'rescues a MiniTest::Assertion' do
         @feature.expects(:execute_step).raises(MiniTest::Assertion)
         @reporter.expects(:step).with(anything, anything, :failure)
@@ -61,10 +61,17 @@ describe Spinach::Runner::Scenario do
         @scenario.run
       end
 
-      it 'runs a step' do
-        @reporter.expects(:step).with(anything, anything, :success).times(3)
-        @scenario.run
+      it "returns an failure" do
+        @feature.expects(:execute_step).raises(MiniTest::Assertion)
+        @scenario.run.wont_equal nil
       end
+
     end
+
+    it 'runs a step' do
+      @reporter.expects(:step).with(anything, anything, :success).times(3)
+      @scenario.run.must_equal nil
+    end
+
   end
 end
