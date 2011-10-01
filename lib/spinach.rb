@@ -7,6 +7,7 @@ require_relative 'spinach/parser'
 require_relative 'spinach/dsl'
 require_relative 'spinach/feature'
 require_relative 'spinach/reporter'
+require_relative 'spinach/cli'
 
 
 # Spinach is a BDD framework in top of gherkin. Its main goals are:

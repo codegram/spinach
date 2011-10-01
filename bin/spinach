@@ -6,28 +6,4 @@ rescue LoadError
   require_relative '../lib/spinach'
 end
 
-require 'optparse'
-
-reporter_options = {}
-reporter_options[:backtrace] = false
-
-OptionParser.new do |opts|
-  opts.on('-b', '--backtrace', "Show backtrace of errors") do |v|
-    reporter_options[:backtrace] = v
-  end
-  opts.on_tail('--version', "Show version") do
-    puts Spinach::VERSION
-    exit
-  end
-end.parse!
-
-features = if ARGV.any?
-  ARGV
-else
-  Dir.glob(File.join 'features', '**', '*.feature')
-end
-
-Spinach.config.default_reporter =
-  Spinach::Reporter::Stdout.new(reporter_options)
-
-Spinach::Runner.new(features).run
+Spinach::Cli.new(ARGV).run
