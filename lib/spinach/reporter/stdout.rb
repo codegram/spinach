@@ -21,23 +21,23 @@ module Spinach
       # Prints the step name to the standard output. If failed, it puts an
       # F! before
       #
-      def step(keyword, name, result, failure=nil)
+      def step(step, result, failure=nil)
         color, symbol = case result
           when :success
             [:green, '✔']
           when :undefined_step
-            undefined_steps << [keyword, name]
+            undefined_steps << [step]
             [:yellow, '?']
           when :failure
-            failed_steps << [keyword, name, failure]
+            failed_steps << [step, failure]
             [:red, '✘']
           when :error
-            error_steps << [keyword, name, failure]
+            error_steps << [step, failure]
             [:red, '!']
           when :skip
             [:cyan, '~']
         end
-        puts "    #{symbol.colorize(:"light_#{color}")}  #{keyword.colorize(:"light_#{color}")} #{name.colorize(color)}"
+        puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)}"
       end
 
       def end(success)
@@ -47,21 +47,29 @@ module Spinach
       # Prints the errors for ths run.
       #
       def error_summary
+        puts ""
         report_error_steps
         report_failed_steps
         report_undefined_steps
       end
 
       def report_error_steps
-        puts "Errors (#{error_steps.length})"
+        puts "Errors (#{error_steps.length})".light_red
+        puts ""
       end
 
       def report_failed_steps
-        puts "Failures (#{failed_steps.length})"
+        puts "Failures (#{failed_steps.length})".red
+        puts ""
       end
 
       def report_undefined_steps
-        puts "Undefined steps (#{undefined_steps.length})"
+        puts "Undefined steps (#{undefined_steps.length})".yellow
+        puts ""
+      end
+
+      def report_error(error)
+        puts error.inspect
       end
 
       # Prints a nice backtrace when an exception is raised.

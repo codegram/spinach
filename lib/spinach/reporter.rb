@@ -59,17 +59,17 @@ module Spinach
       Runner.after_run{|status| reporter.end(status)}
       Runner::Feature.before_run{|name| reporter.feature(name)}
       Runner::Scenario.before_run{ |name| reporter.scenario(name)}
-      Runner::Scenario.on_successful_step{ |keyword, name|
-        reporter.step(keyword, name, :success)
+      Runner::Scenario.on_successful_step{ |step|
+        reporter.step(step, :success)
       }
-      Runner::Scenario.on_failed_step{ |keyword, name, failure|
-        reporter.step(keyword, name, :failure, failure)
+      Runner::Scenario.on_failed_step{ |step, failure|
+        reporter.step(step, :failure, failure)
       }
-      Runner::Scenario.on_error_step{ |keyword, name, failure|
-        reporter.step(keyword, name, :error, failure)
+      Runner::Scenario.on_error_step{ |step, failure|
+        reporter.step(step, :error, failure)
       }
-      Runner::Scenario.on_skipped_step{ |keyword, name|
-        reporter.step(keyword, name, :skip)
+      Runner::Scenario.on_skipped_step{ |step|
+        reporter.step(step, :skip)
       }
     end
 
