@@ -69,13 +69,13 @@ describe Spinach::Runner::Feature do
 
     it 'returns true if the execution succeeds' do
       Spinach::Runner::Scenario.any_instance.
-        expects(run: nil).times(3)
+        expects(run: true).times(3)
       feature.run.must_equal true
     end
 
     it 'returns false if the execution fails' do
       Spinach::Runner::Scenario.any_instance.
-        expects(run: stub_everything).times(3)
+        expects(run: false).times(3)
       feature.run.must_equal false
     end
 

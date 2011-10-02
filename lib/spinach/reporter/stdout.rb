@@ -116,14 +116,18 @@ module Spinach
 
       def full_error(error)
         feature, scenario, step, exception = error
-        output = report_exception(exception)
-
-        if exception.kind_of?(Spinach::StepNotDefinedException)
-          output.yellow
+        output = String.new
+        output += report_exception(exception)
+        output +="\n"
+        if options[:backtrace]
+          output += "\n"
+          exception.backtrace.map do |line|
+            output << "        #{line}\n"
+          end
         else
-          output.red
+          output << "        #{exception.backtrace[0]}"
         end
-
+        output
       end
 
       def full_step(step)
@@ -136,6 +140,12 @@ module Spinach
         output = exception.message.split("\n").map{ |line|
           "        #{line}"
         }.join("\n")
+
+        if exception.kind_of?(Spinach::StepNotDefinedException)
+          output.yellow
+        else
+          output.red
+        end
       end
     end
   end
