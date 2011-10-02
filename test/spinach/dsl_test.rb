@@ -32,5 +32,12 @@ describe Spinach::DSL do
         @feature.feature_name.must_equal 'User salutes'
       end
     end
+
+    describe "#name" do
+      it "responds with a feature's name" do
+        @feature.feature("A cool feature")
+        @feature.new.name.must_equal "A cool feature"
+      end
+    end
   end
 end
