@@ -20,6 +20,14 @@ module Spinach
         puts
       end
 
+      def after_scenario
+        if @scenario_error
+          puts ""
+          report_error @scenario_error, :backtrace
+        end
+        @scenario_error = nil
+      end
+
       # Prints the step name to the standard output. If failed, it puts an
       # F! before
       #
@@ -28,13 +36,16 @@ module Spinach
           when :success
             [:green, '✔']
           when :undefined_step
-            undefined_steps << [current_feature, current_scenario, step]
+            @scenario_error = [current_feature, current_scenario, step]
+            undefined_steps << @scenario_error
             [:yellow, '?']
           when :failure
-            failed_steps << [current_feature, current_scenario, step, failure]
+            @scenario_error = [current_feature, current_scenario, step, failure]
+            failed_steps << @scenario_error
             [:red, '✘']
           when :error
-            error_steps << [current_feature, current_scenario, step, failure]
+            @scenario_error = [current_feature, current_scenario, step, failure]
+            error_steps << @scenario_error
             [:red, '!']
           when :skip
             [:cyan, '~']
@@ -56,41 +67,75 @@ module Spinach
       end
 
       def report_error_steps
-        puts "Errors (#{error_steps.length})".light_red
-        error_steps.each do |error|
-          report_error error
+        if error_steps.any?
+          puts "Errors (#{error_steps.length})".light_red
+          error_steps.each do |error|
+            report_error error
+          end
+          puts ""
         end
-        puts ""
       end
 
       def report_failed_steps
-        puts "Failures (#{failed_steps.length})".red
-        failed_steps.each do |error|
-          report_error error
+        if failed_steps.any?
+          puts "Failures (#{failed_steps.length})".light_red
+          failed_steps.each do |error|
+            report_error error
+          end
+          puts ""
         end
-        puts ""
       end
 
       def report_undefined_steps
-        puts "Undefined steps (#{undefined_steps.length})".yellow
-        undefined_steps.each do |error|
-          report_error error
+        if undefined_steps.any?
+          puts "Undefined steps (#{undefined_steps.length})".yellow
+          undefined_steps.each do |error|
+            report_error error
+          end
+          puts ""
         end
-        puts ""
       end
 
-      def report_error(error)
-        puts error.inspect
+      def report_error(error, format=:summarized)
+        if format == :summarized
+          puts summarized_error(error)
+        else
+          puts full_error(error)
+        end
+      end
+
+      def summarized_error(error)
+        feature, scenario, step, exception = error
+        summary = "  #{feature['name']} :: #{scenario['name']} :: #{full_step step}"
+        if exception.kind_of?(Spinach::StepNotDefinedException)
+          summary.yellow
+        else
+          summary.red
+        end
+      end
+
+      def full_error(error)
+        feature, scenario, step, exception = error
+        output = report_exception(exception)
+
+        if exception.kind_of?(Spinach::StepNotDefinedException)
+          output.yellow
+        else
+          output.red
+        end
+
+      end
+
+      def full_step(step)
+        "#{step['keyword'].strip} #{step['name'].strip}"
       end
 
       # Prints a nice backtrace when an exception is raised.
       #
       def report_exception(exception)
-        @errors << exception
         output = exception.message.split("\n").map{ |line|
           "        #{line}"
         }.join("\n")
-        puts "#{output}\n\n"
       end
     end
   end

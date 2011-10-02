@@ -19,7 +19,7 @@ module Spinach
     #
     attr_accessor :options
 
-    attr_reader :current_feature, :current_scenario
+    attr_accessor :current_feature, :current_scenario
 
     attr_reader :undefined_steps, :failed_steps, :error_steps
 
@@ -58,8 +58,21 @@ module Spinach
     def bind
       reporter = self
       Runner.after_run{|status| reporter.end(status)}
-      Runner::Feature.before_run{|name| reporter.feature(name)}
-      Runner::Scenario.before_run{ |data| reporter.scenario(data)}
+      Runner::Feature.before_run{ |data|
+        reporter.feature(data)
+        reporter.current_feature = data
+      }
+      Runner::Feature.after_run{ |data|
+        reporter.current_feature = nil
+      }
+      Runner::Scenario.before_run{ |data|
+        reporter.scenario(data)
+        reporter.current_scenario = data
+      }
+      Runner::Scenario.after_run{ |data|
+        reporter.after_scenario
+        reporter.current_scenario = nil
+      }
       Runner::Scenario.on_successful_step{ |step|
         reporter.step(step, :success)
       }
