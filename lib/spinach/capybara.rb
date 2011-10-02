@@ -21,7 +21,7 @@ module Spinach
           include ::Capybara::DSL
           include InstanceMethods
 
-          def after
+          after_scenario do
             ::Capybara.current_session.reset! if ::Capybara.app
           end
         end
@@ -31,5 +31,3 @@ module Spinach
     end
   end
 end
-
-Spinach::Feature.send(:include, Spinach::Feature::Capybara)
