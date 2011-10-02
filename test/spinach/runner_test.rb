@@ -56,4 +56,15 @@ describe Spinach::Runner do
       runner.run
     end
   end
+  describe "#require_dependencies" do
+    it "requires support files and step definitions" do
+      @runner.stubs(
+        support_files: ['a', 'b'], step_definition_files: ['c', 'd']
+      )
+      %w{a b c d}.each do |file|
+        @runner.expects(:require).with(file)
+      end
+      @runner.require_dependencies
+    end
+  end
 end

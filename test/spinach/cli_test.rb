@@ -17,10 +17,27 @@ describe Spinach::Cli do
         end
       end
     end
+    describe "version" do
+      %w{-v --version}.each do |opt|
+        it "outputs the version" do
+          cli = Spinach::Cli.new([opt])
+          cli.expects(:exit)
+          cli.expects(:puts).with(Spinach::VERSION)
+          output = capture_stdout do
+            cli.options
+          end
+        end
+      end
+    end
   end
 
   describe '#init_reporter' do
     it 'inits the default reporter' do
+      cli = Spinach::Cli.new([])
+      reporter = stub
+      reporter.expects(:bind)
+      Spinach::Reporter::Stdout.stubs(new: reporter)
+      cli.init_reporter
       Spinach.config.default_reporter.wont_equal nil
     end
   end
