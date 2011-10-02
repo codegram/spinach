@@ -53,14 +53,14 @@ module Spinach
       def run
         reporter.feature(feature_name)
         failures = []
+        feature.run_hook :before, feature_name
         scenarios.each do |scenario|
           if !@scenario_line || scenario['line'].to_s == @scenario_line
-            feature.send(:before)
             failure = Scenario.new(feature_name, feature, scenario, reporter).run
             failures << failure if failure
-            feature.send(:after)
           end
         end
+        feature.run_hook :after, feature_name
 
         unless failures.length.zero?
           reporter.error_summary(failures)

@@ -73,5 +73,25 @@ describe Spinach::Runner::Scenario do
       @scenario.run.must_equal nil
     end
 
+    describe "hooks" do
+      it "fires up the scenario hooks" do
+        @feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
+        @feature.expects(:run_hook).with(:before_scenario, "A cool scenario")
+        @feature.expects(:run_hook).with(:after_scenario, "A cool scenario")
+        @scenario.run
+      end
+      it "fires up the step hooks" do
+        @feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
+        %w{before_step after_step}.each do |hook|
+          @feature.expects(:run_hook).with(
+            hook.to_sym, "Given", "I herd you like steps")
+          @feature.expects(:run_hook).with(
+            hook.to_sym, "When", "I test steps")
+          @feature.expects(:run_hook).with(
+            hook.to_sym, "Then", "I go step by step")
+        end
+        @scenario.run
+      end
+    end
   end
 end

@@ -26,10 +26,12 @@ module Spinach
       #
       def run
         reporter.scenario(name)
+        feature.run_hook :before_scenario, name
         steps.each do |step|
           keyword = step['keyword'].strip
           name = step['name'].strip
           line = step['line']
+          feature.run_hook :before_step, keyword, name
           unless @failure
             begin
               feature.execute_step(name)
@@ -47,7 +49,9 @@ module Spinach
           else
             reporter.step(keyword, name, :skip)
           end
+          feature.run_hook :after_step, keyword, name
         end
+        feature.run_hook :after_scenario, name
         @failure
       end
     end
