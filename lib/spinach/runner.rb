@@ -1,8 +1,15 @@
+require 'hooks'
+
 module Spinach
   # Spinach's runner gets the parsed data from the feature and performs the
   # actual calls to the feature classes.
   #
   class Runner
+    include Hooks
+
+    define_hook :before_run
+    define_hook :after_run
+
     # Initializes the runner with a parsed feature
     #
     # @param [Array<String>] filenames
@@ -47,12 +54,15 @@ module Spinach
       require_dependencies
 
       filenames.each do |filename|
-        success = Feature.new(filename, reporter).run
+        success = Feature.new(filename).run
         @failed = true unless success
       end
-      reporter.end
 
-      @failed ? false : true
+      status = @failed ? false : true
+
+      run_hook :after_run, status
+
+      return status
     end
 
     # Requires step definitions and support files
