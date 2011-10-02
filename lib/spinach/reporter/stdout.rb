@@ -7,13 +7,15 @@ module Spinach
     class Stdout < Reporter
       # Prints the feature name to the standard output
       #
-      def feature(name)
+      def feature(data)
+        name = data['name']
         puts "\n#{'Feature:'.magenta} #{name.light_magenta}"
       end
 
       # Prints the scenario name to the standard ouput
       #
-      def scenario(name)
+      def scenario(data)
+        name = data['name']
         puts "\n  #{'Scenario:'.green} #{name.light_green}"
         puts
       end
@@ -26,13 +28,13 @@ module Spinach
           when :success
             [:green, '✔']
           when :undefined_step
-            undefined_steps << [step]
+            undefined_steps << [current_feature, current_scenario, step]
             [:yellow, '?']
           when :failure
-            failed_steps << [step, failure]
+            failed_steps << [current_feature, current_scenario, step, failure]
             [:red, '✘']
           when :error
-            error_steps << [step, failure]
+            error_steps << [current_feature, current_scenario, step, failure]
             [:red, '!']
           when :skip
             [:cyan, '~']
@@ -55,16 +57,25 @@ module Spinach
 
       def report_error_steps
         puts "Errors (#{error_steps.length})".light_red
+        error_steps.each do |error|
+          report_error error
+        end
         puts ""
       end
 
       def report_failed_steps
         puts "Failures (#{failed_steps.length})".red
+        failed_steps.each do |error|
+          report_error error
+        end
         puts ""
       end
 
       def report_undefined_steps
         puts "Undefined steps (#{undefined_steps.length})".yellow
+        undefined_steps.each do |error|
+          report_error error
+        end
         puts ""
       end
 

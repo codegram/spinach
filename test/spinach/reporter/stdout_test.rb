@@ -8,7 +8,7 @@ describe Spinach::Reporter::Stdout do
   describe '#feature' do
     it 'outputs a feature name' do
       out = capture_stdout do
-        reporter.feature 'User authentication'
+        reporter.feature({'name' => 'User authentication'})
       end
       out.string.must_match /Feature:.*User authentication/
     end
@@ -17,7 +17,7 @@ describe Spinach::Reporter::Stdout do
   describe '#scenario' do
     it 'outputs a scenario name' do
       out = capture_stdout do
-        reporter.scenario 'User logs in'
+        reporter.scenario({'name' => "User logs in"})
       end
       out.string.must_match /Scenario:.*User logs in/
     end

@@ -17,9 +17,7 @@ describe Spinach::Reporter do
 
     describe '#step' do
       it 'raises an error' do
-        proc {
-          reporter.step('Given', 'arbitrary name', :success)
-        }.must_raise RuntimeError
+        proc { @reporter.step(stub, :success) }.must_raise RuntimeError
       end
     end
 

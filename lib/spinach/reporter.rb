@@ -19,38 +19,39 @@ module Spinach
     #
     attr_accessor :options
 
+    attr_reader :current_feature, :current_scenario
+
     attr_reader :undefined_steps, :failed_steps, :error_steps
 
     # Receives this hook when a feature is invoked
-    # @param [String] name
-    #   the feature name
+    # @param [Hash] data
+    #   the feature data
     #
-    def feature(name)
+    def feature(data)
       raise 'You need to define the `feature` method in your reporter!'
     end
 
     # Receives this hook when a scenario is invoked
-    # @param [String] name
-    #   the scenario name
+    # @param [Hash] data
+    #   the scenario data
     #
-    def scenario(name)
+    def scenario(data)
       raise 'You need to define the `scenario` method in your reporter!'
     end
 
     # Receives this hook when a step is invoked
-    # @param [String] name
-    #   the scenario name
+    # @param [Hash] step
+    #   the step data
     # @param [Symbol] result
     #   the step name and its finishing state. May be :success or :failure
     #
-    def step(keyword, name, result)
+    def step(step, result)
       raise 'You need to define the `step` method in your reporter!'
     end
 
     # Receives this hook when a feature reaches its end
     #
     def end(success)
-      raise 'Abstract method!'
       raise 'You need to define the `end` method in your reporter!'
     end
 
@@ -58,7 +59,7 @@ module Spinach
       reporter = self
       Runner.after_run{|status| reporter.end(status)}
       Runner::Feature.before_run{|name| reporter.feature(name)}
-      Runner::Scenario.before_run{ |name| reporter.scenario(name)}
+      Runner::Scenario.before_run{ |data| reporter.scenario(data)}
       Runner::Scenario.on_successful_step{ |step|
         reporter.step(step, :success)
       }

@@ -56,14 +56,14 @@ describe Spinach::Runner::Feature do
 
     it 'calls the steps as expected' do
       seq = sequence('feature')
-      feature.feature.expects(:run_hook).with(:before, 'A cool feature')
+      feature.feature.expects(:run_hook).with(:before, kind_of(Hash))
       3.times do
         Spinach::Runner::Scenario.
           expects(:new).
           returns(stub_everything).
           in_sequence(seq)
       end
-      feature.feature.expects(:run_hook).with(:after, 'A cool feature')
+      feature.feature.expects(:run_hook).with(:after, kind_of(Hash))
       feature.run
     end
 

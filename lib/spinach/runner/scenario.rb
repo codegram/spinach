@@ -5,7 +5,7 @@ module Spinach
     # A Scenario Runner handles a particular scenario run.
     #
     class Scenario
-      attr_reader :name, :feature, :feature_name, :steps
+      attr_reader :feature, :feature_name, :data
 
       include Hooks
 
@@ -25,17 +25,20 @@ module Spinach
       #
       def initialize(feature_name, feature, data)
         @feature_name = feature_name
-        @name = data['name']
-        @steps = data['steps']
+        @data = data
         @feature = feature
+      end
+
+      def steps
+        @steps ||= data['steps']
       end
 
       # Runs this scenario
       # @return [Boolean]
       #   true if this scenario succeeded
       def run
-        run_hook :before_run, name
-        feature.run_hook :before_scenario, name
+        run_hook :before_run, data
+        feature.run_hook :before_scenario, data
         steps.each do |step|
           feature.run_hook :before_step, step
           unless @exception
@@ -57,8 +60,8 @@ module Spinach
           end
           feature.run_hook :after_step, step
         end
-        feature.run_hook :after_scenario, name
-        run_hook :after_run, name
+        feature.run_hook :after_scenario, data
+        run_hook :after_run, data
         !@exception
       end
     end
