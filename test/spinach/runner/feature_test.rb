@@ -2,7 +2,7 @@ require_relative '../../test_helper'
 
 describe Spinach::Runner::Feature do
   let(:filename) { 'feature/a_cool_feature.feature' }
-  let(:feature) { Spinach::Runner::Feature.new(filename, reporter) }
+  let(:feature) { Spinach::Runner::Feature.new(filename) }
 
   describe '#initialize' do
     it 'initializes the given filename' do
@@ -13,7 +13,7 @@ describe Spinach::Runner::Feature do
       @filename = 'feature/a_cool_feature.feature:12'
       @feature = Spinach::Runner::Feature.new(@filename)
 
-      feature.instance_variable_get(:@scenario_line).must_equal '12'
+      @feature.instance_variable_get(:@scenario_line).must_equal '12'
     end
   end
 
@@ -88,10 +88,10 @@ describe Spinach::Runner::Feature do
                        {'keyword'=>'Scenario', 'name'=>'Basic guess II', 'line'=>12, 'description'=>'', 'type'=>'scenario'},
                        {'keyword'=>'Scenario', 'name'=>'Basic guess III', 'line'=>18, 'description'=>'', 'type'=>'scenario'}]
       })
-      feature.stubs(feature: stub_everything)
+      @feature.stubs(feature: stub_everything)
 
-      Spinach::Runner::Scenario.expects(:new).with(anything, anything, feature.scenarios[1], anything).once.returns(stub_everything)
-      feature.run
+      Spinach::Runner::Scenario.expects(:new).with(anything, anything, @feature.scenarios[1], anything).once.returns(stub_everything)
+      @feature.run
     end
   end
 end
