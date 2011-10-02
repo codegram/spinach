@@ -47,7 +47,7 @@ module Spinach
 
       def error_summary(errors)
         puts
-        puts "    !  Error summary (#{errors.length})".light_white
+        puts "    !  Error summary for this feature (#{errors.length})".light_white
         errors.each do |error, step, line, scenario|
           step_file = error.backtrace.detect do |f|
             f =~ /<class:#{scenario.feature.class}>/
@@ -61,7 +61,7 @@ module Spinach
                   end
 
           puts
-          puts "       #{scenario.feature_name.light_magenta} :: #{scenario.name.green} :: #{step.colorize(color)} (line #{line})"
+          puts "       #{scenario.feature_name} :: #{scenario.name} :: #{step.colorize(color)} (line #{line})"
           puts "       #{step_file}" if step_file
           error.message.split("\n").each do |line|
             puts "         #{line}".colorize(color)
