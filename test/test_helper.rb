@@ -1,14 +1,19 @@
 gem 'minitest'
+require 'simplecov'
+
+SimpleCov.start do
+  add_filter '/test/'
+end
+
 require 'minitest/spec'
 require 'minitest/autorun'
 require 'mocha'
 require 'ostruct'
 require 'purdytest'
+require 'stringio'
 
 require 'spinach'
 require 'spinach/capybara'
-
-require 'stringio'
 
 module Kernel
   def capture_stdout

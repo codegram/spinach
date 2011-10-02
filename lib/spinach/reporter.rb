@@ -55,36 +55,55 @@ module Spinach
       raise 'You need to define the `end` method in your reporter!'
     end
 
+    def after_run(status)
+      self.end(status)
+    end
+
+    def before_feature_run(data)
+      feature(data)
+      current_feature = data
+    end
+
+    def after_feature_run(data)
+      current_feature = nil
+    end
+
+    def before_scenario_run(data)
+      scenario(data)
+      current_scenario = data
+    end
+
+    def after_scenario_run(data)
+      after_scenario
+      current_scenario = nil
+    end
+
+    def on_successful_step(step)
+      step(step, :success)
+    end
+
+    def on_failed_step(step, failure)
+      step(step, :failure, failure)
+    end
+
+    def on_error_step(step, failure)
+      step(step, :error, failure)
+    end
+
+    def on_skipped_step(step)
+      step(step, :skip)
+    end
+
     def bind
-      reporter = self
-      Runner.after_run{|status| reporter.end(status)}
-      Runner::Feature.before_run{ |data|
-        reporter.feature(data)
-        reporter.current_feature = data
-      }
-      Runner::Feature.after_run{ |data|
-        reporter.current_feature = nil
-      }
-      Runner::Scenario.before_run{ |data|
-        reporter.scenario(data)
-        reporter.current_scenario = data
-      }
-      Runner::Scenario.after_run{ |data|
-        reporter.after_scenario
-        reporter.current_scenario = nil
-      }
-      Runner::Scenario.on_successful_step{ |step|
-        reporter.step(step, :success)
-      }
-      Runner::Scenario.on_failed_step{ |step, failure|
-        reporter.step(step, :failure, failure)
-      }
-      Runner::Scenario.on_error_step{ |step, failure|
-        reporter.step(step, :error, failure)
-      }
-      Runner::Scenario.on_skipped_step{ |step|
-        reporter.step(step, :skip)
-      }
+      Runner.after_run method(:after_run)
+      Runner::Feature.before_run method(:before_feature_run)
+      Runner::Feature.after_run method(:after_feature_run)
+      Runner::Scenario.before_run method(:before_scenario_run)
+      Runner::Scenario.after_run method(:after_scenario_run)
+      Runner::Scenario.on_successful_step method(:on_successful_step)
+      Runner::Scenario.on_failed_step method(:on_failed_step)
+      Runner::Scenario.on_error_step method(:on_error_step)
+      Runner::Scenario.on_skipped_step method(:on_skipped_step)
     end
 
   end
