@@ -12,7 +12,7 @@ describe Spinach::Reporter::Stdout do
       out = capture_stdout do
         @reporter.feature "User authentication"
       end
-      out.string.must_include "\nFeature: User authentication"
+      out.string.must_match /Feature:.*User authentication/
     end
   end
 
@@ -35,7 +35,7 @@ describe Spinach::Reporter::Stdout do
           @reporter.step "Given", "I say goodbye", :success
         end
         out.string.must_include "✔"
-        out.string.must_include "Given I say goodbye"
+        out.string.must_match /Given.*I say goodbye/
       end
     end
 
@@ -45,7 +45,7 @@ describe Spinach::Reporter::Stdout do
           @reporter.step "Given", "I say goodbye", :undefined_step
         end
         out.string.must_include "?"
-        out.string.must_include "Given I say goodbye"
+        out.string.must_match /Given.*I say goodbye/
       end
     end
 
@@ -55,7 +55,7 @@ describe Spinach::Reporter::Stdout do
           @reporter.step "Given", "I say goodbye", :failure
         end
         out.string.must_include "✘"
-        out.string.must_include "Given I say goodbye"
+        out.string.must_match /Given.*I say goodbye/
       end
     end
 
@@ -65,7 +65,7 @@ describe Spinach::Reporter::Stdout do
           @reporter.step "Given", "I say goodbye", :error
         end
         out.string.must_include "!"
-        out.string.must_include "Given I say goodbye"
+        out.string.must_match /Given.*I say goodbye/
       end
     end
 
@@ -75,7 +75,7 @@ describe Spinach::Reporter::Stdout do
           @reporter.step "Given", "I say nothing", :skip
         end
         out.string.must_include "~"
-        out.string.must_include "Given I say nothing"
+        out.string.must_match /Given.*I say nothing/
       end
     end
   end

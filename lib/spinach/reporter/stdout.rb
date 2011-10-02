@@ -9,7 +9,7 @@ module Spinach
       # Prints the feature name to the standard output
       #
       def feature(name)
-        puts "\nFeature: #{name}".white.underline
+        puts "\n#{'Feature:'.magenta} #{name.light_magenta}"
       end
 
       # Prints the scenario name to the standard ouput
@@ -23,18 +23,20 @@ module Spinach
       # F! before
       #
       def step(keyword, name, result)
-        case result
+        color, symbol = case result
           when :success
-            puts "    ✔  #{keyword} #{name}".light_green
+            [:green, '✔']
           when :undefined_step
-            puts "    ?  #{keyword} #{name}".light_yellow
+            [:yellow, '?']
           when :failure
-            puts "    ✘  #{keyword} #{name}".light_red
+            [:red, '✘']
           when :error
-            puts "    !  #{keyword} #{name}".light_red
+            [:red, '!']
           when :skip
-            puts "    ~  #{keyword} #{name}".light_cyan
+            [:cyan, '~']
         end
+        puts "    #{symbol.colorize(:"light_#{color}")}  #{keyword.colorize(:"light_#{color}")} #{name.colorize(color)}"
+
       end
 
       # Prints a blank line at the end
@@ -59,7 +61,7 @@ module Spinach
                   end
 
           puts
-          puts "       #{scenario.feature_name.underline} :: #{scenario.name.green} :: #{step.colorize(color)} (line #{line})"
+          puts "       #{scenario.feature_name.light_magenta} :: #{scenario.name.green} :: #{step.colorize(color)} (line #{line})"
           puts "       #{step_file}" if step_file
           error.message.split("\n").each do |line|
             puts "         #{line}".colorize(color)
