@@ -33,12 +33,6 @@ module Spinach
         Spinach.config.support_path
     end
 
-    # Returns the current [Reporter] for the [Runner]
-    #
-    def reporter
-      @reporter ||= Spinach::config.default_reporter
-    end
-
     # The feature files to run
     attr_reader :filenames
 
