@@ -41,6 +41,8 @@ describe Spinach::Runner::Scenario do
     describe 'when throwing exceptions' do
       it 'rescues a MiniTest::Assertion' do
         feature.expects(:execute_step).raises(MiniTest::Assertion)
+        scenario.expects(:run_hook).with(:before_run, "A cool scenario")
+        scenario.expects(:run_hook).with(:after_run, "A cool scenario")
         scenario.expects(:run_hook).with(
           :on_failed_step, anything, anything, anything)
         scenario.expects(:run_hook).with(
@@ -51,6 +53,8 @@ describe Spinach::Runner::Scenario do
       it 'rescues a Spinach::StepNotDefinedException' do
         feature.expects(:execute_step).raises(
           Spinach::StepNotDefinedException.new('foo', 'bar'))
+        scenario.expects(:run_hook).with(:before_run, "A cool scenario")
+        scenario.expects(:run_hook).with(:after_run, "A cool scenario")
         scenario.expects(:run_hook).with(
           :on_undefined_step, anything, anything, anything)
         scenario.expects(:run_hook).with(
@@ -60,6 +64,8 @@ describe Spinach::Runner::Scenario do
 
       it 'rescues any other error' do
         feature.expects(:execute_step).raises
+        scenario.expects(:run_hook).with(:after_run, "A cool scenario")
+        scenario.expects(:run_hook).with(:before_run, "A cool scenario")
         scenario.expects(:run_hook).with(
           :on_error_step, anything, anything, anything)
         scenario.expects(:run_hook).with(

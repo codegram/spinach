@@ -78,63 +78,9 @@ describe Spinach::Reporter::Stdout do
   describe '#end' do
     it 'outputs a blank line' do
       out = capture_stdout do
-        reporter.end
+        reporter.end(true)
       end
       out.string.must_include "\n"
-    end
-  end
-
-  describe '#error_summary' do
-    before do
-      make_error = proc do |message|
-        stub(
-          message: message,
-          backtrace: ['foo:1', 'bar:2']
-        )
-      end
-
-      make_scenario = proc do |name|
-        stub(
-          feature_name: name,
-          feature: stub_everything,
-          name: name
-        )
-      end
-
-      @errors = [
-        [make_error.('omg'), 'some_file', '3', make_scenario.('feature')],
-        [make_error.('wtf'), 'other_file', '9', make_scenario.('feature')],
-      ]
-
-    end
-
-    it 'outputs an error summary' do
-      out = capture_stdout do
-        reporter.error_summary(@errors)
-      end
-      out.string.must_include 'omg'
-      out.string.must_include 'some_file'
-      out.string.must_include '(line 3)'
-      out.string.must_include 'wtf'
-      out.string.must_include 'other_file'
-      out.string.must_include '(line 9)'
-      out.string.wont_include 'foo:1'
-      out.string.wont_include 'bar:2'
-    end
-
-    it 'outputs an error summary with backtrace' do
-      reporter.options[:backtrace] = true
-      out = capture_stdout do
-        reporter.error_summary(@errors)
-      end
-      out.string.must_include 'omg'
-      out.string.must_include 'some_file'
-      out.string.must_include '(line 3)'
-      out.string.must_include 'wtf'
-      out.string.must_include 'other_file'
-      out.string.must_include '(line 9)'
-      out.string.must_include 'foo:1'
-      out.string.must_include 'bar:2'
     end
   end
 end

@@ -34,6 +34,7 @@ module Spinach
       # @return [Boolean]
       #   true if this scenario succeeded
       def run
+        run_hook :before_run, name
         feature.run_hook :before_scenario, name
         steps.each do |step|
           keyword = step['keyword'].strip
@@ -60,6 +61,7 @@ module Spinach
           feature.run_hook :after_step, keyword, name
         end
         feature.run_hook :after_scenario, name
+        run_hook :after_run, name
         !@failure
       end
     end

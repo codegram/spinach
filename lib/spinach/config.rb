@@ -19,7 +19,7 @@ module Spinach
   # to run.
   #
   class Config
-    attr_writer :step_definitions_path, :support_path
+    attr_writer :step_definitions_path, :default_reporter, :support_path
 
     # The "step definitions path" helds the place where your feature classes
     # will be searched for. Defaults to 'features/steps'
@@ -33,6 +33,14 @@ module Spinach
     #
     def support_path
       @support_path || 'features/support'
+    end
+
+    # The default reporter is the reporter spinach will use if there's no other
+    # specified. Defaults to Spinach::Reporter::Stdout, which will print all
+    # output to the standard output
+    #
+    def default_reporter
+      @default_reporter || Spinach::Reporter::Stdout.new
     end
 
     # Allows you to read the config object using a hash-like syntax.
