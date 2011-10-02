@@ -9,17 +9,17 @@ describe Spinach::Parser do
 
   describe '#parse' do
     before do
-      @parser.stubs(:content).returns('
+      @parser.stubs(:content).returns("
         Feature: User authentication
            Scenario: User logs in
              Given I am on the front page
              When I fill in the login form and press 'login'
              Then I should be on my dashboard
-      ')
+      ")
     end
 
     it 'parses the feature name' do
-      @parsed['name'].must_equal 'User authentication'
+      parsed['name'].must_equal 'User authentication'
     end
 
     describe 'scenario' do
