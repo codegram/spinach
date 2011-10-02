@@ -2,7 +2,6 @@ require_relative '../../test_helper'
 
 describe Spinach::Runner::Feature do
   let(:filename) { 'feature/a_cool_feature.feature' }
-  let(:reporter) { stub_everything }
   let(:feature) { Spinach::Runner::Feature.new(filename, reporter) }
 
   describe '#initialize' do
@@ -10,13 +9,9 @@ describe Spinach::Runner::Feature do
       feature.filename.must_equal filename
     end
 
-    it 'initializes the given reporter' do
-      feature.reporter.must_equal reporter
-    end
-
     it 'initalizes the given scenario line' do
-      filename = 'feature/a_cool_feature.feature:12'
-      feature = Spinach::Runner::Feature.new(filename, reporter)
+      @filename = 'feature/a_cool_feature.feature:12'
+      @feature = Spinach::Runner::Feature.new(@filename)
 
       feature.instance_variable_get(:@scenario_line).must_equal '12'
     end
@@ -59,13 +54,6 @@ describe Spinach::Runner::Feature do
       feature.stubs(feature: stub_everything)
     end
 
-    it 'reports' do
-      Spinach::Runner::Scenario.stubs(new: stub_everything)
-
-      reporter.expects(:feature).with('A cool feature')
-      feature.run
-    end
-
     it 'calls the steps as expected' do
       seq = sequence('feature')
       feature.feature.expects(:run_hook).with(:before, 'A cool feature')
@@ -80,23 +68,21 @@ describe Spinach::Runner::Feature do
     end
 
     it 'returns true if the execution succeeds' do
-      feature.stubs(reporter: stub_everything)
       Spinach::Runner::Scenario.any_instance.
         expects(run: nil).times(3)
       feature.run.must_equal true
     end
 
     it 'returns false if the execution fails' do
-      feature.stubs(reporter: stub_everything)
       Spinach::Runner::Scenario.any_instance.
         expects(run: stub_everything).times(3)
       feature.run.must_equal false
     end
 
     it 'calls only the given scenario' do
-      filename = 'feature/a_cool_feature.feature:12'
-      feature = Spinach::Runner::Feature.new(filename, reporter)
-      feature.stubs(data: {
+      @filename = 'feature/a_cool_feature.feature:12'
+      @feature = Spinach::Runner::Feature.new(@filename)
+      @feature.stubs(data: {
         'name' => 'A cool feature',
         'elements' => [{'keyword'=>'Scenario', 'name'=>'Basic guess', 'line'=>6, 'description'=>'', 'type'=>'scenario'},
                        {'keyword'=>'Scenario', 'name'=>'Basic guess II', 'line'=>12, 'description'=>'', 'type'=>'scenario'},
@@ -105,16 +91,6 @@ describe Spinach::Runner::Feature do
       feature.stubs(feature: stub_everything)
 
       Spinach::Runner::Scenario.expects(:new).with(anything, anything, feature.scenarios[1], anything).once.returns(stub_everything)
-      feature.run
-    end
-
-    it 'calls an error summary if there are any failures' do
-      failure = stub('failure')
-      scenario = stub(run: failure)
-      Spinach::Runner::Scenario.stubs(:new).returns scenario
-
-      reporter.expects(:error_summary).with [failure, failure, failure]
-
       feature.run
     end
   end

@@ -34,8 +34,7 @@ module Spinach
     #
     # @api public
     def init_reporter
-      Spinach.config.default_reporter =
-        Spinach::Reporter::Stdout.new(options[:reporter])
+      Spinach::Reporter::Stdout.new(options[:reporter])
     end
 
     # @return [Hash]
