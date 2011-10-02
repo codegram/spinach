@@ -1,5 +1,6 @@
 require 'capybara'
 require 'capybara/dsl'
+require_relative 'feature'
 
 module Spinach
   class Feature
