@@ -1,4 +1,5 @@
 require 'minitest/spec'
+require 'hooks'
 MiniTest::Spec.new nil
 
 module Spinach
@@ -7,9 +8,14 @@ module Spinach
   class Feature
     include DSL
     include MiniTest::Assertions
+    include Hooks
 
-    def before; end;
-    def after; end;
+    define_hook :before
+    define_hook :after
+    define_hook :before_scenario
+    define_hook :after_scenario
+    define_hook :before_step
+    define_hook :after_step
 
     def self.inherited(base)
       Spinach.features << base
