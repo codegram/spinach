@@ -69,8 +69,8 @@ module Spinach
       #
       # @api public
       def run
-        run_hook :before_run, feature_name
-        feature.run_hook :before, feature_name
+        run_hook :before_run, data
+        feature.run_hook :before, data
 
         scenarios.each do |scenario|
           if !@scenario_line || scenario['line'].to_s == @scenario_line
@@ -78,8 +78,8 @@ module Spinach
           end
         end
 
-        feature.run_hook :after, feature_name
-        run_hook :after_run, feature_name
+        feature.run_hook :after, data
+        run_hook :after_run, data
 
         return !@failure
       end

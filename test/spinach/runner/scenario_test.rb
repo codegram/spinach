@@ -17,10 +17,6 @@ describe Spinach::Runner::Scenario do
   let(:scenario) { Spinach::Runner::Scenario.new(feature_name, feature, data) }
 
   describe '#initialize' do
-    it 'initializes a scenario name' do
-      scenario.name.must_equal 'A cool scenario'
-    end
-
     it 'lists all the steps' do
       scenario.steps.count.must_equal 3
     end
@@ -41,8 +37,8 @@ describe Spinach::Runner::Scenario do
     describe 'when throwing exceptions' do
       it 'rescues a MiniTest::Assertion' do
         feature.expects(:execute_step).raises(MiniTest::Assertion)
-        scenario.expects(:run_hook).with(:before_run, "A cool scenario")
-        scenario.expects(:run_hook).with(:after_run, "A cool scenario")
+        scenario.expects(:run_hook).with(:before_run, has_value("A cool scenario"))
+        scenario.expects(:run_hook).with(:after_run, has_value("A cool scenario"))
         scenario.expects(:run_hook).with(
           :on_failed_step, anything, anything, anything)
         scenario.expects(:run_hook).with(
@@ -53,8 +49,8 @@ describe Spinach::Runner::Scenario do
       it 'rescues a Spinach::StepNotDefinedException' do
         feature.expects(:execute_step).raises(
           Spinach::StepNotDefinedException.new('foo', 'bar'))
-        scenario.expects(:run_hook).with(:before_run, "A cool scenario")
-        scenario.expects(:run_hook).with(:after_run, "A cool scenario")
+        scenario.expects(:run_hook).with(:before_run, has_value("A cool scenario"))
+        scenario.expects(:run_hook).with(:after_run, has_value("A cool scenario"))
         scenario.expects(:run_hook).with(
           :on_undefined_step, anything, anything, anything)
         scenario.expects(:run_hook).with(
@@ -64,8 +60,8 @@ describe Spinach::Runner::Scenario do
 
       it 'rescues any other error' do
         feature.expects(:execute_step).raises
-        scenario.expects(:run_hook).with(:after_run, "A cool scenario")
-        scenario.expects(:run_hook).with(:before_run, "A cool scenario")
+        scenario.expects(:run_hook).with(:after_run, has_value("A cool scenario"))
+        scenario.expects(:run_hook).with(:before_run, has_value("A cool scenario"))
         scenario.expects(:run_hook).with(
           :on_error_step, anything, anything, anything)
         scenario.expects(:run_hook).with(
@@ -87,8 +83,8 @@ describe Spinach::Runner::Scenario do
     describe 'hooks' do
       it 'fires up the scenario hooks' do
         feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
-        feature.expects(:run_hook).with(:before_scenario, 'A cool scenario')
-        feature.expects(:run_hook).with(:after_scenario, 'A cool scenario')
+        feature.expects(:run_hook).with(:before_scenario, has_value("A cool scenario"))
+        feature.expects(:run_hook).with(:after_scenario, has_value("A cool scenario"))
         scenario.run
       end
 
