@@ -1,5 +1,4 @@
 require 'minitest/spec'
-require 'hooks'
 MiniTest::Spec.new nil
 
 module Spinach
@@ -8,14 +7,6 @@ module Spinach
   class Feature
     include DSL
     include MiniTest::Assertions
-    include Hooks
-
-    define_hook :before
-    define_hook :after
-    define_hook :before_scenario
-    define_hook :after_scenario
-    define_hook :before_step
-    define_hook :after_step
 
     # Registers the feature class for later use.
     #

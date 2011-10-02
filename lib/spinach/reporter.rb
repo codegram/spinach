@@ -10,6 +10,7 @@ module Spinach
     def initialize(options = {})
       @errors = []
       @options = options
+      bind
     end
 
     # A Hash with options for the reporter
@@ -47,6 +48,26 @@ module Spinach
     def end
       raise "You need to define the `end` method in your reporter!"
     end
+
+    def bind
+      reporter = self
+      Runner.after_run{|feature_name| reporter.feature(name)}
+      Runner::Feature.before_run{|feature_name| reporter.feature(name)}
+      Runner::Scenario.before_run{ |scenario_name| reporter.scenario(name)}
+      Runner::Scenario.on_successful_step{ |keyword, name|
+        reporter.scenario(keyword, name, :success)
+      }
+      Runner::Scenario.on_failed_step{ |keyword, name, failure|
+        reporter.scenario(keyword, name, :failure, failure)
+      }
+      Runner::Scenario.on_error_step{ |keyword, name, failure|
+        reporter.scenario(keyword, name, :error, failure)
+      }
+      Runner::Scenario.on_skipped_step{ |keyword, name|
+        reporter.step(keyword, name, :skip)
+      }
+    end
+
   end
 end
 
