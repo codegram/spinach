@@ -12,6 +12,8 @@ module Spinach
       define_hook :before_run
       define_hook :on_successful_step
       define_hook :on_failed_step
+      define_hook :on_error_step
+      define_hook :on_undefined_step
       define_hook :on_skipped_step
       define_hook :after_run
 
@@ -44,7 +46,6 @@ module Spinach
               run_hook :on_successful_step, keyword, name
             rescue MiniTest::Assertion => e
               @failure = [e, name, line, self]
-              reporter.step(keyword, name, :failure)
               run_hook :on_failed_step, keyword, name, @failure
             rescue Spinach::StepNotDefinedException => e
               @failure = [e, name, line, self]

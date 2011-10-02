@@ -36,18 +36,10 @@ describe Spinach::Runner do
     end
   end
 
-  describe '#reporter' do
-    it 'returns a default reporter' do
-      runner.reporter.wont_equal nil
-    end
-  end
-
   describe '#run' do
     before do
       @feature = stub
-      runner.stubs(reporter: stub_everything)
-
-      filenames.each do |filename|
+      @filenames.each do |filename|
         Spinach::Runner::Feature.expects(:new).
           with(filename, anything).
           returns(@feature)

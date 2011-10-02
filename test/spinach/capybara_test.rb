@@ -36,7 +36,8 @@ describe Spinach::Feature::Capybara do
 
   it 'resets the capybara session after each scenario' do
     @feature_runner = Spinach::Runner::Feature.new(
-      stub_everything, stub_everything)
+      stub_everything)
+
     Spinach::Parser.any_instance.stubs(content: '
       Feature: A test feature
         Scenario: A test scenario

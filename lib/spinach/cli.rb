@@ -28,8 +28,7 @@ module Spinach
 
     # Inits the reporter with a default one
     def init_reporter
-      Spinach.config.default_reporter =
-        Spinach::Reporter::Stdout.new(options[:reporter])
+      Spinach::Reporter::Stdout.new(options[:reporter])
     end
 
     # Returns a hash of options, separated by its type:
