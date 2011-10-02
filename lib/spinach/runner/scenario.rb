@@ -37,32 +37,29 @@ module Spinach
         run_hook :before_run, name
         feature.run_hook :before_scenario, name
         steps.each do |step|
-          keyword = step['keyword'].strip
-          name = step['name'].strip
-          line = step['line']
-          feature.run_hook :before_step, keyword, name
-          unless @failure
+          feature.run_hook :before_step, step
+          unless @exception
             begin
-              feature.execute_step(name)
-              run_hook :on_successful_step, keyword, name
+              feature.execute_step(step['name'])
+              run_hook :on_successful_step, step
             rescue MiniTest::Assertion => e
-              @failure = [e, name, line, self]
-              run_hook :on_failed_step, keyword, name, @failure
+              @exception = e
+              run_hook :on_failed_step, step, @exception
             rescue Spinach::StepNotDefinedException => e
-              @failure = [e, name, line, self]
-              run_hook :on_undefined_step, keyword, name, @failure
+              @exception = e
+              run_hook :on_undefined_step, step, @exception
             rescue StandardError => e
-              @failure = [e, name, line, self]
-              run_hook :on_error_step, keyword, name, @failure
+              @exception = e
+              run_hook :on_error_step, step, @exception
             end
           else
-            run_hook :on_skipped_step, keyword, name
+            run_hook :on_skipped_step, step
           end
-          feature.run_hook :after_step, keyword, name
+          feature.run_hook :after_step, step
         end
         feature.run_hook :after_scenario, name
         run_hook :after_run, name
-        !@failure
+        !@exception
       end
     end
   end

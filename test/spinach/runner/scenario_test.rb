@@ -96,11 +96,11 @@ describe Spinach::Runner::Scenario do
         feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
         %w{before_step after_step}.each do |hook|
           feature.expects(:run_hook).with(
-            hook.to_sym, 'Given', 'I herd you like steps')
+            hook.to_sym, kind_of(Hash))
           feature.expects(:run_hook).with(
-            hook.to_sym, 'When', 'I test steps')
+            hook.to_sym, kind_of(Hash))
           feature.expects(:run_hook).with(
-            hook.to_sym, 'Then', 'I go step by step')
+            hook.to_sym, kind_of(Hash))
         end
 
         scenario.run
