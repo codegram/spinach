@@ -21,7 +21,7 @@ describe Spinach::Reporter::Stdout do
       out = capture_stdout do
         @reporter.scenario "User logs in"
       end
-      out.string.must_include "  Scenario: User logs in"
+      out.string.must_match /Scenario:.*User logs in/
     end
   end
 
