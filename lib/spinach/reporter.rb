@@ -49,6 +49,11 @@ module Spinach
       raise 'You need to define the `step` method in your reporter!'
     end
 
+    # Ends with a status
+    def end(status)
+      raise "Abstract method!"
+    end
+
     def bind
       Runner.after_run method(:_after_run)
       Runner::Feature.before_run method(:_before_feature_run)
