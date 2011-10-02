@@ -20,7 +20,6 @@ module Spinach
     #
     # @api public
     def run
-      init_reporter
       parse_options
       features = if @args.any?
         @args
@@ -34,7 +33,10 @@ module Spinach
     #
     # @api public
     def init_reporter
-      Spinach::Reporter::Stdout.new(options[:reporter])
+      reporter =
+        Spinach::Reporter::Stdout.new(options[:reporter])
+      Spinach.config.default_reporter = reporter
+      reporter.bind
     end
 
     # @return [Hash]

@@ -25,7 +25,7 @@ describe Spinach::Reporter do
 
     describe '#end' do
       it 'raises an error' do
-        proc { reporter.end }.must_raise RuntimeError
+        proc { reporter.end(true) }.must_raise RuntimeError
       end
     end
   end
