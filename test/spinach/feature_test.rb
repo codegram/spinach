@@ -1,7 +1,7 @@
 require_relative '../test_helper'
 
 describe Spinach::Feature do
-  describe "ancestors" do
+  describe 'ancestors' do
     it 'includes minitest helpers' do
       Spinach::Feature.ancestors.must_include MiniTest::Assertions
     end
@@ -26,8 +26,8 @@ describe Spinach::Feature do
   end
 
   describe 'instance methods' do
-    before do
-      @feature = Class.new(Spinach::Feature) do
+    let(:feature) do
+      Class.new(Spinach::Feature) do
         When 'I go to the toilet' do
           @pee = true
         end
@@ -37,30 +37,33 @@ describe Spinach::Feature do
 
     describe 'execute_step' do
       it 'runs defined step correctly' do
-        @feature.execute_step('I go to the toilet')
+        feature.execute_step('I go to the toilet')
 
-        @feature.pee.must_equal true
+        feature.pee.must_equal true
       end
 
       it 'raises an exception if step is not defined' do
         proc {
-          @feature.execute_step 'I am lost'
+          feature.execute_step 'I am lost'
         }.must_raise Spinach::StepNotDefinedException
       end
     end
   end
 
-  describe "Object#Feature" do
-    it "creates a feature class" do
-      feature = Feature("Hola") do
+  describe 'Object#Feature' do
+    it 'creates a feature class' do
+      feature = Feature('Hola') do
         attr_accessor :test
-        When "Test" do
+        When 'Test' do
           self.test = true
         end
       end
+
       Spinach.features.must_include feature
+
       instance = feature.new
-      instance.execute_step("Test")
+      instance.execute_step('Test')
+
       instance.test.must_equal true
     end
   end

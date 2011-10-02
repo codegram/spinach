@@ -7,6 +7,8 @@ module Spinach
       @feature = options.last
     end
 
+    # Returns a custom message when a feature class is not found.
+    #
     def message
       "Could not find class for `#{@feature}` feature. Please create a #{@not_found_class}.rb file at #{Spinach.config[:step_definitions_path]}"
     end
@@ -24,5 +26,4 @@ module Spinach
       @step = step
     end
   end
-
 end

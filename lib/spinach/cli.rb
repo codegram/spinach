@@ -35,33 +35,29 @@ module Spinach
     # Returns a hash of options, separated by its type:
     #
     # @example
-    #   {
-    #     reporter: { backtrace: true }
-    #   }
+    #   { reporter: { backtrace: true } }
     #
     # @return [Hash]
     def options
       @options ||= parse_options
     end
 
-  private
-
+    private
     def parse_options
       reporter_options = {}
       reporter_options[:backtrace] = false
 
       OptionParser.new do |opts|
-        opts.on('-b', '--backtrace', "Show backtrace of errors") do |v|
+        opts.on('-b', '--backtrace', 'Show backtrace of errors') do |v|
           reporter_options[:backtrace] = v
         end
-        opts.on_tail('--version', "Show version") do
+        opts.on_tail('--version', 'Show version') do
           puts Spinach::VERSION
           exit
         end
       end.parse!(@args)
+
       {reporter: reporter_options}
     end
-
-
   end
 end

@@ -1,5 +1,4 @@
 module Spinach
-
   # Accesses spinach config. Allows you to configure several runtime options,
   # like the step definitions path.
   #

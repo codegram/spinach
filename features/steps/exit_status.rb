@@ -46,5 +46,4 @@ Feature "Exit status" do
   Then "the exit status should be 1" do
     last_exit_status.must_equal 1
   end
-
 end

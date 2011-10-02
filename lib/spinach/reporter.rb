@@ -12,6 +12,8 @@ module Spinach
       @options = options
     end
 
+    # A Hash with options for the reporter
+    #
     attr_accessor :options
 
     # Receives this hook when a feature is invoked
@@ -19,7 +21,7 @@ module Spinach
     #   the feature name
     #
     def feature(name)
-      raise "Abstract method!"
+      raise "You need to define the `feature` method in your reporter!"
     end
 
     # Receives this hook when a scenario is invoked
@@ -27,7 +29,7 @@ module Spinach
     #   the scenario name
     #
     def scenario(name)
-      raise "Abstract method!"
+      raise "You need to define the `scenario` method in your reporter!"
     end
 
     # Receives this hook when a step is invoked
@@ -37,15 +39,14 @@ module Spinach
     #   the step name and its finishing state. May be :success or :failure
     #
     def step(keyword, name, result)
-      raise "Abstract method!"
+      raise "You need to define the `step` method in your reporter!"
     end
 
     # Receives this hook when a feature reaches its end
     #
     def end
-      raise "Abstract method!"
+      raise "You need to define the `end` method in your reporter!"
     end
-
   end
 end
 

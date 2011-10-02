@@ -6,7 +6,6 @@ module Spinach
   # needed from the plain feature definition.
   #
   class Parser
-
     # @param [String] filename
     #   the file to parse
     #

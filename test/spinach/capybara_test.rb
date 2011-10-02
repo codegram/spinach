@@ -9,30 +9,35 @@ describe Spinach::Feature::Capybara do
         'Hello world!'
       end
     end
+
     Capybara.app = @sinatra_app
+
     @feature = Class.new(Spinach::Feature) do
       include Spinach::Feature::Capybara
-      Given "Hello" do
+      Given 'Hello' do
       end
-      Then "Goodbye" do
+      Then 'Goodbye' do
       end
       def go_home
-        visit "/"
+        visit '/'
         page
       end
     end.new
   end
-  it "includes capybara into all features" do
+
+  it 'includes capybara into all features' do
     @feature.kind_of? Capybara
   end
-  it "goes to a capybara page and returns its result" do
+
+  it 'goes to a capybara page and returns its result' do
     page = @feature.go_home
     page.has_content?('Hello world').must_equal true
   end
-  it "resets the capybara session after each scenario" do
+
+  it 'resets the capybara session after each scenario' do
     @feature_runner = Spinach::Runner::Feature.new(
       stub_everything, stub_everything)
-    Spinach::Parser.any_instance.stubs(content: "
+    Spinach::Parser.any_instance.stubs(content: '
       Feature: A test feature
         Scenario: A test scenario
           Given Hello
@@ -40,9 +45,11 @@ describe Spinach::Feature::Capybara do
         Scenario: Another test scenario
           Given Hello
           Then Goodbye
-    ").at_least_once
+    ').at_least_once
+
     @feature_runner.stubs(feature: @feature).at_least_once
     Capybara.current_session.expects(:reset!).twice
+
     @feature_runner.run
   end
 end

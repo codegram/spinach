@@ -3,7 +3,6 @@ module Spinach
     # A feature runner handles a particular Spinach::Feature run.
     #
     class Feature
-
       # @param [String] filename
       #   path to the feature file. Scenario line could be passed to run just
       #   that scenario.
@@ -17,7 +16,12 @@ module Spinach
         @reporter = reporter
       end
 
+      # The [Reporter] used in this feature.
+      #
       attr_reader :reporter
+
+      # The file taht describes the feature.
+      #
       attr_reader :filename
 
       # @return [Spinach::Feature]
@@ -53,23 +57,25 @@ module Spinach
       def run
         reporter.feature(feature_name)
         failures = []
+
         feature.run_hook :before, feature_name
+
         scenarios.each do |scenario|
           if !@scenario_line || scenario['line'].to_s == @scenario_line
             failure = Scenario.new(feature_name, feature, scenario, reporter).run
             failures << failure if failure
           end
         end
+
         feature.run_hook :after, feature_name
 
-        unless failures.length.zero?
+        if failures.any?
           reporter.error_summary(failures)
-          return false
+          false
         else
-          return true
+          true
         end
       end
-
     end
   end
 end

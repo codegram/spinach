@@ -4,7 +4,6 @@ require_relative 'feature'
 
 module Spinach
   class Feature
-
     # Spinach's capybara module integrates capybara into all features
     #
     # @example

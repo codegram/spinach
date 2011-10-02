@@ -5,7 +5,6 @@ module Spinach
     # The Stdout reporter outputs the runner results to the standard output
     #
     class Stdout < Reporter
-
       # Prints the feature name to the standard output
       #
       def feature(name)
@@ -36,7 +35,6 @@ module Spinach
             [:cyan, '~']
         end
         puts "    #{symbol.colorize(:"light_#{color}")}  #{keyword.colorize(:"light_#{color}")} #{name.colorize(color)}"
-
       end
 
       # Prints a blank line at the end
@@ -45,6 +43,8 @@ module Spinach
         puts ""
       end
 
+      # Prints the errors for ths run.
+      #
       def error_summary(errors)
         puts
         puts "    !  Error summary for this feature (#{errors.length})".light_white
@@ -66,6 +66,7 @@ module Spinach
           error.message.split("\n").each do |line|
             puts "         #{line}".colorize(color)
           end
+
           if options[:backtrace]
             puts error.backtrace.map {|e| "      #{e}"}
           end
@@ -73,6 +74,8 @@ module Spinach
         end
       end
 
+      # Prints a nice backtrace when an exception is raised.
+      #
       def report_exception(exception)
         @errors << exception
         output = exception.message.split("\n").map{ |line|
@@ -80,7 +83,6 @@ module Spinach
         }.join("\n")
         puts "#{output}\n\n"
       end
-
     end
   end
 end

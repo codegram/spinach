@@ -3,7 +3,6 @@ module Spinach
   # specific actions into your feature classes
   #
   module DSL
-
     def self.included(base)
       base.class_eval do
         include InstanceMethods
@@ -12,7 +11,6 @@ module Spinach
     end
 
     module ClassMethods
-
       # Defines an action to perform given a particular step literal.
       #
       # @param [String] step name
@@ -53,7 +51,6 @@ module Spinach
     end
 
     module InstanceMethods
-
       # Execute a given step.
       #
       # @param [String] step
@@ -63,9 +60,7 @@ module Spinach
         if self.respond_to?(step)
           self.send(step)
         else
-          raise Spinach::StepNotDefinedException.new(
-            self, step
-          )
+          raise Spinach::StepNotDefinedException.new(self, step)
         end
       end
 

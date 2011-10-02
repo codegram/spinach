@@ -23,6 +23,8 @@ module Spinach
   end
 end
 
+# Syntax sugar. Define the "Feature do" syntax
+#
 Object.send(:define_method, :Feature) do |name, &block|
   Class.new(Spinach::Feature) do
     feature name

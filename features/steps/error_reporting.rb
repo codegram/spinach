@@ -41,7 +41,6 @@ Feature "Error reporting" do
   end
 
   private
-
   def check_error_messages
     all_stdout.must_include "Error summary"
     all_stdout.must_match /errors.*This scenario will fail.*line 4/
@@ -52,5 +51,4 @@ Feature "Error reporting" do
     all_stdout.must_match /errors.*This scenario will fail.*line 4/
     all_stdout.must_match /gems.*minitest.*assert_equal/
   end
-
 end

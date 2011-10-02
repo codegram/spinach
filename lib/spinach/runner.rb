@@ -3,7 +3,6 @@ module Spinach
   # actual calls to the feature classes.
   #
   class Runner
-
     # Initializes the runner with a parsed feature
     #
     # @param [Array<String>] filenames
@@ -25,13 +24,15 @@ module Spinach
 
       @support_path = options.delete(:support_path ) ||
         Spinach.config.support_path
-
     end
 
+    # Returns the current [Reporter] for the [Runner]
+    #
     def reporter
       @reporter ||= Spinach::config.default_reporter
     end
 
+    # The feature files to run
     attr_reader :filenames
 
     # The default path where the steps are located
@@ -50,6 +51,7 @@ module Spinach
         @failed = true unless success
       end
       reporter.end
+
       @failed ? false : true
     end
 

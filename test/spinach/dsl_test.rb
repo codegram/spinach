@@ -8,7 +8,7 @@ describe Spinach::DSL do
   end
 
   describe 'class methods' do
-    describe "#When" do
+    describe '#When' do
       it 'defines a method with the step name' do
         @feature.When('I say goodbye') do
           'You say hello'

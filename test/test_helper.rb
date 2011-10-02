@@ -1,5 +1,5 @@
 gem 'minitest'
-require 'minitest/unit'
+require 'minitest/spec'
 require 'minitest/autorun'
 require 'mocha'
 require 'ostruct'
@@ -11,7 +11,6 @@ require 'spinach/capybara'
 require 'stringio'
 
 module Kernel
-
   def capture_stdout
     out = StringIO.new
     $stdout = out
@@ -20,5 +19,4 @@ module Kernel
   ensure
     $stdout = STDOUT
   end
-
 end

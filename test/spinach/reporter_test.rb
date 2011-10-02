@@ -2,35 +2,31 @@
 require_relative '../test_helper'
 
 describe Spinach::Reporter do
-  describe "abstract methods" do
-    before do
-      @reporter = Spinach::Reporter.new
-    end
+  describe 'abstract methods' do
+    let(:reporter) { Spinach::Reporter.new }
+
     %w{feature scenario}.each do |abstract_method|
-      describe "#{abstract_method}" do
-        it "raises an error" do
-          Proc.new{
-            @reporter.send(abstract_method, "arbitrary name")
+      describe '#{abstract_method}' do
+        it 'raises an error' do
+          proc {
+            reporter.send(abstract_method, 'arbitrary name')
           }.must_raise RuntimeError
         end
       end
     end
 
-    describe "#step" do
-      it "raises an error" do
-        Proc.new{
-          @reporter.step("Given", "arbitrary name", :success)
+    describe '#step' do
+      it 'raises an error' do
+        proc {
+          reporter.step('Given', 'arbitrary name', :success)
         }.must_raise RuntimeError
       end
     end
 
-    describe "#end" do
-      it "raises an error" do
-        Proc.new{
-          @reporter.end
-        }.must_raise RuntimeError
+    describe '#end' do
+      it 'raises an error' do
+        proc { reporter.end }.must_raise RuntimeError
       end
     end
   end
-
 end
