@@ -1,5 +1,3 @@
-require 'active_support/inflector/methods'
-
 module Spinach
   # A module to offer common helpers
   module Support
@@ -13,7 +11,7 @@ module Spinach
     #   Spinach::Support.camelize('User authentication')
     #   => 'UserAuthentication'
     def self.camelize(name)
-      ActiveSupport::Inflector.camelize(name.to_s.downcase.strip.squeeze(' ').gsub(' ','_'))
+      name.to_s.strip.split(/[^a-z0-9]/i).map{|w| w.capitalize}.join
     end
   end
 end
