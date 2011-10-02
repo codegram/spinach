@@ -43,13 +43,14 @@ module Spinach
         Spinach.config.support_path
     end
 
-    # @return [Reporter]
-    #   The current {Reporter} for the {Runner}.
-    #
-    # @api public
-    def reporter
-      @reporter ||= Spinach::config.default_reporter
-    end
+    # The feature files to run
+    attr_reader :filenames
+
+    # The default path where the steps are located
+    attr_reader :step_definitions_path
+
+    # The default path where the support files are located
+    attr_reader :support_path
 
     # Runs this runner and outputs the results in a colorful manner.
     #
