@@ -74,14 +74,14 @@ module Spinach
 
         scenarios.each do |scenario|
           if !@scenario_line || scenario['line'].to_s == @scenario_line
-            @failure = Scenario.new(feature_name, feature, scenario).run
+            @success = Scenario.new(feature_name, feature, scenario).run
           end
         end
 
         feature.run_hook :after, data
         run_hook :after_run, data
 
-        return !@failure
+        return !!@success
       end
     end
   end

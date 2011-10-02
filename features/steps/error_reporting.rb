@@ -42,13 +42,11 @@ Feature "Error reporting" do
 
   private
   def check_error_messages
-    all_stdout.must_include "Error summary"
-    all_stdout.must_match /errors.*This scenario will fail.*line 4/
+    all_stdout.must_match /Failures \(1\)/
   end
 
   def check_backtrace
-    all_stdout.must_include "Error summary"
-    all_stdout.must_match /errors.*This scenario will fail.*line 4/
+    all_stdout.must_match /Failures \(1\)/
     all_stdout.must_match /gems.*minitest.*assert_equal/
   end
 end
