@@ -7,20 +7,23 @@ module Spinach
     class Stdout < Reporter
       # Prints the feature name to the standard output
       #
-      def feature(data)
+      def before_feature_run(data)
+        super
         name = data['name']
         puts "\n#{'Feature:'.magenta} #{name.light_magenta}"
       end
 
       # Prints the scenario name to the standard ouput
       #
-      def scenario(data)
+      def before_scenario_run(data)
+        super
         name = data['name']
         puts "\n  #{'Scenario:'.green} #{name.light_green}"
         puts
       end
 
-      def after_scenario
+      def after_scenario_run(data)
+        super
         if @scenario_error
           puts ""
           report_error @scenario_error, :backtrace
@@ -28,32 +31,43 @@ module Spinach
         @scenario_error = nil
       end
 
-      # Prints the step name to the standard output. If failed, it puts an
-      # F! before
-      #
-      def step(step, result, failure=nil)
-        color, symbol = case result
-          when :success
-            [:green, '✔']
-          when :undefined_step
-            @scenario_error = [current_feature, current_scenario, step]
-            undefined_steps << @scenario_error
-            [:yellow, '?']
-          when :failure
-            @scenario_error = [current_feature, current_scenario, step, failure]
-            failed_steps << @scenario_error
-            [:red, '✘']
-          when :error
-            @scenario_error = [current_feature, current_scenario, step, failure]
-            error_steps << @scenario_error
-            [:red, '!']
-          when :skip
-            [:cyan, '~']
-        end
+      def on_successful_step(step)
+        super
+        output_step('✔', step, :green)
+      end
+
+      def on_failed_step(step, failure)
+        super
+        output_step('✘', step, :red)
+        @scenario_error = [current_feature, current_scenario, step, failure]
+        failed_steps << @scenario_error
+      end
+
+      def on_error_step(step, failure)
+        super
+        output_step('!', step, :red)
+        @scenario_error = [current_feature, current_scenario, step, failure]
+        error_steps << @scenario_error
+      end
+
+      def on_undefined_step(step, failure)
+        super
+        output_step('?', step, :yellow)
+        @scenario_error = [current_feature, current_scenario, step]
+        undefined_steps << @scenario_error
+      end
+
+      def on_skipped_step(step)
+        super
+        output_step('~', step, :cyan)
+      end
+
+      def output_step(symbol, step, color)
         puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)}"
       end
 
-      def end(success)
+      def after_run(success)
+        super
         error_summary
       end
 
