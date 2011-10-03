@@ -8,7 +8,6 @@ module Spinach
       # Prints the feature name to the standard output
       #
       def before_feature_run(data)
-        super
         name = data['name']
         puts "\n#{'Feature:'.magenta} #{name.light_magenta}"
       end
@@ -16,14 +15,12 @@ module Spinach
       # Prints the scenario name to the standard ouput
       #
       def before_scenario_run(data)
-        super
         name = data['name']
         puts "\n  #{'Scenario:'.green} #{name.light_green}"
         puts
       end
 
       def after_scenario_run(data)
-        super
         if @scenario_error
           puts ""
           report_error @scenario_error, :backtrace
@@ -32,33 +29,28 @@ module Spinach
       end
 
       def on_successful_step(step)
-        super
         output_step('✔', step, :green)
       end
 
       def on_failed_step(step, failure)
-        super
         output_step('✘', step, :red)
         @scenario_error = [current_feature, current_scenario, step, failure]
         failed_steps << @scenario_error
       end
 
       def on_error_step(step, failure)
-        super
         output_step('!', step, :red)
         @scenario_error = [current_feature, current_scenario, step, failure]
         error_steps << @scenario_error
       end
 
       def on_undefined_step(step, failure)
-        super
         output_step('?', step, :yellow)
         @scenario_error = [current_feature, current_scenario, step]
         undefined_steps << @scenario_error
       end
 
       def on_skipped_step(step)
-        super
         output_step('~', step, :cyan)
       end
 
@@ -67,7 +59,6 @@ module Spinach
       end
 
       def after_run(success)
-        super
         error_summary
       end
 
