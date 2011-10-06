@@ -12,6 +12,7 @@ require 'mocha'
 require 'ostruct'
 require 'purdytest'
 require 'stringio'
+require 'pry'
 
 require 'spinach'
 require 'spinach/capybara'
