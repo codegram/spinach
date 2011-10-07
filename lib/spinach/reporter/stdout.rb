@@ -6,13 +6,13 @@ module Spinach
     #
     class Stdout < Reporter
 
-      def initialize(out = $stdout, error = $stderr, options = {})
-        super(options)
-        @out = out 
-        @error = error
+      def initialize(*args)
+        super(*args)
+        @out = options[:output] || $stdout
+        @err = options[:error] || $stderr
       end
 
-      attr_reader :out, :error
+      attr_reader :out, :err
 
       attr_accessor :scenario_error
 
@@ -44,19 +44,19 @@ module Spinach
 
       def on_failed_step(step, failure)
         output_step('✘', step, :red)
-        scenario_error = [current_feature, current_scenario, step, failure]
+        self.scenario_error = [current_feature, current_scenario, step, failure]
         failed_steps << scenario_error
       end
 
       def on_error_step(step, failure)
         output_step('!', step, :red)
-        scenario_error = [current_feature, current_scenario, step, failure]
+        self.scenario_error = [current_feature, current_scenario, step, failure]
         error_steps << scenario_error
       end
 
       def on_undefined_step(step, failure)
         output_step('?', step, :yellow)
-        scenario_error = [current_feature, current_scenario, step]
+        self.scenario_error = [current_feature, current_scenario, step]
         undefined_steps << scenario_error
       end
 
@@ -75,7 +75,7 @@ module Spinach
       # Prints the errors for ths run.
       #
       def error_summary
-        error.puts ""
+        err.puts ""
         report_error_steps
         report_failed_steps
         report_undefined_steps
@@ -83,40 +83,40 @@ module Spinach
 
       def report_error_steps
         if error_steps.any?
-          error.puts "Errors (#{error_steps.length})".light_red
+          err.puts "Errors (#{error_steps.length})".light_red
           error_steps.each do |error|
             report_error error
           end
-          error.puts ""
+          err.puts ""
         end
       end
 
       def report_failed_steps
         if failed_steps.any?
-          error.puts "Failures (#{failed_steps.length})".light_red
+          err.puts "Failures (#{failed_steps.length})".light_red
           failed_steps.each do |error|
             report_error error
           end
-          error.puts ""
+          err.puts ""
         end
       end
 
       def report_undefined_steps
         if undefined_steps.any?
-          error.puts "Undefined steps (#{undefined_steps.length})".yellow
+          err.puts "Undefined steps (#{undefined_steps.length})".yellow
           undefined_steps.each do |error|
             report_error error
           end
-          error.puts ""
+          err.puts ""
         end
       end
 
       def report_error(error, format=:summarized)
         case format
           when :summarized
-            error.puts summarized_error(error)
+            err.puts summarized_error(error)
           when :full
-            error.puts full_error(error)
+            err.puts full_error(error)
           else
             raise "Format not defined"
         end

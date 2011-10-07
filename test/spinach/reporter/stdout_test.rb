@@ -6,7 +6,10 @@ describe Spinach::Reporter::Stdout do
   before do
     @out = StringIO.new
     @error = StringIO.new
-    @reporter = Spinach::Reporter::Stdout.new(@out, @error)
+    @reporter = Spinach::Reporter::Stdout.new(
+      output: @out, 
+      error: @error
+    )
   end
   describe "#before_feature_run" do
     it "outputs the feature" do
