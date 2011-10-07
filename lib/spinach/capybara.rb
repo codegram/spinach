@@ -4,7 +4,7 @@ require_relative 'feature'
 
 module Spinach
   class Feature
-    # Spinach's capybara module integrates capybara into all features
+    # Spinach's capybara module makes Capybara DSL available in all features.
     #
     # @example
     #   require 'spinach/capybara'
@@ -15,17 +15,20 @@ module Spinach
     #   end
     #
     module Capybara
+      # Enhances a Feature with Capybara goodness.
+      #
+      # @param [Class] base
+      #   The host class.
+      #
+      # @api public
       def self.included(base)
         base.class_eval do
           include ::Capybara::DSL
-          include InstanceMethods
 
           after_scenario do
             ::Capybara.current_session.reset! if ::Capybara.app
           end
         end
-      end
-      module InstanceMethods
       end
     end
   end
