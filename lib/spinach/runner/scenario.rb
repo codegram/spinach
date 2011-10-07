@@ -1,9 +1,21 @@
+require 'hooks'
+
 module Spinach
   class Runner
     # A Scenario Runner handles a particular scenario run.
     #
     class Scenario
-      attr_reader :name, :feature, :feature_name, :steps, :reporter
+      attr_reader :feature, :feature_name, :data
+
+      include Hooks
+
+      define_hook :before_run
+      define_hook :on_successful_step
+      define_hook :on_failed_step
+      define_hook :on_error_step
+      define_hook :on_undefined_step
+      define_hook :on_skipped_step
+      define_hook :after_run
 
       # @param [Feature] feature
       #   The feature that contains the steps.
@@ -11,48 +23,47 @@ module Spinach
       # @param [Hash] data
       #   The parsed feature data.
       #
-      # @param [Reporter]
-      #   The reporter.
-      #
       # @api public
-      def initialize(feature_name, feature, data, reporter)
+      def initialize(feature_name, feature, data)
         @feature_name = feature_name
-        @name = data['name']
-        @steps = data['steps']
-        @reporter = reporter
+        @data = data
         @feature = feature
       end
 
-      # Runs this scenario and notifies the reporter.
+      def steps
+        @steps ||= data['steps']
+      end
+
+      # Runs this scenario
+      # @return [True, False]
+      #   true if this scenario succeeded, false if not
       def run
-        reporter.scenario(name)
-        feature.run_hook :before_scenario, name
+        run_hook :before_run, data
+        feature.run_hook :before_scenario, data
         steps.each do |step|
-          keyword = step['keyword'].strip
-          name = step['name'].strip
-          line = step['line']
-          feature.run_hook :before_step, keyword, name
-          unless @failure
+          feature.run_hook :before_step, step
+          unless @exception
             begin
-              feature.execute_step(name)
-              reporter.step(keyword, name, :success)
+              feature.execute_step(step['name'])
+              run_hook :on_successful_step, step
             rescue MiniTest::Assertion => e
-              @failure = [e, name, line, self]
-              reporter.step(keyword, name, :failure)
+              @exception = e
+              run_hook :on_failed_step, step, @exception
             rescue Spinach::StepNotDefinedException => e
-              @failure = [e, name, line, self]
-              reporter.step(keyword, name, :undefined_step)
+              @exception = e
+              run_hook :on_undefined_step, step, @exception
             rescue StandardError => e
-              @failure = [e, name, line, self]
-              reporter.step(keyword, name, :error)
+              @exception = e
+              run_hook :on_error_step, step, @exception
             end
           else
-            reporter.step(keyword, name, :skip)
+            run_hook :on_skipped_step, step
           end
-          feature.run_hook :after_step, keyword, name
+          feature.run_hook :after_step, step
         end
-        feature.run_hook :after_scenario, name
-        @failure
+        feature.run_hook :after_scenario, data
+        run_hook :after_run, data
+        !@exception
       end
     end
   end

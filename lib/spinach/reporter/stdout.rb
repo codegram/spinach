@@ -5,83 +5,279 @@ module Spinach
     # The Stdout reporter outputs the runner results to the standard output
     #
     class Stdout < Reporter
+
+      # The output buffers to store the reports.
+      attr_reader :out, :error
+
+      # The last scenario error
+      attr_accessor :scenario_error
+
+      # Initialitzes the runner
+      #
+      # @param [Hash] options
+      #  Sets a custom output buffer by setting options[:output]
+      #  Sets a custom error buffer by setting options[:error]
+      #
+      def initialize(*args)
+        super(*args)
+        @out = options[:output] || $stdout
+        @error = options[:error] || $stderr
+      end
+
       # Prints the feature name to the standard output
       #
-      def feature(name)
-        puts "\n#{'Feature:'.magenta} #{name.light_magenta}"
+      # @param [Hash] data
+      #   The feature in a JSON Gherkin format
+      #
+      def before_feature_run(data)
+        name = data['name']
+        out.puts "\n#{'Feature:'.magenta} #{name.light_magenta}"
       end
 
       # Prints the scenario name to the standard ouput
       #
-      def scenario(name)
-        puts "\n  #{'Scenario:'.green} #{name.light_green}"
-        puts
+      # @param [Hash] data
+      #   The feature in a JSON Gherkin format
+      #
+      def before_scenario_run(data)
+        name = data['name']
+        out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
+        out.puts
       end
 
-      # Prints the step name to the standard output. If failed, it puts an
-      # F! before
+      # Adds an error report and re
       #
-      def step(keyword, name, result)
-        color, symbol = case result
-          when :success
-            [:green, '✔']
-          when :undefined_step
-            [:yellow, '?']
-          when :failure
-            [:red, '✘']
-          when :error
-            [:red, '!']
-          when :skip
-            [:cyan, '~']
+      # @param [Hash] data
+      #   The feature in a JSON Gherkin format
+      #
+      def after_scenario_run(data)
+        if scenario_error
+          report_error(scenario_error, :full)
+          self.scenario_error = nil
         end
-        puts "    #{symbol.colorize(:"light_#{color}")}  #{keyword.colorize(:"light_#{color}")} #{name.colorize(color)}"
       end
 
-      # Prints a blank line at the end
+      # Adds a passed step to the output buffer.
       #
-      def end
-        puts ""
+      # @param [Hash] step
+      #   The step in a JSON Gherkin format
+      #
+      def on_successful_step(step)
+        output_step('✔', step, :green)
+      end
+
+      # Adds a failing step to the output buffer.
+      #
+      # @param [Hash] step
+      #   The step in a JSON Gherkin format
+      #
+      # @param [Exception] failure
+      #   The exception that caused the failure
+      #
+      def on_failed_step(step, failure)
+        output_step('✘', step, :red)
+        self.scenario_error = [current_feature, current_scenario, step, failure]
+        failed_steps << scenario_error
+      end
+
+      # Adds a step that has raised an error to the output buffer.
+      #
+      # @param [Hash] step
+      #   The step in a JSON Gherkin format
+      #
+      # @param [Exception] failure
+      #   The exception that caused the failure
+      #
+      def on_error_step(step, failure)
+        output_step('!', step, :red)
+        self.scenario_error = [current_feature, current_scenario, step, failure]
+        error_steps << scenario_error
+      end
+
+      # Adds an undefined step to the output buffer.
+      #
+      # @param [Hash] step
+      #   The step in a JSON Gherkin format
+      #
+      def on_undefined_step(step)
+        output_step('?', step, :yellow)
+        self.scenario_error = [current_feature, current_scenario, step]
+        undefined_steps << scenario_error
+      end
+
+      # Adds a step that has been skipped to the output buffer.
+      #
+      # @param [Hash] step
+      #   The step that Gherkin extracts
+      #
+      def on_skipped_step(step)
+        output_step('~', step, :cyan)
+      end
+
+      # Adds to the output buffer a step result
+      #
+      # @param [String] symbol
+      #   A symbol to prepend before the step keyword (might be useful to
+      #   indicate if everything went ok or not).
+      #
+      # @param [Hash] step
+      #   The step in a JSON Gherkin format
+      #
+      # @param [Symbol] color
+      #   The color code to use with Colorize to colorize the output.
+      #
+      def output_step(symbol, step, color)
+        out.puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)}"
+      end
+
+      # It prints the error summary if the run has failed
+      #
+      # @param [True,False] success
+      #   whether the run has succeed or not
+      #
+      def after_run(success)
+        error_summary unless success
       end
 
       # Prints the errors for ths run.
       #
-      def error_summary(errors)
-        puts
-        puts "    !  Error summary for this feature (#{errors.length})".light_white
-        errors.each do |error, step, line, scenario|
-          step_file = error.backtrace.detect do |f|
-            f =~ /<class:#{scenario.feature.class}>/
-          end
-          step_file = step_file.split(':')[0..1].join(':') if step_file
+      def error_summary
+        error.puts "\nError summary:\n"
+        report_error_steps
+        report_failed_steps
+        report_undefined_steps
+      end
 
-          color = if error.kind_of?(Spinach::StepNotDefinedException)
-                    :light_yellow
-                  else
-                    :light_red
-                  end
+      # Prints the steps that raised an error.
+      #
+      def report_error_steps
+        report_errors('Errors', error_steps, :light_red) if error_steps.any?
+      end
 
-          puts
-          puts "       #{scenario.feature_name} :: #{scenario.name} :: #{step.colorize(color)} (line #{line})"
-          puts "       #{step_file}" if step_file
-          error.message.split("\n").each do |line|
-            puts "         #{line}".colorize(color)
-          end
+      # Prints failing steps.
+      #
+      def report_failed_steps
+        report_errors('Failures', failed_steps, :light_red) if failed_steps.any?
+      end
 
-          if options[:backtrace]
-            puts error.backtrace.map {|e| "      #{e}"}
-          end
-          puts
+      # Prints undefined steps.
+      #
+      def report_undefined_steps
+        report_errors('Undefined steps', undefined_steps, :yellow) if undefined_steps.any?
+      end
+
+      # Prints the error for a given set of steps
+      #
+      # @param [String] banner
+      #   the text to prepend as the title
+      #
+      # @param [Array] steps
+      #   the steps to output
+      #
+      # @param [Symbol] color
+      #   The color code to use with Colorize to colorize the output.
+      #
+      def report_errors(banner, steps, color)
+        error.puts "#{banner} (#{steps.length})".colorize(color)
+        steps.each do |error|
+          report_error error
+        end
+        error.puts ""
+      end
+
+      # Prints an error in a nice format
+      #
+      # @param [Array] error
+      #  An array containing the feature, scenario, step and exception
+      #
+      # @param [Symbol] format
+      #   The format to output the error. Currently supproted formats are
+      #   :summarized (default) and :full
+      #
+      # @returns [String]
+      #  The error report
+      #
+      def report_error(error, format=:summarized)
+        case format
+          when :summarized
+            self.error.puts summarized_error(error)
+          when :full
+            self.error.puts full_error(error)
+          else
+            raise "Format not defined"
         end
       end
 
-      # Prints a nice backtrace when an exception is raised.
+      # Returns summarized error report
+      #
+      # @param [Array] error
+      #  An array containing the feature, scenario, step and exception
+      #
+      # @returns [String]
+      #  The summarized error report
+      #
+      def summarized_error(error)
+        feature, scenario, step, exception = error
+        summary = "  #{feature['name']} :: #{scenario['name']} :: #{full_step step}"
+        if exception.kind_of?(Spinach::StepNotDefinedException)
+          summary.yellow
+        else
+          summary.red
+        end
+      end
+
+      # Returns a complete error report
+      #
+      # @param [Array] error
+      #  An array containing the feature, scenario, step and exception
+      #
+      # @returns [String]
+      #  The coplete error report
+      #
+      def full_error(error)
+        feature, scenario, step, exception = error
+        output = String.new
+        output += report_exception(exception)
+        output +="\n"
+
+        if options[:backtrace]
+          output += "\n"
+          exception.backtrace.map do |line|
+            output << "        #{line}\n"
+          end
+        else
+          output << "        #{exception.backtrace[0]}"
+        end
+        output
+      end
+
+      # Constructs the full step definition
+      #
+      # @param [Hash] step
+      #   The step in a JSON Gherkin format
+      #
+      def full_step(step)
+        "#{step['keyword'].strip} #{step['name'].strip}"
+      end
+
+      # Prints a information when an exception is raised.
+      #
+      # @param [Exception] exception
+      #   The exception to report
+      #
+      # @returns [String]
+      #  The exception report
       #
       def report_exception(exception)
-        @errors << exception
         output = exception.message.split("\n").map{ |line|
           "        #{line}"
         }.join("\n")
-        puts "#{output}\n\n"
+
+        if exception.kind_of?(Spinach::StepNotDefinedException)
+          output.yellow
+        else
+          output.red
+        end
       end
     end
   end

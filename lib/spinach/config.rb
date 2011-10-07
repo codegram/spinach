@@ -46,12 +46,8 @@ module Spinach
 
     # The default reporter is the reporter spinach will use if there's no other
     # specified. Defaults to Spinach::Reporter::Stdout, which will print all
-    # output to the standard output.
+    # output to the standard output
     #
-    # @return [Reporter]
-    #   A reporter object.
-    #
-    # @api public
     def default_reporter
       @default_reporter || Spinach::Reporter::Stdout.new
     end
