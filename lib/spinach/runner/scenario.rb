@@ -43,17 +43,17 @@ module Spinach
           feature.run_hook :before_step, step
           unless @exception
             begin
-              feature.execute_step(step['name'])
-              run_hook :on_successful_step, step
+              step_location = feature.execute_step(step['name'])
+              run_hook :on_successful_step, step, step_location
             rescue MiniTest::Assertion => e
               @exception = e
-              run_hook :on_failed_step, step, @exception
+              run_hook :on_failed_step, step, @exception, step_location
             rescue Spinach::StepNotDefinedException => e
               @exception = e
               run_hook :on_undefined_step, step, @exception
             rescue StandardError => e
               @exception = e
-              run_hook :on_error_step, step, @exception
+              run_hook :on_error_step, step, @exception, step_location
             end
           else
             run_hook :on_skipped_step, step
