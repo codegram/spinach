@@ -3,7 +3,7 @@ require 'hooks'
 MiniTest::Spec.new nil
 
 module Spinach
-  # The feature class is the class where all the features must inherit from.
+  # The feature class is the class which all the features must inherit from.
   #
   class Feature
     include DSL
@@ -17,14 +17,19 @@ module Spinach
     define_hook :before_step
     define_hook :after_step
 
+    # Registers the feature class for later use.
+    #
+    # @param [Class] base
+    #   The host class.
+    #
+    # @api public
     def self.inherited(base)
       Spinach.features << base
     end
   end
 end
 
-# Syntax sugar. Define the "Feature do" syntax
-#
+# Syntactic sugar. Define the "Feature do" syntax.
 Object.send(:define_method, :Feature) do |name, &block|
   Class.new(Spinach::Feature) do
     feature name
