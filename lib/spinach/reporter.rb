@@ -19,52 +19,48 @@ module Spinach
     #
     attr_reader :options
 
-    attr_reader :current_feature, :current_scenario
+    attr_accessor :current_feature, :current_scenario
 
     attr_reader :undefined_steps, :failed_steps, :error_steps
 
     def bind
-      Runner.after_run method(:after_run)
-      Runner::Feature.before_run method(:before_feature_run)
-      Runner::Feature.after_run method(:after_feature_run)
-      Runner::Scenario.before_run method(:before_scenario_run)
-      Runner::Scenario.after_run method(:after_scenario_run)
-      Runner::Scenario.on_successful_step method(:on_successful_step)
-      Runner::Scenario.on_failed_step method(:on_failed_step)
-      Runner::Scenario.on_error_step method(:on_error_step)
-      Runner::Scenario.on_skipped_step method(:on_skipped_step)
+      runner.after_run method(:after_run)
+      feature_runner.before_run method(:before_feature_run)
+      feature_runner.after_run method(:after_feature_run)
+      scenario_runner.before_run method(:before_scenario_run)
+      scenario_runner.after_run method(:after_scenario_run)
+      scenario_runner.on_successful_step method(:on_successful_step)
+      scenario_runner.on_failed_step method(:on_failed_step)
+      scenario_runner.on_error_step method(:on_error_step)
+      scenario_runner.on_skipped_step method(:on_skipped_step)
 
-      Runner::Feature.before_run method(:current_feature=)
-      Runner::Feature.after_run method(:clear_current_feature)
-      Runner::Scenario.before_run method(:current_scenario=)
-      Runner::Scenario.after_run method(:clear_current_scenario)
+      feature_runner.before_run method(:current_feature=)
+      feature_runner.after_run method(:clear_current_feature)
+      scenario_runner.before_run method(:current_scenario=)
+      scenario_runner.after_run method(:clear_current_scenario)
     end
+
+    def feature_runner; Runner::Feature; end
+    def scenario_runner; Runner::Scenario; end
+    def runner; Runner; end
 
     def after_run(*args); end;
-    def before_feature_run(data); end
-    def after_feature_run(data); end
-    def before_scenario_run(data); end
-    def after_scenario_run(data); end
-    def on_successful_step(step); end;
-    def on_failed_step(step, failure); end;
-    def on_error_step(step, failure); end;
-    def on_undefined_step(step); end;
-    def on_skipped_step(step); end;
+    def before_feature_run(*args); end
+    def after_feature_run(*args); end
+    def before_scenario_run(*args); end
+    def after_scenario_run(*args); end
+    def on_successful_step(*args); end;
+    def on_failed_step(*args); end;
+    def on_error_step(*args); end;
+    def on_undefined_step(*args); end;
+    def on_skipped_step(*args); end;
 
     def clear_current_feature(*args)
-      current_feature = nil
-    end
-
-    def current_feature=(data)
-      current_feature = data
-    end
-
-    def current_scenario=(data)
-      current_scenario = data
+      self.current_feature = nil
     end
 
     def clear_current_scenario(*args)
-      current_scenario = nil
+      self.current_scenario = nil
     end
 
   end
