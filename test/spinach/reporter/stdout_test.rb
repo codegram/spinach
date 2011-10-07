@@ -3,6 +3,20 @@
 require_relative '../../test_helper'
 
 describe Spinach::Reporter::Stdout do
+  let(:exception) { StandardError.new('Something went wrong') }
+
+  let(:error) do
+    [{'name' => 'My feature'},
+      {'name' => 'A scenario'},
+      {'keyword' => 'Keyword', 'name' => 'step name'},
+      exception]
+  end
+
+  let(:steps) do
+    [error]
+  end
+
+
   before do
     @out = StringIO.new
     @error = StringIO.new
@@ -246,13 +260,6 @@ describe Spinach::Reporter::Stdout do
 
   describe '#report_errors' do
     describe 'when some steps have raised an error' do
-      let(:steps) do
-        [[{'name' => 'My feature'},
-          {'name' => 'A scenario'},
-          {'keyword' => 'Keyword', 'name' => 'step name'},
-          anything]]
-      end
-
       it 'outputs a the banner with the number of steps given' do
         @reporter.report_errors('Banner', steps, :blue)
 
@@ -274,13 +281,6 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#report_error' do
-    let(:error) do
-      [{'name' => 'My feature'},
-        {'name' => 'A scenario'},
-        {'keyword' => 'Keyword', 'name' => 'step name'},
-        anything]
-    end
-
     it 'raises when given an unsupported format' do
       proc {
         @reporter.report_error(error, :nil)
@@ -313,13 +313,6 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#summarized_error' do
-    let(:error) do
-      [{'name' => 'My feature'},
-        {'name' => 'A scenario'},
-        {'keyword' => 'Keyword', 'name' => 'step name'},
-        anything]
-    end
-
     it 'prints the error' do
       summary = @reporter.summarized_error(error)
 
@@ -345,16 +338,33 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#full_error' do
+    before do
+      @reporter.expects(:report_exception).with(exception).returns('Exception backtrace')
+    end
+
     it 'returns the exception data' do
+      exception.expects(:backtrace).returns(['first backtrace line'])
+      output = @reporter.full_error(error)
+
+      output.must_include 'Exception backtrace'
     end
 
     it 'returns the first backtrace line' do
+      exception.expects(:backtrace).returns(['first backtrace line'])
+      output = @reporter.full_error(error)
 
+      output.must_include 'first backtrace line'
     end
 
     describe 'when the user wants to print the full backtrace' do
       it 'prints the full backtrace' do
+        @reporter.stubs(:options).returns({backtrace: true})
+        exception.expects(:backtrace).returns(['first backtrace line', 'second backtrace line'])
 
+        output = @reporter.full_error(error)
+
+        output.must_include 'first backtrace line'
+        output.must_include 'second backtrace line'
       end
     end
   end
@@ -370,24 +380,26 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#report_exception' do
-    it 'returns the exception data'
+    it 'returns the exception data' do
+      output = @reporter.report_exception(exception)
+
+      output.must_include 'Something went wrong'
+    end
 
     it 'colorizes the print' do
       String.any_instance.expects(:red)
 
-      @reporter.summarized_error(error)
+      @reporter.report_exception(exception)
     end
 
     describe 'when given an undefined step exception' do
       it 'prints the error in yellow' do
-        undefined_error = error
-        undefined_error.insert(3, Spinach::StepNotDefinedException.new(anything, anything))
+        undefined_exception = Spinach::StepNotDefinedException.new(anything, anything)
 
         String.any_instance.expects(:yellow)
 
-        @reporter.summarized_error(error)
+        @reporter.report_exception(undefined_exception)
       end
     end
-
   end
 end

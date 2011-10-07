@@ -6,15 +6,14 @@ module Spinach
     #
     class Stdout < Reporter
 
+      attr_reader :out, :err
+      attr_accessor :scenario_error
+
       def initialize(*args)
         super(*args)
         @out = options[:output] || $stdout
         @err = options[:error] || $stderr
       end
-
-      attr_reader :out, :err
-
-      attr_accessor :scenario_error
 
       # Prints the feature name to the standard output
       #
@@ -172,11 +171,14 @@ module Spinach
       # Prints an error in a nice format
       #
       # @param [Array] error
-      #  An array containing the feature, scenario, step an exception
+      #  An array containing the feature, scenario, step and exception
       #
       # @param [Symbol] format
       #   The format to output the error. Currently supproted formats are
       #   :summarized (default) and :full
+      #
+      # @returns [String]
+      #  The error report
       #
       def report_error(error, format=:summarized)
         case format
@@ -189,6 +191,14 @@ module Spinach
         end
       end
 
+      # Returns summarized error report
+      #
+      # @param [Array] error
+      #  An array containing the feature, scenario, step and exception
+      #
+      # @returns [String]
+      #  The summarized error report
+      #
       def summarized_error(error)
         feature, scenario, step, exception = error
         summary = "  #{feature['name']} :: #{scenario['name']} :: #{full_step step}"
@@ -199,11 +209,20 @@ module Spinach
         end
       end
 
+      # Returns a complete error report
+      #
+      # @param [Array] error
+      #  An array containing the feature, scenario, step and exception
+      #
+      # @returns [String]
+      #  The coplete error report
+      #
       def full_error(error)
         feature, scenario, step, exception = error
         output = String.new
         output += report_exception(exception)
         output +="\n"
+
         if options[:backtrace]
           output += "\n"
           exception.backtrace.map do |line|
@@ -215,11 +234,22 @@ module Spinach
         output
       end
 
+      # Constructs the full step definition
+      #
+      # @param [Hash] step
+      #   The step in a JSON Gherkin format
+      #
       def full_step(step)
         "#{step['keyword'].strip} #{step['name'].strip}"
       end
 
-      # Prints a nice backtrace when an exception is raised.
+      # Prints a information when an exception is raised.
+      #
+      # @param [Exception] exception
+      #   The exception to report
+      #
+      # @returns [String]
+      #  The exception report
       #
       def report_exception(exception)
         output = exception.message.split("\n").map{ |line|
@@ -232,7 +262,6 @@ module Spinach
           output.red
         end
       end
-
     end
   end
 end
