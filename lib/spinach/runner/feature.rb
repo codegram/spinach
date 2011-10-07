@@ -1,8 +1,14 @@
 module Spinach
   class Runner
-    # A feature runner handles a particular Spinach::Feature run.
+    # A feature runner handles a particular feature run.
     #
     class Feature
+      # The {Reporter} used in this feature.
+      attr_reader :reporter
+
+      # The file that describes the feature.
+      attr_reader :filename
+
       # @param [String] filename
       #   path to the feature file. Scenario line could be passed to run just
       #   that scenario.
@@ -11,49 +17,50 @@ module Spinach
       # @param [Spinach::Reporter] reporter
       #   the reporter that will log this run
       #
+      # @api public
       def initialize(filename, reporter)
         @filename, @scenario_line = filename.split(':')
         @reporter = reporter
       end
 
-      # The [Reporter] used in this feature.
+      # @return [Feature]
+      #   The feature object used to run this scenario.
       #
-      attr_reader :reporter
-
-      # The file taht describes the feature.
-      #
-      attr_reader :filename
-
-      # @return [Spinach::Feature]
-      #   the feature towards which this scenario will be run
-      #
+      # @api public
       def feature
         @feature ||= Spinach.find_feature(feature_name).new
       end
 
       # @return [Hash]
-      #   the parsed data for this feature
+      #   The parsed data for this feature.
       #
+      # @api public
       def data
         @data ||= Spinach::Parser.new(filename).parse
       end
 
       # @return [String]
-      #   this feature's name
+      #   This feature name.
       #
+      # @api public
       def feature_name
         @feature_name ||= data['name']
       end
 
       # @return [Hash]
-      #   the parsed scenarios for this runner's feature
+      #   The parsed scenarios for this runner's feature.
       #
+      # @api public
       def scenarios
         @scenarios ||= (data['elements'] || [])
       end
 
-      # Runs this feature
+      # Runs this feature.
       #
+      # @return [true, false]
+      #   Whether the run was successful or not.
+      #
+      # @api public
       def run
         reporter.feature(feature_name)
         failures = []
