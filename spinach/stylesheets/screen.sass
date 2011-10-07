@@ -1,0 +1,86 @@
+//
+// Application Stylesheet
+//
+
+@import "partials/base"
+@import "partials/fonts"
+@import "compass/css3/text-shadow"
+@import "compass/typography/lists/bullets"
+@import "compass/css3/inline-block"
+
+#fork_me_on_github
+  position: fixed
+  top: 0px
+  right: 0px
+  span
+    display: none
+  background: url(https://a248.e.akamai.net/assets.github.com/img/abad93f42020b733148435e2cd92ce15c542d320/687474703a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677265656e5f3030373230302e706e67)
+  width: 149px
+  height: 149px
+
+#wrapper
+  width: 1000px
+  margin: 0px auto
+
+body
+  padding-top: 20px
+  a
+    text-decoration: none
+    &:hover
+      text-decoration: underline
+
+header#header
+  padding-left: 398px
+  min-height: 509px
+  background: url(/images/spinach.png) center left no-repeat
+  font-family: "Terminal Dosis"
+  font-weight: 200
+  strong
+    font-weight: 500
+  em
+    color: $link-color
+    font-weight: 300
+    font-style: normal
+  h1
+    font-family: "Santa Fe"
+    font-size: 110px
+    text-align: center
+    padding-bottom: 30px
+    background: url(/images/stars.png) bottom center no-repeat
+    margin-bottom: 30px
+    height: 135px
+    a
+      text-decoration: none
+      color: $link-color
+      text-align: center
+      +single-text-shadow(#6c7172, -1px, -1px, 1px)
+  h2
+    font-weight: 200
+    width: 440px
+    font-size: 1.4em
+    margin: 0px auto
+    text-align: center
+
+  #motto
+    padding-top: 30px
+    font-size: 1.3em
+    width: 340px
+    margin: 0px auto
+
+navigation#menu
+  margin-top: 30px
+  a
+    margin: 0px 15px
+    color: $text-color
+    font-weight: 300
+  display: block
+  text-align: center
+  font-family: "Terminal Dosis"
+  font-size: 1.6em
+  font-weight: 200
+
+h1, h2, h3, h4
+  font-family: "Terminal Dosis"
+  font-weight: 200
+  strong
+    font-weight: 500

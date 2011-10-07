@@ -1,4 +1,6 @@
 @import "compass";
+@import "blueprint/reset";
+@import "blueprint/typography";
 
 // Reversed?
 $reversed-text: false;
@@ -21,12 +23,12 @@ $quiet-color: soften($text-color, 1.5);
 $header-color: strengthen($text-color, 0.66);
 
 // Link Colors
-$link-color: #bb3a08;
-$link-visited-color: #a72;
-$link-hover-color: #f66933;
+$link-color: #e5685f;
+$link-visited-color: $link-color;
+$link-hover-color: $link-color;
 
 // Theme Colors
-$background-color: white;
+$background-color: #ececec;
 $banner-color: #973b12;
 
 // Paragraphs
@@ -40,8 +42,11 @@ $default-border-radius: 8px;
 
 @import "modules/all";
 
-@include global-reset;
+@include blueprint-global-reset;
 @include reset-html5;
 
 html, body { background: $background-color; }
-body { @include base-font; }
+body { 
+  @include base-font; 
+  @include blueprint-typography; 
+}
