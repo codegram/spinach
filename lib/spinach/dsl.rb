@@ -1,8 +1,12 @@
 module Spinach
-  # Spinach DSL aims to provide an easy way to define steps and other domain
-  # specific actions into your feature classes
+  # Spinach DSL aims to provide an easy way to define steps and hooks into your
+  # feature classes.
   #
   module DSL
+    # @param [Class] base
+    #   The host class.
+    #
+    # @api public
     def self.included(base)
       base.class_eval do
         include InstanceMethods
@@ -10,23 +14,29 @@ module Spinach
       end
     end
 
+    # Class methods to extend the host class.
+    #
     module ClassMethods
+      # The feature name.
+      attr_reader :feature_name
       # Defines an action to perform given a particular step literal.
       #
-      # @param [String] step name
-      #   The step literal
+      # @param [String] step
+      #   The step name.
+      #
       # @param [Proc] block
-      #   action to perform in that step
+      #   Action to perform in that step.
       #
       # @example
-      #   class MyFeature << Spinach::Feature
+      #   class MyFeature < Spinach::Feature
       #     When "I go to the toilet" do
       #       @sittin_on_the_toilet.must_equal true
       #     end
       #   end
       #
-      def Given(string, &block)
-        define_method(string, &block)
+      # @api public
+      def Given(step, &block)
+        define_method(step, &block)
       end
 
       alias_method :When, :Given
@@ -34,28 +44,34 @@ module Spinach
       alias_method :And, :Given
       alias_method :But, :Given
 
-      # Defines this feature's name
+      # Sets the feature name.
+      #
+      # @param [String] name
+      #   The name.
       #
       # @example
       #   class MyFeature < Spinach::Feature
       #     feature "Satisfy needs"
       #   end
       #
+      # @api public
       def feature(name)
         @feature_name = name
       end
-
-      # @return [String] this feature's name
-      #
-      attr_reader :feature_name
     end
 
+    # Instance methods to include in the host class.
+    #
     module InstanceMethods
-      # Execute a given step.
+      # Executes a given step.
       #
       # @param [String] step
-      #   the step to execute
+      #   The step name to execute.
       #
+      # @return [String]
+      #   The file and line where the step was defined.
+      #
+      # @api public
       def execute_step(step)
         if self.respond_to?(step)
           self.send(step)
@@ -64,6 +80,8 @@ module Spinach
         end
       end
 
+      # @return [String]
+      #   The feature name.
       def name
         self.class.feature_name
       end
