@@ -272,8 +272,8 @@ body .loud {
 
 @font-face {
   font-family: "Santa Fe";
-  src: url(/fonts/santafe.eot);
-  src: url(/fonts/santafe.eot?iefix) format('eot'), url(/fonts/santafe.woff) format('woff'), url(/fonts/santafe.ttf) format('truetype');
+  src: url('fonts/../fonts/santafe.eot');
+  src: url('fonts/../fonts/santafe.eot?iefix') format('eot'), url('fonts/../fonts/santafe.woff') format('woff'), url('fonts/../fonts/santafe.ttf') format('truetype');
 }
 
 #fork_me_on_github {
