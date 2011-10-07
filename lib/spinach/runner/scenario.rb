@@ -5,15 +5,16 @@ module Spinach
     class Scenario
       attr_reader :name, :feature, :feature_name, :steps, :reporter
 
-      # @param [Spinach::Feature] feature
-      #   the feature that contains the steps
+      # @param [Feature] feature
+      #   The feature that contains the steps.
       #
       # @param [Hash] data
-      #   the parsed feature data
+      #   The parsed feature data.
       #
-      # @param [Spinach::Reporter]
-      #   the reporter
+      # @param [Reporter]
+      #   The reporter.
       #
+      # @api public
       def initialize(feature_name, feature, data, reporter)
         @feature_name = feature_name
         @name = data['name']
@@ -22,8 +23,7 @@ module Spinach
         @feature = feature
       end
 
-      # Runs this scenario and signals the reporter
-      #
+      # Runs this scenario and notifies the reporter.
       def run
         reporter.scenario(name)
         feature.run_hook :before_scenario, name
