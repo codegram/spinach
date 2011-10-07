@@ -58,7 +58,7 @@ describe Spinach::Reporter::Stdout do
         @reporter.after_scenario_run('name' => 'Arbitrary scenario')
       end
 
-      it 'reports the full error' do
+      it 'resets the scenario error' do
         @reporter.stubs(:report_error)
         @reporter.after_scenario_run('name' => 'Arbitrary scenario')
 

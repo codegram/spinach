@@ -6,16 +6,28 @@ module Spinach
     #
     class Stdout < Reporter
 
-      attr_reader :out, :err
+      # The output buffers to store the reports.
+      attr_reader :out, :error
+
+      # The last scenario error
       attr_accessor :scenario_error
 
+      # Initialitzes the runner
+      #
+      # @param [Hash] options
+      #  Sets a custom output buffer by setting options[:output]
+      #  Sets a custom error buffer by setting options[:error]
+      #
       def initialize(*args)
         super(*args)
         @out = options[:output] || $stdout
-        @err = options[:error] || $stderr
+        @error = options[:error] || $stderr
       end
 
       # Prints the feature name to the standard output
+      #
+      # @param [Hash] data
+      #   The feature in a JSON Gherkin format
       #
       def before_feature_run(data)
         name = data['name']
@@ -24,26 +36,31 @@ module Spinach
 
       # Prints the scenario name to the standard ouput
       #
+      # @param [Hash] data
+      #   The feature in a JSON Gherkin format
+      #
       def before_scenario_run(data)
         name = data['name']
         out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
         out.puts
       end
 
+      # Adds an error report and re
+      #
+      # @param [Hash] data
+      #   The feature in a JSON Gherkin format
+      #
       def after_scenario_run(data)
         if scenario_error
-          report_error scenario_error, :full
+          report_error(scenario_error, :full)
+          self.scenario_error = nil
         end
-        self.scenario_error = nil
       end
 
       # Adds a passed step to the output buffer.
       #
       # @param [Hash] step
       #   The step in a JSON Gherkin format
-      #
-      # @example
-      #  @report.on_successful_step({'keyword' => 'Given', 'name' => 'I am too cool'})
       #
       def on_successful_step(step)
         output_step('✔', step, :green)
@@ -125,7 +142,7 @@ module Spinach
       # Prints the errors for ths run.
       #
       def error_summary
-        err.puts "\nError summary:\n"
+        error.puts "\nError summary:\n"
         report_error_steps
         report_failed_steps
         report_undefined_steps
@@ -161,11 +178,11 @@ module Spinach
       #   The color code to use with Colorize to colorize the output.
       #
       def report_errors(banner, steps, color)
-        err.puts "#{banner} (#{steps.length})".colorize(color)
+        error.puts "#{banner} (#{steps.length})".colorize(color)
         steps.each do |error|
           report_error error
         end
-        err.puts ""
+        error.puts ""
       end
 
       # Prints an error in a nice format
@@ -183,9 +200,9 @@ module Spinach
       def report_error(error, format=:summarized)
         case format
           when :summarized
-            err.puts summarized_error(error)
+            self.error.puts summarized_error(error)
           when :full
-            err.puts full_error(error)
+            self.error.puts full_error(error)
           else
             raise "Format not defined"
         end
