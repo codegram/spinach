@@ -68,11 +68,14 @@ module Spinach
       #   the step to execute
       #
       def execute_step(step)
+        location = nil
         if self.respond_to?(step)
+          location = method(step).source_location
           self.send(step)
         else
           raise Spinach::StepNotDefinedException.new(self, step)
         end
+        location
       end
 
       def name
