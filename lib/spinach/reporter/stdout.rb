@@ -5,27 +5,37 @@ module Spinach
     # The Stdout reporter outputs the runner results to the standard output
     #
     class Stdout < Reporter
+
+      def initialize(out = $stdout, error = $stderr, options = {})
+        super(options)
+        @out = out 
+        @error = error
+      end
+
+      attr_reader :out, :error
+
+      attr_accessor :scenario_error
+
       # Prints the feature name to the standard output
       #
       def before_feature_run(data)
         name = data['name']
-        puts "\n#{'Feature:'.magenta} #{name.light_magenta}"
+        out.puts "\n#{'Feature:'.magenta} #{name.light_magenta}"
       end
 
       # Prints the scenario name to the standard ouput
       #
       def before_scenario_run(data)
         name = data['name']
-        puts "\n  #{'Scenario:'.green} #{name.light_green}"
-        puts
+        out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
+        out.puts
       end
 
       def after_scenario_run(data)
-        if @scenario_error
-          puts ""
-          report_error @scenario_error, :backtrace
+        if scenario_error
+          report_error scenario_error, :full
         end
-        @scenario_error = nil
+        self.scenario_error = nil
       end
 
       def on_successful_step(step)
@@ -34,20 +44,20 @@ module Spinach
 
       def on_failed_step(step, failure)
         output_step('✘', step, :red)
-        @scenario_error = [current_feature, current_scenario, step, failure]
-        failed_steps << @scenario_error
+        scenario_error = [current_feature, current_scenario, step, failure]
+        failed_steps << scenario_error
       end
 
       def on_error_step(step, failure)
         output_step('!', step, :red)
-        @scenario_error = [current_feature, current_scenario, step, failure]
-        error_steps << @scenario_error
+        scenario_error = [current_feature, current_scenario, step, failure]
+        error_steps << scenario_error
       end
 
       def on_undefined_step(step, failure)
         output_step('?', step, :yellow)
-        @scenario_error = [current_feature, current_scenario, step]
-        undefined_steps << @scenario_error
+        scenario_error = [current_feature, current_scenario, step]
+        undefined_steps << scenario_error
       end
 
       def on_skipped_step(step)
@@ -55,7 +65,7 @@ module Spinach
       end
 
       def output_step(symbol, step, color)
-        puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)}"
+        out.puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)}"
       end
 
       def after_run(success)
@@ -65,7 +75,7 @@ module Spinach
       # Prints the errors for ths run.
       #
       def error_summary
-        puts ""
+        error.puts ""
         report_error_steps
         report_failed_steps
         report_undefined_steps
@@ -73,39 +83,42 @@ module Spinach
 
       def report_error_steps
         if error_steps.any?
-          puts "Errors (#{error_steps.length})".light_red
+          error.puts "Errors (#{error_steps.length})".light_red
           error_steps.each do |error|
             report_error error
           end
-          puts ""
+          error.puts ""
         end
       end
 
       def report_failed_steps
         if failed_steps.any?
-          puts "Failures (#{failed_steps.length})".light_red
+          error.puts "Failures (#{failed_steps.length})".light_red
           failed_steps.each do |error|
             report_error error
           end
-          puts ""
+          error.puts ""
         end
       end
 
       def report_undefined_steps
         if undefined_steps.any?
-          puts "Undefined steps (#{undefined_steps.length})".yellow
+          error.puts "Undefined steps (#{undefined_steps.length})".yellow
           undefined_steps.each do |error|
             report_error error
           end
-          puts ""
+          error.puts ""
         end
       end
 
       def report_error(error, format=:summarized)
-        if format == :summarized
-          puts summarized_error(error)
-        else
-          puts full_error(error)
+        case format
+          when :summarized
+            error.puts summarized_error(error)
+          when :full
+            error.puts full_error(error)
+          else
+            raise "Format not defined"
         end
       end
 
