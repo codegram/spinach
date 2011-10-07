@@ -1,21 +1,31 @@
 module Spinach
-  # Spinach's runner gets the parsed data from the feature and performs the
-  # actual calls to the feature classes.
+  # Runner gets the parsed data from the feature and performs the actual calls
+  # to the feature classes.
   #
   class Runner
-    # Initializes the runner with a parsed feature
+    # The feature files to run
+    attr_reader :filenames
+
+    # The default path where the steps are located
+    attr_reader :step_definitions_path
+
+    # The default path where the support files are located
+    attr_reader :support_path
+
+    # Initializes the runner with a parsed feature.
     #
     # @param [Array<String>] filenames
-    #   an array of feature filenames to run
+    #   A list of feature filenames to run
     #
     # @param [Hash] options
     #
     # @option options [String] :step_definitions_path
-    #   The path in which step definitions are found
+    #   The path in which step definitions are found.
     #
     # @option options [String] :support_path
-    #   The path with the support ruby files
+    #   The path with the support ruby files.
     #
+    # @api public
     def initialize(filenames, options = {})
       @filenames = filenames
 
@@ -26,63 +36,62 @@ module Spinach
         Spinach.config.support_path
     end
 
-    # Returns the current [Reporter] for the [Runner]
+    # @return [Reporter]
+    #   The current {Reporter} for the {Runner}.
     #
+    # @api public
     def reporter
       @reporter ||= Spinach::config.default_reporter
     end
 
-    # The feature files to run
-    attr_reader :filenames
-
-    # The default path where the steps are located
-    attr_reader :step_definitions_path
-
-    # The default path where the support files are located
-    attr_reader :support_path
-
     # Runs this runner and outputs the results in a colorful manner.
     #
+    # @return [true, false]
+    #   Whether the run was succesful.
+    #
+    # @api public
     def run
       require_dependencies
 
+      successful = true
+
       filenames.each do |filename|
         success = Feature.new(filename, reporter).run
-        @failed = true unless success
+        successful = false unless success
       end
       reporter.end
 
-      @failed ? false : true
+      successful
     end
 
-    # Requires step definitions and support files
+    # Loads step definitions and support files.
     #
+    # @api public
     def require_dependencies
       (support_files + step_definition_files).each do |file|
         require file
       end
     end
 
-    # List of step definition files
-    #
     # @return [Array<String>] files
+    #   The step definition files.
     #
+    # @api public
     def step_definition_files
       Dir.glob(
         File.expand_path File.join(step_definitions_path, '**', '*.rb')
       )
     end
 
-    # List of support files
-    #
     # @return [Array<String>] files
+    #   The support files.
     #
+    # @api public
     def support_files
       Dir.glob(
         File.expand_path File.join(support_path, '**', '*.rb')
       )
     end
-
   end
 end
 

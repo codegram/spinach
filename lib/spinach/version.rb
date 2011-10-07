@@ -1,5 +1,4 @@
 module Spinach
-  unless defined?(VERSION)
-    VERSION = "0.0.6"
-  end
+  # Spianch version.
+  VERSION = "0.0.6"
 end
