@@ -64,7 +64,7 @@ module Spinach
       successful = true
 
       filenames.each do |filename|
-        success = Feature.new(filename, reporter).run
+        success = Feature.new(filename).run
         successful = false unless success
       end
 
