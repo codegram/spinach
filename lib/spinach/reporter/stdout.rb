@@ -38,18 +38,18 @@ module Spinach
         self.scenario_error = nil
       end
 
-      def on_successful_step(step)
-        output_step('✔', step, :green)
+      def on_successful_step(step, step_location)
+        output_step('✔', step, :green, step_location)
       end
 
-      def on_failed_step(step, failure)
-        output_step('✘', step, :red)
+      def on_failed_step(step, failure, step_location)
+        output_step('✘', step, :red, step_location)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         failed_steps << scenario_error
       end
 
-      def on_error_step(step, failure)
-        output_step('!', step, :red)
+      def on_error_step(step, failure, step_location)
+        output_step('!', step, :red, step_location)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         error_steps << scenario_error
       end
@@ -64,8 +64,11 @@ module Spinach
         output_step('~', step, :cyan)
       end
 
-      def output_step(symbol, step, color)
-        out.puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)}"
+      def output_step(symbol, step, color, step_location=nil)
+        if step_location
+          step_location = step_location.first.gsub(File.expand_path('.'), '# ')+":#{step_location.last.to_s}"
+        end
+          out.puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)} #{step_location.to_s.colorize(:grey)}"
       end
 
       def after_run(success)
