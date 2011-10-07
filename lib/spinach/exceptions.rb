@@ -1,26 +1,38 @@
 module Spinach
-  # This class represents the feature raised when Spniach can't find a class
+  # This class represents the exception raised when Spinach can't find a class
   # for a feature.
+  #
   class FeatureNotFoundException < StandardError
+    # @param [Array] options
+    #   An array consisting of the missing class and the feature.
+    #
+    # @api pulic
     def initialize(options)
-      @not_found_class = options.first
-      @feature = options.last
+      @missing_class, @feature = options
     end
 
-    # Returns a custom message when a feature class is not found.
+    # @return [String]
+    #   A custom message when a feature class is not found.
     #
+    # @api public
     def message
-      "Could not find class for `#{@feature}` feature. Please create a #{@not_found_class}.rb file at #{Spinach.config[:step_definitions_path]}"
+      "Could not find class for `#{@feature}` feature. Please create a #{@missing_class}.rb file at #{Spinach.config[:step_definitions_path]}"
     end
   end
 
-  # This class represents the step raised when Spinach can't find a step for a
-  # Scenario.
+  # This class represents the exception raised when Spinach can't find a step
+  # for a {Scenario}.
   #
   class StepNotDefinedException < StandardError
-
     attr_reader :feature, :step
 
+    # @param [Feature] feature
+    #   The container feature.
+    #
+    # @param [Hash] step
+    #   The missing step.
+    #
+    # @api pulic
     def initialize(feature, step)
       @feature = feature
       @step = step
