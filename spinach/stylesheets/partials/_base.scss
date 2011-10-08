@@ -26,6 +26,8 @@ $header-color: strengthen($text-color, 0.66);
 $link-color: #e5685f;
 $link-visited-color: $link-color;
 $link-hover-color: $link-color;
+$link-active-color: $link-color;
+$link-focus-color: $link-color;
 
 // Theme Colors
 $background-color: #ececec;
@@ -46,7 +48,7 @@ $default-border-radius: 8px;
 @include reset-html5;
 
 html, body { background: $background-color; }
-body { 
-  @include base-font; 
-  @include blueprint-typography; 
+body {
+  @include base-font;
+  @include blueprint-typography;
 }
