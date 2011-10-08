@@ -12,11 +12,18 @@ module Spinach
     end
 
     # @return [String]
-    #   A custom message when a feature class is not found.
+    #   A custom message when feature steps aren't found.
     #
     # @api public
     def message
-      "Could not find class for `#{@feature}` feature. Please create a #{@missing_class}.rb file at #{Spinach.config[:step_definitions_path]}"
+      [%Q{Could not find steps for `#{@feature}` feature.
+      Please create the file #{Spinach::Support.underscore(@missing_class)}.rb
+      at #{Spinach.config[:step_definitions_path]}, with:}.gsub(/^\s{6,7}/, ''),
+      %Q{class #{@missing_class} << Spinach::Feature
+         #
+         # define your steps here
+         #
+      end}.gsub(/^\s{6,7}/, '')].join("\n\n").red
     end
   end
 

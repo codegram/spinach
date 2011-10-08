@@ -22,4 +22,37 @@ describe Spinach::Support do
       Spinach::Support.camelize('feature name').must_equal 'FeatureName'
     end
   end
+
+  describe '#underscore' do
+    it 'changes dashes to underscores' do
+      Spinach::Support.underscore('feature-name').must_equal 'feature_name'
+    end
+
+    it 'downcases the text' do
+      Spinach::Support.underscore('FEATURE').must_equal 'feature'
+    end
+
+    it 'converts namespaces to paths' do
+      Spinach::Support.underscore('Spinach::Support').must_equal 'spinach/support'
+    end
+
+    it 'prepends underscores to uppercase letters' do
+      Spinach::Support.underscore('FeatureName').must_equal 'feature_name'
+    end
+
+    it 'only prepends underscores to the last uppercase letter' do
+      Spinach::Support.underscore('SSLError').must_equal 'ssl_error'
+    end
+
+    it 'does not modify the original string' do
+      text = 'FeatureName'
+      underscored_text = Spinach::Support.underscore(text)
+
+      text.wont_equal underscored_text
+    end
+
+    it 'accepts non string values' do
+      Spinach::Support.underscore(:FeatureName).must_equal 'feature_name'
+    end
+  end
 end
