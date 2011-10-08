@@ -43,7 +43,7 @@ describe Spinach do
       it 'raises when it cannot find the class' do
         exception = proc {
           Spinach.find_feature('This feature does not exist')
-        }.must_raise Spinach::FeatureNotFoundException
+        }.must_raise Spinach::FeatureStepsNotFoundException
       end
     end
   end

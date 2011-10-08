@@ -1,21 +1,21 @@
 require_relative '../test_helper'
 
-describe Spinach::Feature do
+describe Spinach::FeatureSteps do
   describe 'ancestors' do
     it 'includes minitest helpers' do
-      Spinach::Feature.ancestors.must_include MiniTest::Assertions
+      Spinach::FeatureSteps.ancestors.must_include MiniTest::Assertions
     end
 
     it 'is extended by the DSL' do
-      Spinach::Feature.ancestors.must_include Spinach::DSL
+      Spinach::FeatureSteps.ancestors.must_include Spinach::DSL
     end
   end
 
   describe 'class methods' do
     describe '#inherited' do
       it 'registers any feature subclass' do
-        @feature1 = Class.new(Spinach::Feature)
-        @feature2 = Class.new(Spinach::Feature)
+        @feature1 = Class.new(Spinach::FeatureSteps)
+        @feature2 = Class.new(Spinach::FeatureSteps)
         @feature3 = Class.new
 
         Spinach.features.must_include @feature1
@@ -27,7 +27,7 @@ describe Spinach::Feature do
 
   describe 'instance methods' do
     let(:feature) do
-      Class.new(Spinach::Feature) do
+      Class.new(Spinach::FeatureSteps) do
         When 'I go to the toilet' do
           @pee = true
         end

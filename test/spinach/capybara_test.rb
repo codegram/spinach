@@ -2,7 +2,7 @@ require 'test_helper'
 require 'spinach/capybara'
 require 'sinatra'
 
-describe Spinach::Feature::Capybara do
+describe Spinach::FeatureSteps::Capybara do
   before do
     @sinatra_app = Sinatra::Application.new do
       get '/' do
@@ -12,8 +12,8 @@ describe Spinach::Feature::Capybara do
 
     Capybara.app = @sinatra_app
 
-    @feature = Class.new(Spinach::Feature) do
-      include Spinach::Feature::Capybara
+    @feature = Class.new(Spinach::FeatureSteps) do
+      include Spinach::FeatureSteps::Capybara
       Given 'Hello' do
       end
       Then 'Goodbye' do

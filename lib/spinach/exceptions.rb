@@ -2,7 +2,7 @@ module Spinach
   # This class represents the exception raised when Spinach can't find a class
   # for a feature.
   #
-  class FeatureNotFoundException < StandardError
+  class FeatureStepsNotFoundException < StandardError
     # @param [Array] options
     #   An array consisting of the missing class and the feature.
     #
@@ -19,7 +19,7 @@ module Spinach
       [%Q{Could not find steps for `#{@feature}` feature.
       Please create the file #{Spinach::Support.underscore(@missing_class)}.rb
       at #{Spinach.config[:step_definitions_path]}, with:}.gsub(/^\s{6,7}/, ''),
-      %Q{class #{@missing_class} << Spinach::Feature
+      %Q{class #{@missing_class} << Spinach::FeatureSteps
          #
          # define your steps here
          #

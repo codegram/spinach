@@ -4,7 +4,7 @@ MiniTest::Spec.new nil
 module Spinach
   # The feature class is the class which all the features must inherit from.
   #
-  class Feature
+  class FeatureSteps
     include DSL
     include MiniTest::Assertions
 
@@ -22,7 +22,7 @@ end
 
 # Syntactic sugar. Define the "Feature do" syntax.
 Object.send(:define_method, :Feature) do |name, &block|
-  Class.new(Spinach::Feature) do
+  Class.new(Spinach::FeatureSteps) do
     feature name
     class_eval &block
   end

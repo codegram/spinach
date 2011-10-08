@@ -1,21 +1,21 @@
 require 'capybara'
 require 'capybara/dsl'
-require_relative 'feature'
+require_relative 'feature_steps'
 
 module Spinach
-  class Feature
+  class FeatureSteps
     # Spinach's capybara module makes Capybara DSL available in all features.
     #
     # @example
     #   require 'spinach/capybara'
-    #   class CapybaraFeature < Spinach::Feature
+    #   class CapybaraFeature < Spinach::FeatureSteps
     #     Given "I go to the home page" do
     #       visit '/'
     #     end
     #   end
     #
     module Capybara
-      # Enhances a Feature with Capybara goodness.
+      # Enhances a FeatureSteps with Capybara goodness.
       #
       # @param [Class] base
       #   The host class.

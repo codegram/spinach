@@ -5,7 +5,7 @@ require_relative 'spinach/exceptions'
 require_relative 'spinach/runner'
 require_relative 'spinach/parser'
 require_relative 'spinach/dsl'
-require_relative 'spinach/feature'
+require_relative 'spinach/feature_steps'
 require_relative 'spinach/reporter'
 require_relative 'spinach/cli'
 
@@ -51,6 +51,6 @@ module Spinach
     @@features.detect do |feature|
       feature.feature_name.to_s == name.to_s ||
       feature.name == klass
-    end || raise(Spinach::FeatureNotFoundException, [klass, name])
+    end || raise(Spinach::FeatureStepsNotFoundException, [klass, name])
   end
 end

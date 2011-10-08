@@ -39,7 +39,7 @@ module Spinach
       #   Action to perform in that step.
       #
       # @example
-      #   class MyFeature < Spinach::Feature
+      #   class MyFeature < Spinach::FeatureSteps
       #     When "I go to the toilet" do
       #       @sittin_on_the_toilet.must_equal true
       #     end
@@ -61,7 +61,7 @@ module Spinach
       #   The name.
       #
       # @example
-      #   class MyFeature < Spinach::Feature
+      #   class MyFeature < Spinach::FeatureSteps
       #     feature "Satisfy needs"
       #   end
       #

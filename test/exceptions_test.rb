@@ -1,8 +1,8 @@
 require_relative 'test_helper'
 
-describe Spinach::FeatureNotFoundException do
+describe Spinach::FeatureStepsNotFoundException do
   subject do
-    Spinach::FeatureNotFoundException.new(['ThisFeatureDoesNotExist', 'This feature does not exist'])
+    Spinach::FeatureStepsNotFoundException.new(['ThisFeatureDoesNotExist', 'This feature does not exist'])
   end
 
   describe 'message' do
@@ -20,7 +20,7 @@ describe Spinach::FeatureNotFoundException do
     end
 
     it 'tells the user what to write in the file' do
-      subject.message.must_include 'class ThisFeatureDoesNotExist << Spinach::Feature'
+      subject.message.must_include 'class ThisFeatureDoesNotExist << Spinach::FeatureSteps'
     end
   end
 end
