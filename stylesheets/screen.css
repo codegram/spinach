@@ -272,8 +272,8 @@ body .loud {
 
 @font-face {
   font-family: "Santa Fe";
-  src: url(/spinach/fonts/santafe.eot);
-  src: url(/spinach/fonts/santafe.eot?iefix) format('eot'), url(/spinach/fonts/santafe.woff) format('woff'), url(/spinach/fonts/santafe.ttf) format('truetype');
+  src: url('fonts/santafe.eot');
+  src: url('fonts/santafe.eot?iefix') format('eot'), url('fonts/santafe.woff') format('woff'), url('fonts/santafe.ttf') format('truetype');
 }
 
 #fork_me_on_github {
@@ -306,7 +306,7 @@ body a:hover {
 header#header {
   padding-left: 398px;
   min-height: 509px;
-  background: url(../images/spinach.png) center left no-repeat;
+  background: url('../images/spinach.png?1318084903') center left no-repeat;
   font-family: "Terminal Dosis";
   font-weight: 200;
 }
@@ -323,7 +323,7 @@ header#header h1 {
   font-size: 110px;
   text-align: center;
   padding-bottom: 30px;
-  background: url(../images/stars.png) bottom center no-repeat;
+  background: url('../images/stars.png?1318084903') bottom center no-repeat;
   margin-bottom: 30px;
   height: 135px;
 }
