@@ -36,17 +36,9 @@ describe Spinach::Runner do
     end
   end
 
-  describe '#reporter' do
-    it 'returns a default reporter' do
-      runner.reporter.wont_equal nil
-    end
-  end
-
   describe '#run' do
     before do
       @feature = stub
-      runner.stubs(reporter: stub_everything)
-
       filenames.each do |filename|
         Spinach::Runner::Feature.expects(:new).
           with(filename, anything).
@@ -62,6 +54,17 @@ describe Spinach::Runner do
     it 'returns false if it fails' do
       @feature.stubs(run: false)
       runner.run
+    end
+  end
+  describe '#require_dependencies' do
+    it 'requires support files and step definitions' do
+      runner.stubs(
+        support_files: ['a', 'b'], step_definition_files: ['c', 'd']
+      )
+      %w{a b c d}.each do |file|
+        runner.expects(:require).with(file)
+      end
+      runner.require_dependencies
     end
   end
 end

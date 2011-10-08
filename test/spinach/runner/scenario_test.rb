@@ -14,20 +14,11 @@ describe Spinach::Runner::Scenario do
 
   let(:feature) { stub_everything }
   let(:feature_name) { 'My feature' }
-  let(:reporter) { stub_everything }
-  let(:scenario) { Spinach::Runner::Scenario.new(feature_name, feature, data, reporter) }
+  let(:scenario) { Spinach::Runner::Scenario.new(feature_name, feature, data) }
 
   describe '#initialize' do
-    it 'initializes a scenario name' do
-      scenario.name.must_equal 'A cool scenario'
-    end
-
     it 'lists all the steps' do
       scenario.steps.count.must_equal 3
-    end
-
-    it 'sets the reporter' do
-      scenario.reporter.must_equal reporter
     end
 
     it 'sets the feature' do
@@ -46,19 +37,35 @@ describe Spinach::Runner::Scenario do
     describe 'when throwing exceptions' do
       it 'rescues a MiniTest::Assertion' do
         feature.expects(:execute_step).raises(MiniTest::Assertion)
-        reporter.expects(:step).with(anything, anything, :failure)
+        scenario.expects(:run_hook).with(:before_run, has_value("A cool scenario"))
+        scenario.expects(:run_hook).with(:after_run, has_value("A cool scenario"))
+        scenario.expects(:run_hook).with(
+          :on_failed_step, anything, anything, anything)
+        scenario.expects(:run_hook).with(
+          :on_skipped_step, anything, anything).twice
         scenario.run
       end
 
       it 'rescues a Spinach::StepNotDefinedException' do
-        feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
-        reporter.expects(:step).with(anything, anything, :undefined_step)
+        feature.expects(:execute_step).raises(
+          Spinach::StepNotDefinedException.new('foo', 'bar'))
+        scenario.expects(:run_hook).with(:before_run, has_value("A cool scenario"))
+        scenario.expects(:run_hook).with(:after_run, has_value("A cool scenario"))
+        scenario.expects(:run_hook).with(
+          :on_undefined_step, anything, anything, anything)
+        scenario.expects(:run_hook).with(
+          :on_skipped_step, anything, anything).twice
         scenario.run
       end
 
       it 'rescues any other error' do
         feature.expects(:execute_step).raises
-        reporter.expects(:step).with(anything, anything, :error)
+        scenario.expects(:run_hook).with(:after_run, has_value("A cool scenario"))
+        scenario.expects(:run_hook).with(:before_run, has_value("A cool scenario"))
+        scenario.expects(:run_hook).with(
+          :on_error_step, anything, anything, anything)
+        scenario.expects(:run_hook).with(
+          :on_skipped_step, anything, anything).twice
         scenario.run
       end
 
@@ -69,15 +76,15 @@ describe Spinach::Runner::Scenario do
     end
 
     it 'runs a step' do
-      reporter.expects(:step).with(anything, anything, :success).times(3)
-      scenario.run.must_equal nil
+      feature.expects(:execute_step).with(anything).times(3)
+      scenario.run.must_equal true
     end
 
     describe 'hooks' do
       it 'fires up the scenario hooks' do
         feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
-        feature.expects(:run_hook).with(:before_scenario, 'A cool scenario')
-        feature.expects(:run_hook).with(:after_scenario, 'A cool scenario')
+        feature.expects(:run_hook).with(:before_scenario, has_value("A cool scenario"))
+        feature.expects(:run_hook).with(:after_scenario, has_value("A cool scenario"))
         scenario.run
       end
 
@@ -85,11 +92,11 @@ describe Spinach::Runner::Scenario do
         feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
         %w{before_step after_step}.each do |hook|
           feature.expects(:run_hook).with(
-            hook.to_sym, 'Given', 'I herd you like steps')
+            hook.to_sym, kind_of(Hash))
           feature.expects(:run_hook).with(
-            hook.to_sym, 'When', 'I test steps')
+            hook.to_sym, kind_of(Hash))
           feature.expects(:run_hook).with(
-            hook.to_sym, 'Then', 'I go step by step')
+            hook.to_sym, kind_of(Hash))
         end
 
         scenario.run

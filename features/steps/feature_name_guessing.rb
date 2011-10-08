@@ -27,6 +27,6 @@ Feature "Feature name guessing" do
   end
 
   Then 'I want "MyCoolFeature" class to be used to run it' do
-    all_stderr.must_be_empty
+    last_exit_status.must_equal 0
   end
 end
