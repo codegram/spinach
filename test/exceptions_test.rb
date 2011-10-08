@@ -14,11 +14,7 @@ describe Spinach::FeatureNotFoundException do
       subject.message.must_include 'Please create the file this_feature_does_not_exist.rb'
     end
 
-    it 'tells the user where to create the file' do
-      subject.message.must_include 'at features/steps, with:'
-    end
-
-    it 'tells the user where to create the file using a custom path' do
+    it 'tells the user where to create the file respecting the step definitions path' do
       Spinach.config.stubs(:step_definitions_path).returns('my/path')
       subject.message.must_include 'at my/path, with:'
     end
