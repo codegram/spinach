@@ -51,31 +51,43 @@ module Spinach
         @callback = mock
         @reporter.stubs(:method)
       end
+
       it "binds a callback after running all the suite" do
         @reporter.expects(:method).with(:after_run).returns(@callback)
         @reporter.runner.expects(:after_run).with(@callback)
         @reporter.bind
       end
+
       it "binds a callback before running every feature" do
         @reporter.expects(:method).with(:before_feature_run).returns(@callback)
         @reporter.feature_runner.expects(:before_run).with(@callback)
         @reporter.bind
       end
+
       it "binds a callback after running every feature" do
         @reporter.expects(:method).with(:after_feature_run).returns(@callback)
         @reporter.feature_runner.expects(:after_run).with(@callback)
         @reporter.bind
       end
+
+      it "binds a callback for not defined features" do
+        @reporter.expects(:method).with(:on_feature_not_found).returns(@callback)
+        @reporter.feature_runner.expects(:when_not_found).with(@callback)
+        @reporter.bind
+      end
+
       it "binds a callback before running every scenario" do
         @reporter.expects(:method).with(:before_scenario_run).returns(@callback)
         @reporter.scenario_runner.expects(:before_run).with(@callback)
         @reporter.bind
       end
+
       it "binds a callback after running every feature" do
         @reporter.expects(:method).with(:after_scenario_run).returns(@callback)
         @reporter.scenario_runner.expects(:after_run).with(@callback)
         @reporter.bind
       end
+
       describe "when running steps" do
         %w{successful failed error skipped}.each do |type|
           it "binds a callback after running a #{type} step" do
@@ -85,22 +97,26 @@ module Spinach
           end
         end
       end
+
       describe "binds the context methods" do
         it "binds the current feature setter" do
           @reporter.expects(:method).with(:current_feature=).returns(@callback)
           @reporter.feature_runner.expects(:before_run).with(@callback)
           @reporter.bind
         end
+
         it "binds the current feature clearer" do
           @reporter.expects(:method).with(:clear_current_feature).returns(@callback)
           @reporter.feature_runner.expects(:after_run).with(@callback)
           @reporter.bind
         end
+
         it "binds the current scenario setter" do
           @reporter.expects(:method).with(:current_scenario=).returns(@callback)
           @reporter.scenario_runner.expects(:before_run).with(@callback)
           @reporter.bind
         end
+
         it "binds the current feature clearer" do
           @reporter.expects(:method).with(:clear_current_scenario).returns(@callback)
           @reporter.scenario_runner.expects(:after_run).with(@callback)
@@ -131,11 +147,13 @@ module Spinach
           @reporter.feature_runner.must_be_kind_of Class
         end
       end
+
       describe "#scenario_runner" do
         it "returns a runner class" do
           @reporter.scenario_runner.must_be_kind_of Class
         end
       end
+
       describe "#runner" do
         it "returns a runner class" do
           @reporter.runner.must_be_kind_of Class
@@ -156,6 +174,5 @@ module Spinach
         end
       end
     end
-
   end
 end
