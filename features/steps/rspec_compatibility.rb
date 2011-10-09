@@ -22,9 +22,11 @@ Feature "RSpec compatibility" do
                   end
                 end')
   end
+
   When "I run \"spinach\" with rspec" do
     run_feature 'features/feature_with_failures.feature', suite: :rspec
   end
+
   Then "I should see the failure count along with their messages" do
     check_error_messages(1)
   end

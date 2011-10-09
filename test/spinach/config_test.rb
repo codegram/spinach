@@ -4,9 +4,10 @@ describe Spinach::Config do
   before do
     @config = Spinach::Config.new
   end
+
   describe '#step_definitions_path' do
     it 'returns a default' do
-      (@config[:step_definitions_path].kind_of? String).must_equal true
+      @config[:step_definitions_path].must_be_kind_of String
     end
 
     it 'can be overwritten' do
@@ -17,7 +18,7 @@ describe Spinach::Config do
 
   describe '#support_path' do
     it 'returns a default' do
-      (@config[:support_path].kind_of? String).must_equal true
+      @config[:support_path].must_be_kind_of String
     end
 
     it 'can be overwritten' do
@@ -28,7 +29,7 @@ describe Spinach::Config do
 
   describe '#failure_exceptions' do
     it 'returns a default' do
-      @config[:failure_exceptions].kind_of?(Array).must_equal true
+      @config[:failure_exceptions].must_be_kind_of Array
     end
 
     it 'can be overwritten' do
