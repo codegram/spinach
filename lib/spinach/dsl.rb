@@ -47,7 +47,7 @@ module Spinach
       #
       # @api public
       def Given(step, &block)
-        define_method(step, &block)
+        define_method(Spinach::Support.underscore(step), &block)
       end
 
       alias_method :When, :Given
@@ -84,8 +84,8 @@ module Spinach
       #
       # @api public
       def execute_step(step)
-        if self.respond_to?(step)
-          self.send(step)
+        if self.respond_to?(Spinach::Support.underscore step)
+          self.send(Spinach::Support.underscore step)
         else
           raise Spinach::StepNotDefinedException.new(self, step)
         end

@@ -14,7 +14,7 @@ describe Spinach::DSL do
           'You say hello'
         end
 
-        @feature.new.send('I say goodbye').must_equal 'You say hello'
+        @feature.new.execute_step('I say goodbye').must_equal 'You say hello'
       end
     end
 
