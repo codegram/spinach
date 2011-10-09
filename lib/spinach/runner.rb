@@ -62,6 +62,8 @@ module Spinach
       require_dependencies
       require_suites
 
+      run_hook :before_run
+
       successful = true
 
       filenames.each do |filename|
