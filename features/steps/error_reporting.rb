@@ -23,11 +23,11 @@ Feature "Error reporting" do
   end
 
   When 'I run "spinach"' do
-    run_feature 'features/feature_with_errors.feature'
+    run_feature 'features/feature_with_failures.feature'
   end
 
   When 'I run "spinach --backtrace"' do
-    run_feature 'features/feature_with_failures.feature', '--backtrace'
+    run_feature 'features/feature_with_failures.feature', append: '--backtrace'
   end
 
   Then 'I should see the error count along with their messages' do

@@ -1,3 +1,1 @@
-if defined?(MiniTest)
-  require_relative 'suites/minitest'
-end
+require_relative 'suites/minitest' if defined?(MiniTest::Unit)

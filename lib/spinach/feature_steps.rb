@@ -1,6 +1,3 @@
-require 'minitest/spec'
-MiniTest::Spec.new nil
-
 module Spinach
   # The feature class is the class which all the features must inherit from.
   #

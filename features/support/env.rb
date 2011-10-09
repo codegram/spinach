@@ -1,1 +1,1 @@
-require 'spinach/suites/minitest'
+require 'minitest/spec'

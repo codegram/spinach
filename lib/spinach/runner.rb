@@ -60,6 +60,7 @@ module Spinach
     # @api public
     def run
       require_dependencies
+      require_suites
 
       successful = true
 
@@ -80,6 +81,12 @@ module Spinach
       (support_files + step_definition_files).each do |file|
         require file
       end
+    end
+
+    # Requires the test suite support
+    #
+    def require_suites
+      require_relative 'suites'
     end
 
     # @return [Array<String>] files
