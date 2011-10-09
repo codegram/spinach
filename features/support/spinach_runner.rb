@@ -11,6 +11,9 @@ module Integration
             FileUtils.rmdir('features')
           end
         end
+        before do
+          @aruba_timeout_seconds = 6
+        end
       end
     end
 

@@ -150,13 +150,34 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe "#on_feature_not_found" do
+    before do
+      @feature = {
+        'name' => 'This feature does not exist'
+      }
+      Spinach.config.stubs(:step_definitions_path).returns('my/path')
+      exception = stub(
+        message: "This is a \nmultiple line error message",
+        missing_class: "ThisFeatureDoesNotExist"
+      )
+      @reporter.on_feature_not_found(@feature, exception)
+    end
     it "outputs a message" do
-      feature = stub_everything
-      exception = stub(message: "This is a \nmultiple line error message")
-      @reporter.on_feature_not_found(feature, exception)
+      @out.string.must_include "this_feature_does_not_exist.rb"
       @out.string.must_include "This is a"
       @out.string.must_include "multiple line error message"
-      @reporter.undefined_features.must_include feature
+      @reporter.undefined_features.must_include @feature
+    end
+
+    it 'tells the user to create the file' do
+      @out.string.must_include 'Please create the file this_feature_does_not_exist.rb'
+    end
+
+    it 'tells the user where to create the file respecting the step definitions path' do
+      @out.string.must_include 'at my/path, with:'
+    end
+
+    it 'tells the user what to write in the file' do
+      @out.string.must_include 'Feature \'This feature does not exist\' do'
     end
   end
 

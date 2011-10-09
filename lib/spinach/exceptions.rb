@@ -16,15 +16,10 @@ module Spinach
     #
     # @api public
     def message
-      [%Q{Could not find steps for `#{@feature}` feature.
-      Please create the file #{Spinach::Support.underscore(@missing_class)}.rb
-      at #{Spinach.config[:step_definitions_path]}, with:}.gsub(/^\s{6,7}/, ''),
-      %Q{Feature "#{@feature}" do
-         #
-         # define your steps here
-         #
-      end}.gsub(/^\s{6,7}/, '')].join("\n\n")
+      "Could not find steps for `#{@feature}` feature"
     end
+
+    attr_reader :missing_class
   end
 
   # This class represents the exception raised when Spinach can't find a step
