@@ -8,6 +8,7 @@ require_relative 'spinach/dsl'
 require_relative 'spinach/feature_steps'
 require_relative 'spinach/reporter'
 require_relative 'spinach/cli'
+require_relative 'spinach/suites'
 
 # Spinach is a BDD framework leveraging the great Gherkin language. This
 # language is the one used defining features in Cucumber, the BDD framework

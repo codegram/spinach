@@ -6,7 +6,6 @@ module Spinach
   #
   class FeatureSteps
     include DSL
-    include MiniTest::Assertions
 
     # Registers the feature class for later use.
     #

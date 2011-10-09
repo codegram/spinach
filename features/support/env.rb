@@ -1,0 +1,1 @@
+require 'spinach/suites/minitest'
