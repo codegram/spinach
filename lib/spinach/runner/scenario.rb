@@ -52,7 +52,7 @@ module Spinach
             rescue Spinach::StepNotDefinedException => e
               @exception = e
               run_hook :on_undefined_step, step, @exception
-            rescue StandardError => e
+            rescue Exception => e
               @exception = e
               run_hook :on_error_step, step, @exception
             end
