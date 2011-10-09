@@ -15,6 +15,7 @@ module Spinach
 
       define_hook :before_run
       define_hook :after_run
+      define_hook :when_not_found
 
       # @param [String] filename
       #   path to the feature file. Scenario line could be passed to run just
@@ -81,6 +82,9 @@ module Spinach
         feature.run_hook :after, data
         run_hook :after_run, data
 
+      rescue Spinach::FeatureStepsNotFoundException => e
+        run_hook :when_not_found, data, e
+      ensure
         return !!@success
       end
     end

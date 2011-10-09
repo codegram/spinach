@@ -23,7 +23,7 @@ module Spinach
          #
          # define your steps here
          #
-      end}.gsub(/^\s{6,7}/, '')].join("\n\n").red
+      end}.gsub(/^\s{6,7}/, '')].join("\n\n")
     end
   end
 
