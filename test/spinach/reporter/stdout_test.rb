@@ -149,6 +149,38 @@ describe Spinach::Reporter::Stdout do
     end
   end
 
+  describe "#on_feature_not_found" do
+    before do
+      @feature = {
+        'name' => 'This feature does not exist'
+      }
+      Spinach.config.stubs(:step_definitions_path).returns('my/path')
+      exception = stub(
+        message: "This is a \nmultiple line error message",
+        missing_class: "ThisFeatureDoesNotExist"
+      )
+      @reporter.on_feature_not_found(@feature, exception)
+    end
+    it "outputs a message" do
+      @out.string.must_include "this_feature_does_not_exist.rb"
+      @out.string.must_include "This is a"
+      @out.string.must_include "multiple line error message"
+      @reporter.undefined_features.must_include @feature
+    end
+
+    it 'tells the user to create the file' do
+      @out.string.must_include 'Please create the file this_feature_does_not_exist.rb'
+    end
+
+    it 'tells the user where to create the file respecting the step definitions path' do
+      @out.string.must_include 'at my/path, with:'
+    end
+
+    it 'tells the user what to write in the file' do
+      @out.string.must_include 'Feature \'This feature does not exist\' do'
+    end
+  end
+
   describe '#on_skipped_step' do
     it 'adds the step to the output buffer' do
       @reporter.on_skipped_step({'keyword' => 'Then', 'name' => 'some steps are not even called'})
@@ -191,6 +223,7 @@ describe Spinach::Reporter::Stdout do
       @reporter.expects(:report_error_steps).once
       @reporter.expects(:report_failed_steps).once
       @reporter.expects(:report_undefined_steps).once
+      @reporter.expects(:report_undefined_features).once
 
       @reporter.error_summary
 
@@ -254,6 +287,27 @@ describe Spinach::Reporter::Stdout do
         @reporter.expects(:report_errors).never
 
         @reporter.report_undefined_steps
+      end
+    end
+  end
+
+  describe '#report_undefined_features' do
+    describe 'when some features are undefined' do
+      it 'outputs the undefined features' do
+        @reporter.undefined_features << {'name' => 'Undefined feature name'}
+        @reporter.report_undefined_features
+
+        @error.string.must_include "Undefined features (1)"
+        @error.string.must_include "Undefined feature name"
+      end
+    end
+
+    describe 'when there are no undefined features' do
+      it 'does nothing' do
+        error = @error.string.dup
+        @reporter.report_undefined_steps
+
+        error.must_equal @error.string
       end
     end
   end

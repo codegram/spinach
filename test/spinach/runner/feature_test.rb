@@ -93,5 +93,19 @@ describe Spinach::Runner::Feature do
       Spinach::Runner::Scenario.expects(:new).with(anything, anything, @feature.scenarios[1], anything).once.returns(stub_everything)
       @feature.run
     end
+
+    it "fires a hook if the feature is not defined" do
+      feature = Spinach::Runner::Feature.new(filename)
+      data = mock
+      exception = Spinach::FeatureStepsNotFoundException.new([anything, anything])
+      feature.stubs(:feature).raises(exception)
+      feature.stubs(:data).returns(data)
+      not_found_called = false
+      feature.class.when_not_found do |data, exception|
+        not_found_called = [data, exception]
+      end
+      feature.run
+      not_found_called.must_equal [data, exception]
+    end
   end
 end
