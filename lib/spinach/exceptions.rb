@@ -19,7 +19,7 @@ module Spinach
       [%Q{Could not find steps for `#{@feature}` feature.
       Please create the file #{Spinach::Support.underscore(@missing_class)}.rb
       at #{Spinach.config[:step_definitions_path]}, with:}.gsub(/^\s{6,7}/, ''),
-      %Q{class #{@missing_class} << Spinach::FeatureSteps
+      %Q{Feature "#{@feature}" do
          #
          # define your steps here
          #

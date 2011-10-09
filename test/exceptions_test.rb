@@ -20,7 +20,7 @@ describe Spinach::FeatureStepsNotFoundException do
     end
 
     it 'tells the user what to write in the file' do
-      subject.message.must_include 'class ThisFeatureDoesNotExist << Spinach::FeatureSteps'
+      subject.message.must_include 'Feature "This feature does not exist" do'
     end
   end
 end
