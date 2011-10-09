@@ -2,10 +2,6 @@ require_relative '../test_helper'
 
 describe Spinach::FeatureSteps do
   describe 'ancestors' do
-    it 'includes minitest helpers' do
-      Spinach::FeatureSteps.ancestors.must_include MiniTest::Assertions
-    end
-
     it 'is extended by the DSL' do
       Spinach::FeatureSteps.ancestors.must_include Spinach::DSL
     end

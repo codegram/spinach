@@ -1,8 +1,8 @@
-Feature "Error reporting" do
+Feature "RSpec compatibility" do
   include Integration::SpinachRunner
   include Integration::ErrorReporting
 
-  Given "I have a feature with some failures" do
+  Given "I have a feature with some failed expectations" do
     write_file('features/feature_with_failures.feature',
                'Feature: Feature with failures
 
@@ -14,7 +14,7 @@ Feature "Error reporting" do
     write_file('features/steps/failure_feature.rb',
                'Feature "Feature with failures" do
                   Given "true is false" do
-                    true.must_equal false
+                    true.should == false
                   end
 
                   Then "remove all the files in my hard drive" do
@@ -23,21 +23,11 @@ Feature "Error reporting" do
                 end')
   end
 
-  When 'I run "spinach"' do
-    run_feature 'features/feature_with_failures.feature'
+  When "I run \"spinach\" with rspec" do
+    run_feature 'features/feature_with_failures.feature', suite: :rspec
   end
 
-  When 'I run "spinach --backtrace"' do
-    run_feature 'features/feature_with_failures.feature', append: '--backtrace'
-  end
-
-  Then 'I should see the failure count along with their messages' do
+  Then "I should see the failure count along with their messages" do
     check_error_messages(1)
-    all_stderr.wont_match /gems.*minitest.*assert_equal/
-  end
-
-  Then 'I should see the error count along with their messages and backtrace' do
-    check_error_messages(1)
-    check_backtrace
   end
 end
