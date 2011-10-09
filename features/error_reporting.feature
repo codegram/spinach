@@ -6,7 +6,7 @@ Feature: Error reporting
   Scenario: Error reporting without backtrace
     Given I have a feature with some failures
     When I run "spinach"
-    Then I should see the error count along with their messages
+    Then I should see the failure count along with their messages
 
   Scenario: Error reporting with backtrace
     Given I have a feature with some failures
