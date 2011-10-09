@@ -20,10 +20,11 @@ module Spinach
   # to run.
   #
   class Config
-    attr_writer :step_definitions_path, :default_reporter, :support_path
+    attr_writer :step_definitions_path, :default_reporter, :support_path,
+      :failure_exceptions
 
-    # The "step definitions path" holds the place where your feature classes
-    # will be searched for. Defaults to 'features/steps'
+    # The "step definitions path" holds the place where your feature step
+    # classes will be searched for. Defaults to 'features/steps'
     #
     # @return [String]
     #   The step definitions path.
@@ -81,6 +82,16 @@ module Spinach
     # @api public
     def []=(attribute, value)
       self.send("#{attribute}=", value)
+    end
+
+    # The failure exceptions return an array of exceptions to be captured and
+    # considered as failures (as opposite of errors)
+    #
+    # @return [Array<Exception>]
+    #
+    # @api public
+    def failure_exceptions
+      @failure_exceptions ||= []
     end
   end
 end

@@ -1,12 +1,8 @@
-require 'minitest/spec'
-MiniTest::Spec.new nil
-
 module Spinach
   # The feature class is the class which all the features must inherit from.
   #
   class FeatureSteps
     include DSL
-    include MiniTest::Assertions
 
     # Registers the feature class for later use.
     #

@@ -46,7 +46,7 @@ module Spinach
             begin
               feature.execute_step(step['name'])
               run_hook :on_successful_step, step
-            rescue MiniTest::Assertion => e
+            rescue *Spinach.config[:failure_exceptions] => e
               @exception = e
               run_hook :on_failed_step, step, @exception
             rescue Spinach::StepNotDefinedException => e
