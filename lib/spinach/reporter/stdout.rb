@@ -105,6 +105,35 @@ module Spinach
         undefined_steps << scenario_error
       end
 
+      # Adds a feature not found message to the output buffer.
+      #
+      # @param [Hash] feature
+      #   the feature in a json gherkin format
+      #
+      # @param [Spinach::FeatureNotFoundException] exception
+      #   the related exception
+      #
+      def on_feature_not_found(feature, exception)
+        lines = "#{exception.message}\n"
+
+        lines << "\nPlease create the file #{Spinach::Support.underscore(exception.missing_class)}.rb at #{Spinach.config[:step_definitions_path]}, with:\n\n"
+
+        lines << "Feature '#{feature['name']}' do\n"
+
+        # TODO: Write the actual steps. We can do this since we have the entire
+        # feature just here. We should iterate over all the scenarios and return
+        # the different steps
+        #
+        lines << "  # Write your steps here"
+        lines << "end\n\n"
+
+        lines.split("\n").each do |line|
+          out.puts "    #{line}".yellow
+        end
+
+        undefined_features << feature
+      end
+
       # Adds a step that has been skipped to the output buffer.
       #
       # @param [Hash] step
@@ -145,6 +174,7 @@ module Spinach
         error.puts "\nError summary:\n"
         report_error_steps
         report_failed_steps
+        report_undefined_features
         report_undefined_steps
       end
 
@@ -166,6 +196,15 @@ module Spinach
         report_errors('Undefined steps', undefined_steps, :yellow) if undefined_steps.any?
       end
 
+      def report_undefined_features
+        if undefined_features.any?
+          error.puts "  Undefined features (#{undefined_features.length})".light_yellow
+          undefined_features.each do |feature|
+            error.puts "    #{feature['name']}".yellow
+          end
+        end
+      end
+
       # Prints the error for a given set of steps
       #
       # @param [String] banner
@@ -178,7 +217,7 @@ module Spinach
       #   The color code to use with Colorize to colorize the output.
       #
       def report_errors(banner, steps, color)
-        error.puts "#{banner} (#{steps.length})".colorize(color)
+        error.puts "  #{banner} (#{steps.length})".colorize(color)
         steps.each do |error|
           report_error error
         end
@@ -218,7 +257,7 @@ module Spinach
       #
       def summarized_error(error)
         feature, scenario, step, exception = error
-        summary = "  #{feature['name']} :: #{scenario['name']} :: #{full_step step}"
+        summary = "    #{feature['name']} :: #{scenario['name']} :: #{full_step step}"
         if exception.kind_of?(Spinach::StepNotDefinedException)
           summary.yellow
         else

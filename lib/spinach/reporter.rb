@@ -10,6 +10,7 @@ module Spinach
     def initialize(options = {})
       @errors = []
       @options = options
+      @undefined_features = []
       @undefined_steps = []
       @failed_steps = []
       @error_steps = []
@@ -21,12 +22,13 @@ module Spinach
 
     attr_accessor :current_feature, :current_scenario
 
-    attr_reader :undefined_steps, :failed_steps, :error_steps
+    attr_reader :undefined_steps, :failed_steps, :error_steps, :undefined_features
 
     def bind
       runner.after_run method(:after_run)
       feature_runner.before_run method(:before_feature_run)
       feature_runner.after_run method(:after_feature_run)
+      feature_runner.when_not_found method(:on_feature_not_found)
       scenario_runner.before_run method(:before_scenario_run)
       scenario_runner.after_run method(:after_scenario_run)
       scenario_runner.on_successful_step method(:on_successful_step)
@@ -47,6 +49,7 @@ module Spinach
     def after_run(*args); end;
     def before_feature_run(*args); end
     def after_feature_run(*args); end
+    def on_feature_not_found(*args); end
     def before_scenario_run(*args); end
     def after_scenario_run(*args); end
     def on_successful_step(*args); end;
