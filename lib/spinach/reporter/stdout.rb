@@ -125,7 +125,7 @@ module Spinach
         # feature just here. We should iterate over all the scenarios and return
         # the different steps
         #
-        lines << "  # Write your steps here"
+        lines << "  # Write your steps here\n"
         lines << "end\n\n"
 
         lines.split("\n").each do |line|
