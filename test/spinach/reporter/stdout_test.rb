@@ -207,16 +207,20 @@ describe Spinach::Reporter::Stdout do
 
   describe '#after_run' do
     describe 'when the run has succeed' do
-      it 'does nothing' do
-        @reporter.after_run(true).must_equal nil
+      it 'display run summary' do
+        @reporter.expects(:error_summary).never
+        @reporter.expects(:run_summary)
+
+        @reporter.after_run(true)
       end
     end
 
-    describe 'when the run has succeed' do
-      it 'does nothing' do
-        @reporter.stubs(:error_summary).returns('Error summary')
+    describe 'when the run has failed' do
+      it 'display run and error summaries' do
+        @reporter.expects(:error_summary)
+        @reporter.expects(:run_summary)
 
-        @reporter.after_run(false).must_equal 'Error summary'
+        @reporter.after_run(false)
       end
     end
   end
