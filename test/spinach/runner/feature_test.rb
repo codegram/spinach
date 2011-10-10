@@ -21,7 +21,7 @@ describe Spinach::Runner::Feature do
     it 'returns the parsed data' do
       parsed_data = {name: 'A cool feature'}
       parser = stub(parse: parsed_data)
-      Spinach::Parser.expects(:new).returns(parser)
+      Spinach::Parser.expects(:open_file).returns(parser)
       feature.data.must_equal parsed_data
     end
   end

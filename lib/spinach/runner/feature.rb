@@ -36,7 +36,7 @@ module Spinach
       #
       # @api public
       def data
-        @data ||= Spinach::Parser.new(filename).parse
+        @data ||= Spinach::Parser.open_file(filename).parse
       end
 
       # @return [String]

@@ -2,22 +2,18 @@ require_relative '../test_helper'
 
 describe Spinach::Parser do
   before do
-    @parser = Spinach::Parser.new('feature_definition.feature')
-  end
-
-  let(:parsed) { @parser.parse }
-
-  describe '#parse' do
-    before do
-      @parser.stubs(:content).returns("
-        Feature: User authentication
+    @parser = Spinach::Parser.new(
+      "Feature: User authentication
            Scenario: User logs in
              Given I am on the front page
              When I fill in the login form and press 'login'
              Then I should be on my dashboard
       ")
-    end
+  end
 
+  let(:parsed) { @parser.parse }
+
+  describe '#parse' do
     it 'parses the feature name' do
       parsed['name'].must_equal 'User authentication'
     end
@@ -41,10 +37,11 @@ describe Spinach::Parser do
     end
   end
 
-  describe '#content' do
+  describe '.open_file' do
     it 'reads the disk and returns the file content' do
       File.expects(:read).with('feature_definition.feature')
-      @parser.content
+      @parser = Spinach::Parser.open_file(
+        'feature_definition.feature')
     end
   end
 end

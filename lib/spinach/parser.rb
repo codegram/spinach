@@ -5,14 +5,22 @@ module Spinach
   # Parser leverages Gherkin to parse the feature definition.
   #
   class Parser
+    # @param [String] content
+    #   The content to parse.
+    #
+    # @api public
+    def initialize(content)
+      @content = content
+      @formatter = Gherkin::Formatter::JSONFormatter.new(nil)
+      @parser = Gherkin::Parser::Parser.new(@formatter)
+    end
+
     # @param [String] filename
     #   The filename to parse.
     #
     # @api public
-    def initialize(filename)
-      @filename = filename
-      @formatter = Gherkin::Formatter::JSONFormatter.new(nil)
-      @parser = Gherkin::Parser::Parser.new(@formatter)
+    def self.open_file(filename)
+      new File.read(filename)
     end
 
     # Gets the plain text content out of the feature file.
@@ -21,9 +29,7 @@ module Spinach
     #   The plain feature content.
     #
     # @api public
-    def content
-      File.read(@filename)
-    end
+    attr_reader :content
 
     # Parses the feature file and returns an AST as a Hash.
     #
