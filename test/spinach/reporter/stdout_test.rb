@@ -68,8 +68,9 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#on_successful_step' do
+    let(:step_location){['error_step_location', 1]}
     it 'adds the step to the output buffer' do
-      @reporter.on_successful_step({'keyword' => 'Given', 'name' => 'I am too cool'})
+      @reporter.on_successful_step({'keyword' => 'Given', 'name' => 'I am too cool'}, step_location)
 
       @out.string.must_include '✔'
       @out.string.must_include 'Given'
@@ -79,9 +80,10 @@ describe Spinach::Reporter::Stdout do
 
   describe '#on_failed_step' do
     let(:step) { {'keyword' => 'Then', 'name' => 'I write failing steps'} }
+    let(:step_location){['error_step_location', 1]}
 
     it 'adds the step to the output buffer' do
-      @reporter.on_failed_step(step, anything)
+      @reporter.on_failed_step(step, anything, step_location)
 
       @out.string.must_include '✘'
       @out.string.must_include 'Then'
@@ -89,13 +91,13 @@ describe Spinach::Reporter::Stdout do
     end
 
     it 'sets the current scenario error' do
-      @reporter.on_failed_step(step, anything)
+      @reporter.on_failed_step(step, anything, step_location)
 
       @reporter.scenario_error.must_include step
     end
 
     it 'adds the step to the failing steps' do
-      @reporter.on_failed_step(step, anything)
+      @reporter.on_failed_step(step, anything, step_location)
 
       @reporter.failed_steps.last.must_include step
     end
@@ -103,9 +105,10 @@ describe Spinach::Reporter::Stdout do
 
   describe '#on_error_step' do
     let(:step) { {'keyword' => 'And', 'name' => 'I even make syntax errors'} }
+    let(:step_location){['error_step_location', 1]}
 
     it 'adds the step to the output buffer' do
-      @reporter.on_error_step(step, anything)
+      @reporter.on_error_step(step, anything, step_location)
 
       @out.string.must_include '!'
       @out.string.must_include 'And'
@@ -113,13 +116,13 @@ describe Spinach::Reporter::Stdout do
     end
 
     it 'sets the current scenario error' do
-      @reporter.on_error_step(step, anything)
+      @reporter.on_error_step(step, anything, step_location)
 
       @reporter.scenario_error.must_include step
     end
 
     it 'adds the step to the error steps' do
-      @reporter.on_error_step(step, anything)
+      @reporter.on_error_step(step, anything, step_location)
 
       @reporter.error_steps.last.must_include step
     end
