@@ -11,6 +11,7 @@ module Spinach
       @errors = []
       @options = options
       @undefined_features = []
+      @successful_steps = []
       @undefined_steps = []
       @failed_steps = []
       @error_steps = []
@@ -22,7 +23,7 @@ module Spinach
 
     attr_accessor :current_feature, :current_scenario
 
-    attr_reader :undefined_steps, :failed_steps, :error_steps, :undefined_features
+    attr_reader :undefined_steps, :failed_steps, :error_steps, :undefined_features, :successful_steps
 
     def bind
       runner.after_run method(:after_run)
