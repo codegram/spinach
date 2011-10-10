@@ -8,10 +8,10 @@ module Integration
       base.class_eval do
         before_scenario do
           in_current_dir do
-            FileUtils.rmdir('features')
+            run "rm -fR features"
           end
         end
-        before do
+        before_scenario do
           @aruba_timeout_seconds = 6
         end
       end

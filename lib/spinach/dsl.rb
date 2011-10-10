@@ -15,8 +15,6 @@ module Spinach
         extend ClassMethods
         include Hooks
 
-        define_hook :before
-        define_hook :after
         define_hook :before_scenario
         define_hook :after_scenario
         define_hook :before_step
