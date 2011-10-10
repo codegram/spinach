@@ -44,7 +44,6 @@ module Spinach
         @max_step_name_length = data['steps'].map{|step| step['name'].length}.max if data['steps']
         name = data['name']
         out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
-        out.puts
       end
 
       # Adds an error report and re
