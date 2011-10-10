@@ -1,4 +1,4 @@
 module Spinach
-  # Spianch version.
-  VERSION = "0.1.1"
+  # Spinach version.
+  VERSION = "0.1.2"
 end
