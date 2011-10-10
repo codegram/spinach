@@ -6,7 +6,7 @@ module Integration
 
     def self.included(base)
       base.class_eval do
-        before do
+        before_scenario do
           in_current_dir do
             FileUtils.rmdir('features')
           end
