@@ -16,6 +16,15 @@ describe Spinach::DSL do
 
         @feature.new.send('I say goodbye').must_equal 'You say hello'
       end
+
+      it 'returns step source location' do
+        @feature.When('I say goodbye') do
+          'You say hello'
+        end
+
+        @feature.new.execute_step('I say goodbye').first.must_include '/dsl_test.rb'
+        @feature.new.execute_step('I say goodbye').last.must_be_kind_of Fixnum
+      end
     end
 
     describe '#When, #Then, #And, #But' do
