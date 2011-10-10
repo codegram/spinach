@@ -31,14 +31,6 @@ module Spinach
       #
       attr_reader :filename
 
-      # @return [Feature]
-      #   The feature object used to run this scenario.
-      #
-      # @api public
-      def feature
-        @feature ||= Spinach.find_feature(feature_name).new
-      end
-
       # @return [Hash]
       #   The parsed data for this feature.
       #
@@ -71,15 +63,13 @@ module Spinach
       # @api public
       def run
         run_hook :before_run, data
-        feature.run_hook :before, data
 
         scenarios.each do |scenario|
           if !@scenario_line || scenario['line'].to_s == @scenario_line
-            @success = Scenario.new(feature_name, feature, scenario).run
+            @success = Scenario.new(feature_name, scenario).run
           end
         end
 
-        feature.run_hook :after, data
         run_hook :after_run, data
 
       rescue Spinach::FeatureStepsNotFoundException => e

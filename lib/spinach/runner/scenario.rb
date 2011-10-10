@@ -24,14 +24,21 @@ module Spinach
       #   The parsed feature data.
       #
       # @api public
-      def initialize(feature_name, feature, data)
+      def initialize(feature_name, data)
         @feature_name = feature_name
         @data = data
-        @feature = feature
       end
 
       def steps
         @steps ||= data['steps']
+      end
+
+      # @return [Feature]
+      #   The feature object used to run this scenario.
+      #
+      # @api public
+      def feature
+        @feature ||= Spinach.find_feature(feature_name).new
       end
 
       # Runs this scenario

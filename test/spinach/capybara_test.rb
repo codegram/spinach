@@ -48,7 +48,8 @@ describe Spinach::FeatureSteps::Capybara do
           Then Goodbye
     ').at_least_once
 
-    @feature_runner.stubs(feature: @feature).at_least_once
+    Spinach::Runner::Scenario.any_instance.stubs(feature: @feature)
+
     Capybara.current_session.expects(:reset!).twice
 
     @feature_runner.run

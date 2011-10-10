@@ -17,16 +17,6 @@ describe Spinach::Runner::Feature do
     end
   end
 
-  describe '#feature' do
-    it 'finds the feature given a feature name' do
-      @feature = stub_everything
-      feature.stubs(feature_name: 'A cool feature')
-
-      Spinach.expects(:find_feature).with('A cool feature').returns(@feature)
-      feature.feature
-    end
-  end
-
   describe '#data' do
     it 'returns the parsed data' do
       parsed_data = {name: 'A cool feature'}
@@ -56,14 +46,12 @@ describe Spinach::Runner::Feature do
 
     it 'calls the steps as expected' do
       seq = sequence('feature')
-      feature.feature.expects(:run_hook).with(:before, kind_of(Hash))
       3.times do
         Spinach::Runner::Scenario.
           expects(:new).
           returns(stub_everything).
           in_sequence(seq)
       end
-      feature.feature.expects(:run_hook).with(:after, kind_of(Hash))
       feature.run
     end
 
@@ -90,7 +78,7 @@ describe Spinach::Runner::Feature do
       })
       @feature.stubs(feature: stub_everything)
 
-      Spinach::Runner::Scenario.expects(:new).with(anything, anything, @feature.scenarios[1], anything).once.returns(stub_everything)
+      Spinach::Runner::Scenario.expects(:new).with(anything, @feature.scenarios[1], anything).once.returns(stub_everything)
       @feature.run
     end
 
@@ -98,7 +86,7 @@ describe Spinach::Runner::Feature do
       feature = Spinach::Runner::Feature.new(filename)
       data = mock
       exception = Spinach::FeatureStepsNotFoundException.new([anything, anything])
-      feature.stubs(:feature).raises(exception)
+      feature.stubs(:scenarios).raises(exception)
       feature.stubs(:data).returns(data)
       not_found_called = false
       feature.class.when_not_found do |data, exception|

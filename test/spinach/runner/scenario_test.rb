@@ -14,7 +14,11 @@ describe Spinach::Runner::Scenario do
 
   let(:feature) { stub_everything }
   let(:feature_name) { 'My feature' }
-  let(:scenario) { Spinach::Runner::Scenario.new(feature_name, feature, data) }
+  let(:scenario) { 
+    scenario = Spinach::Runner::Scenario.new(feature_name, data) 
+    scenario.stubs(feature: feature)
+    scenario
+  }
 
   describe '#initialize' do
     it 'lists all the steps' do
@@ -23,6 +27,16 @@ describe Spinach::Runner::Scenario do
 
     it 'sets the feature' do
       scenario.feature.must_equal feature
+    end
+  end
+
+  describe '#feature' do
+    it 'finds the feature given a feature name' do
+      scenario.unstub(:feature)
+      @feature = stub_everything
+      scenario.stubs(feature_name: 'A cool feature')
+      Spinach.expects(:find_feature).with('A cool feature').returns(@feature)
+      scenario.feature
     end
   end
 
