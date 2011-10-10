@@ -6,7 +6,6 @@ gemspec
 group :test do
   gem 'guard'
   gem 'guard-minitest'
-  gem 'pry', git: 'git://github.com/pry/pry.git'
 end
 
 group :darwin do
