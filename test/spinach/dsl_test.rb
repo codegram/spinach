@@ -10,11 +10,22 @@ describe Spinach::DSL do
   describe 'class methods' do
     describe '#When' do
       it 'defines a method with the step name' do
+        step_executed = false
+        @feature.When('I say goodbye') do
+          step_executed = true
+        end
+
+        @feature.new.execute_step('I say goodbye')
+        step_executed.must_equal true
+      end
+
+      it 'returns step source location' do
         @feature.When('I say goodbye') do
           'You say hello'
         end
 
-        @feature.new.execute_step('I say goodbye').must_equal 'You say hello'
+        @feature.new.execute_step('I say goodbye').first.must_include '/dsl_test.rb'
+        @feature.new.execute_step('I say goodbye').last.must_be_kind_of Fixnum
       end
     end
 

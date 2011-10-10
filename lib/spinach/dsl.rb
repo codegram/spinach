@@ -84,11 +84,15 @@ module Spinach
       #
       # @api public
       def execute_step(step)
-        if self.respond_to?(Spinach::Support.underscore step)
-          self.send(Spinach::Support.underscore step)
+        step = Spinach::Support.underscore(step)
+        location = nil
+        if self.respond_to?(step)
+          location = method(step).source_location
+          self.send(step)
         else
           raise Spinach::StepNotDefinedException.new(self, step)
         end
+        location
       end
 
       # @return [String]
