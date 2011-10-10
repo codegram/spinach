@@ -26,7 +26,7 @@ module Spinach
       # Prints the scenario name to the standard ouput
       #
       def before_scenario_run(data)
-        @max_step_name_length = data['steps'].map{|step| step['name'].length}.max
+        @max_step_name_length = data['steps'].map{|step| step['name'].length}.max if data['steps']
         name = data['name']
         out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
         out.puts
@@ -66,10 +66,9 @@ module Spinach
       end
 
       def output_step(symbol, step, color, step_location=nil)
-        if step_location
-          step_location = step_location.first.gsub(File.expand_path('.'), '# ')+":#{step_location.last.to_s}"
-        end
+        step_location = step_location.first.gsub("#{File.expand_path('.')}/", '# ')+":#{step_location.last.to_s}" if step_location
         max_length = @max_step_name_length + 60 # Colorize and output format correction
+        # REMEMBER TO CORRECT PREVIOUS MAX LENGTH IF OUTPUT FORMAT IS MODIFIED
         out.puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)} ".ljust(max_length) + step_location.to_s.colorize(:grey)
       end
 

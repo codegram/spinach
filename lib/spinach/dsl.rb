@@ -62,11 +62,14 @@ module Spinach
     end
 
     module InstanceMethods
-      # Execute a given step.
+      # Execute a given step and returns it source location or raise an
+      # StepNotDefinedException if it does not exist.
       #
       # @param [String] step
       #   the step to execute
       #
+      # @return [String]
+      #   the step source location
       def execute_step(step)
         location = nil
         if self.respond_to?(step)
