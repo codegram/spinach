@@ -11,6 +11,17 @@ Feature "Display run summary" do
         Given I am a fool
         When I jump from Codegrams roof
         Then I must be pwned by floor
+
+      # Scenario: Failed scenario
+      #   Given I love risk
+      #   When I jump from Codegrams roof
+      #   Then my parachute must open
+      #   Then I must not pwned by floor
+
+      # Scenario: Error scenario
+      #   Given I am not a fool
+      #   When I go downstairs
+      #   Then I must succeed
      ')
     write_file('features/steps/test_feature.rb',
     'Feature "A test feature" do
@@ -18,11 +29,21 @@ Feature "Display run summary" do
       end
       When "I jump from Codegrams roof" do
       end
-      Given "I love risk" do
-      end
-      And "my parachute must open" do
-        false
-      end
+      # Given "I love risk" do
+      # end
+      # And "my parachute must open" do
+      #   false
+      # end
+      # Given I am a fool
+      #   djkadlaksaldkajd
+      # end
+      # Given I am not a fool
+      # end
+      # When I go downstairs
+      # end
+      # Then I must succeed
+      #   true
+      # end
      end')
     @feature = "features/test_feature.feature"
   end
