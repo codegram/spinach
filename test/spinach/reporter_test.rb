@@ -89,7 +89,7 @@ module Spinach
       end
 
       describe "when running steps" do
-        %w{successful failed error skipped}.each do |type|
+        %w{successful failed error undefined skipped}.each do |type|
           it "binds a callback after running a #{type} step" do
             @reporter.expects(:method).with(:"on_#{type}_step").returns(@callback)
             @reporter.scenario_runner.expects(:"on_#{type}_step").with(@callback)

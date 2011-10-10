@@ -22,6 +22,7 @@ module Spinach
         super(*args)
         @out = options[:output] || $stdout
         @error = options[:error] || $stderr
+        @max_step_name_length = 0
       end
 
       # Prints the feature name to the standard output
@@ -40,6 +41,7 @@ module Spinach
       #   The feature in a JSON Gherkin format
       #
       def before_scenario_run(data)
+        @max_step_name_length = data['steps'].map{|step| step['name'].length}.max if data['steps']
         name = data['name']
         out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
         out.puts
@@ -62,8 +64,8 @@ module Spinach
       # @param [Hash] step
       #   The step in a JSON Gherkin format
       #
-      def on_successful_step(step)
-        output_step('✔', step, :green)
+      def on_successful_step(step, step_location)
+        output_step('✔', step, :green, step_location)
       end
 
       # Adds a failing step to the output buffer.
@@ -74,8 +76,8 @@ module Spinach
       # @param [Exception] failure
       #   The exception that caused the failure
       #
-      def on_failed_step(step, failure)
-        output_step('✘', step, :red)
+      def on_failed_step(step, failure, step_location)
+        output_step('✘', step, :red, step_location)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         failed_steps << scenario_error
       end
@@ -88,8 +90,8 @@ module Spinach
       # @param [Exception] failure
       #   The exception that caused the failure
       #
-      def on_error_step(step, failure)
-        output_step('!', step, :red)
+      def on_error_step(step, failure, step_location)
+        output_step('!', step, :red, step_location)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         error_steps << scenario_error
       end
@@ -99,7 +101,7 @@ module Spinach
       # @param [Hash] step
       #   The step in a JSON Gherkin format
       #
-      def on_undefined_step(step)
+      def on_undefined_step(step, failure)
         output_step('?', step, :yellow)
         self.scenario_error = [current_feature, current_scenario, step]
         undefined_steps << scenario_error
@@ -155,8 +157,14 @@ module Spinach
       # @param [Symbol] color
       #   The color code to use with Colorize to colorize the output.
       #
-      def output_step(symbol, step, color)
-        out.puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)}"
+      # @param [Array] step_location
+      #   step source location and file line
+      #
+      def output_step(symbol, step, color, step_location = nil)
+        step_location = step_location.first.gsub("#{File.expand_path('.')}/", '# ')+":#{step_location.last.to_s}" if step_location
+        max_length = @max_step_name_length + 60 # Colorize and output format correction
+        # REMEMBER TO CORRECT PREVIOUS MAX LENGTH IF OUTPUT FORMAT IS MODIFIED
+        out.puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)} ".ljust(max_length) + step_location.to_s.colorize(:grey)
       end
 
       # It prints the error summary if the run has failed
