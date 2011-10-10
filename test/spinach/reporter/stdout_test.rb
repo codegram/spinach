@@ -132,7 +132,7 @@ describe Spinach::Reporter::Stdout do
     let(:step) { {'keyword' => 'When', 'name' => 'I forgot to write steps'} }
 
     it 'adds the step to the output buffer' do
-      @reporter.on_undefined_step(step)
+      @reporter.on_undefined_step(step, anything)
 
       @out.string.must_include '?'
       @out.string.must_include 'When'
@@ -140,13 +140,13 @@ describe Spinach::Reporter::Stdout do
     end
 
     it 'sets the current scenario error' do
-      @reporter.on_undefined_step(step)
+      @reporter.on_undefined_step(step, anything)
 
       @reporter.scenario_error.must_include step
     end
 
     it 'adds the step to the undefined steps' do
-      @reporter.on_undefined_step(step)
+      @reporter.on_undefined_step(step, anything)
 
       @reporter.undefined_steps.last.must_include step
     end

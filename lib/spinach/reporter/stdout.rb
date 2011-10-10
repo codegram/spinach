@@ -101,7 +101,7 @@ module Spinach
       # @param [Hash] step
       #   The step in a JSON Gherkin format
       #
-      def on_undefined_step(step)
+      def on_undefined_step(step, failure)
         output_step('?', step, :yellow)
         self.scenario_error = [current_feature, current_scenario, step]
         undefined_steps << scenario_error

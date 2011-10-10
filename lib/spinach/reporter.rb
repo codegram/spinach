@@ -32,6 +32,7 @@ module Spinach
       scenario_runner.before_run method(:before_scenario_run)
       scenario_runner.after_run method(:after_scenario_run)
       scenario_runner.on_successful_step method(:on_successful_step)
+      scenario_runner.on_undefined_step method(:on_undefined_step)
       scenario_runner.on_failed_step method(:on_failed_step)
       scenario_runner.on_error_step method(:on_error_step)
       scenario_runner.on_skipped_step method(:on_skipped_step)
