@@ -11,6 +11,7 @@ module Spinach
 
       # The last scenario error
       attr_accessor :scenario_error
+      attr_accessor :scenario
 
       # Initialitzes the runner
       #
@@ -65,6 +66,8 @@ module Spinach
       #
       def on_successful_step(step, step_location)
         output_step('✔', step, :green, step_location)
+        self.scenario = [current_feature, current_scenario, step]
+        successful_steps << scenario
       end
 
       # Adds a failing step to the output buffer.
@@ -167,12 +170,25 @@ module Spinach
       end
 
       # It prints the error summary if the run has failed
+      # It always print feature success summary
       #
       # @param [True,False] success
       #   whether the run has succeed or not
       #
       def after_run(success)
         error_summary unless success
+        out.puts ""
+        run_summary
+      end
+
+      # Prints the feature success summaryfor ths run.
+      #
+      def run_summary
+        successful_summary = "(".colorize(:green)+successful_steps.length.to_s.colorize(:light_green)+") Successful".colorize(:green)
+        undefined_summary = "(".colorize(:yellow)+undefined_steps.length.to_s.colorize(:light_yellow)+") Undefined".colorize(:yellow)
+        failed_summary = "(".colorize(:red)+failed_steps.length.to_s.colorize(:light_red)+") Failed".colorize(:red)
+        error_summary = "(".colorize(:red)+error_steps.length.to_s.colorize(:light_red)+") Error".colorize(:red)
+        out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{failed_summary}, #{error_summary}\n\n"
       end
 
       # Prints the errors for ths run.
