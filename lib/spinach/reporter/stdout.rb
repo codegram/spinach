@@ -105,7 +105,7 @@ module Spinach
       #
       def on_undefined_step(step, failure)
         output_step('?', step, :yellow)
-        self.scenario_error = [current_feature, current_scenario, step]
+        self.scenario_error = [current_feature, current_scenario, step, failure]
         undefined_steps << scenario_error
       end
 
@@ -302,13 +302,15 @@ module Spinach
         output += report_exception(exception)
         output +="\n"
 
-        if options[:backtrace]
-          output += "\n"
-          exception.backtrace.map do |line|
-            output << "        #{line}\n"
+        unless exception.kind_of?(Spinach::StepNotDefinedException)
+          if options[:backtrace]
+            output += "\n"
+            exception.backtrace.map do |line|
+              output << "        #{line}\n"
+            end
+          else
+            output << "        #{exception.backtrace[0]}"
           end
-        else
-          output << "        #{exception.backtrace[0]}"
         end
         output
       end
