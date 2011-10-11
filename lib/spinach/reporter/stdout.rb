@@ -11,6 +11,8 @@ module Spinach
 
       # The last scenario error
       attr_accessor :scenario_error
+
+      # The last scenario
       attr_accessor :scenario
 
       # Initialitzes the runner
@@ -63,6 +65,9 @@ module Spinach
       #
       # @param [Hash] step
       #   The step in a JSON Gherkin format
+      #
+      # @param [Array] step_location
+      #   The step source location
       #
       def on_successful_step(step, step_location)
         output_step('✔', step, :green, step_location)
@@ -181,7 +186,7 @@ module Spinach
         run_summary
       end
 
-      # Prints the feature success summaryfor ths run.
+      # Prints the feature success summary for ths run.
       #
       def run_summary
         successful_summary = "(".colorize(:green)+successful_steps.length.to_s.colorize(:light_green)+") Successful".colorize(:green)

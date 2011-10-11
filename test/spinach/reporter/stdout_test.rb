@@ -68,13 +68,26 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#on_successful_step' do
+    let(:step) { {'keyword' => 'Given', 'name' => 'I am too cool'} }
     let(:step_location){['error_step_location', 1]}
     it 'adds the step to the output buffer' do
-      @reporter.on_successful_step({'keyword' => 'Given', 'name' => 'I am too cool'}, step_location)
+      @reporter.on_successful_step(step, step_location)
 
       @out.string.must_include '✔'
       @out.string.must_include 'Given'
       @out.string.must_include 'am too cool'
+    end
+
+    it 'sets the current scenario' do
+      @reporter.on_successful_step(step, step_location)
+
+      @reporter.scenario.must_include step
+    end
+
+    it 'adds the step to the successful steps' do
+      @reporter.on_successful_step(step, step_location)
+
+      @reporter.successful_steps.last.must_include step
     end
   end
 
@@ -235,6 +248,14 @@ describe Spinach::Reporter::Stdout do
       @reporter.error_summary
 
       @error.string.must_include 'Error summary'
+    end
+  end
+
+  describe '#run_summary' do
+    it 'prints a run summary' do
+      @reporter.run_summary
+
+      @out.string.must_include 'Steps Summary:'
     end
   end
 
