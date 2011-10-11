@@ -298,11 +298,19 @@ module Spinach
       #
       def full_error(error)
         feature, scenario, step, exception = error
-        output = String.new
+        output = "\n"
         output += report_exception(exception)
         output +="\n"
 
-        unless exception.kind_of?(Spinach::StepNotDefinedException)
+        if exception.kind_of?(Spinach::StepNotDefinedException)
+          output << "\n"
+          output << "        You can define it with: \n\n".yellow
+          suggestion = Generators::StepGenerator.new(step).generate
+          suggestion.split("\n").each do |line|
+            output << "          #{line}\n".yellow
+          end
+          output << "\n"
+        else
           if options[:backtrace]
             output += "\n"
             exception.backtrace.map do |line|
