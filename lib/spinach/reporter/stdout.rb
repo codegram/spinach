@@ -186,7 +186,7 @@ module Spinach
         run_summary
       end
 
-      # Prints the feature success summary for ths run.
+      # Prints the feature success summary for this run.
       #
       def run_summary
         successful_summary = "(".colorize(:green)+successful_steps.length.to_s.colorize(:light_green)+") Successful".colorize(:green)
@@ -196,7 +196,7 @@ module Spinach
         out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{failed_summary}, #{error_summary}\n\n"
       end
 
-      # Prints the errors for ths run.
+      # Prints the errors for this run.
       #
       def error_summary
         error.puts "\nError summary:\n"

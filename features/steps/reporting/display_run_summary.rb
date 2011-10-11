@@ -27,20 +27,27 @@ Feature "Display run summary" do
     'Feature "A test feature" do
       Given "I am a fool" do
       end
+
       When "I jump from Codegrams roof" do
       end
+
       Given "I love risk" do
       end
+
       And "my parachute must open" do
         false.must_equal true
       end
+
       Given "I am a fool" do
       end
+
       Given "I am not a fool" do
         adaksjdald
       end
+
       When "I go downstairs" do
       end
+
       Then "I must succeed" do
         true
       end
