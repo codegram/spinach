@@ -17,12 +17,5 @@ module Spinach::Generators
       end
     end
 
-    describe "#escape" do
-      it "escapes the name" do
-        subject.escape(
-          "I've been doing bad things"
-        ).must_include "I\\'ve been doing bad things"
-      end
-    end
   end
 end

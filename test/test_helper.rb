@@ -16,6 +16,7 @@ require 'ostruct'
 require 'purdytest'
 require 'stringio'
 require 'pry'
+require 'fakefs/safe'
 
 require 'spinach'
 require 'spinach/capybara'

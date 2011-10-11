@@ -38,5 +38,9 @@ module Spinach
       word.downcase!
       word
     end
+
+    def self.escape(text)
+      text.sub("'", "\\\\'")
+    end
   end
 end

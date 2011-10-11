@@ -67,6 +67,9 @@ module Spinach
         opts.on('-b', '--backtrace', 'Show backtrace of errors') do |v|
           reporter_options[:backtrace] = v
         end
+        opts.on('-g', '--generate', 'Auto-generate the feeature steps files') do |v|
+          Spinach::Generators.bind
+        end
         opts.on_tail('--version', 'Show version') do
           puts Spinach::VERSION
           exit
