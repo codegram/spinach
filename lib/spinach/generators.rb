@@ -1,7 +1,9 @@
 module Spinach
   module Generators
     def self.bind
-      Spinach::Runner::Feature.when_not_found method(:generate_feature)
+      Spinach::Runner::Feature.when_not_found do |data|
+        Spinach::Generators.generate_feature(data)
+      end
     end
 
     def self.generate_feature(data)

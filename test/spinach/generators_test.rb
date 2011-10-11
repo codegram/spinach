@@ -20,12 +20,10 @@ describe Spinach::Generators do
 
   describe "#bind" do
     it "binds the generator to the missing feature hook" do
-      method_mock = mock
-      Spinach::Generators.expects(:method).with(:generate_feature).returns(
-        method_mock
-      )
-      Spinach::Runner::Feature.expects(:when_not_found).with(method_mock)
+      subject.expects(:generate_feature).with(data)
       subject.bind
+      Spinach::Runner::Feature.new(stub_everything).run_hook :when_not_found, data
+      Spinach::Runner::Feature._when_not_found_callbacks = []
     end
   end
 
