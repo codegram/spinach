@@ -125,20 +125,15 @@ module Spinach
       def on_feature_not_found(feature, exception)
         lines = "#{exception.message}\n"
 
-        lines << "\nPlease create the file #{Spinach::Support.underscore(exception.missing_class)}.rb at #{Spinach.config[:step_definitions_path]}, with:\n\n"
+        generator = Generators::FeatureGenerator.new(feature)
+        lines << "\nPlease create the file #{generator.filename} at #{generator.path}, with:\n\n"
 
-        lines << "Feature '#{feature['name']}' do\n"
-
-        # TODO: Write the actual steps. We can do this since we have the entire
-        # feature just here. We should iterate over all the scenarios and return
-        # the different steps
-        #
-        lines << "  # Write your steps here\n"
-        lines << "end\n\n"
+        lines << generator.generate
 
         lines.split("\n").each do |line|
           out.puts "    #{line}".yellow
         end
+        out.puts "\n\n"
 
         undefined_features << feature
       end

@@ -55,4 +55,12 @@ describe Spinach::Support do
       Spinach::Support.underscore(:FeatureName).must_equal 'feature_name'
     end
   end
+
+  describe "#escape" do
+    it "escapes the name" do
+      Spinach::Support.escape_single_commas(
+        "I've been doing bad things"
+      ).must_include "I\\'ve been doing bad things"
+    end
+  end
 end
