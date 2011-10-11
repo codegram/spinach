@@ -25,6 +25,7 @@ module Spinach
 
     attr_reader :undefined_steps, :failed_steps, :error_steps, :undefined_features, :successful_steps
 
+    # Hooks the reporter to the runner endpoints
     def bind
       runner.after_run method(:after_run)
       feature_runner.before_run method(:before_feature_run)

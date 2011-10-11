@@ -17,8 +17,8 @@ module Spinach
       define_hook :on_skipped_step
       define_hook :after_run
 
-      # @param [Feature] feature
-      #   The feature that contains the steps.
+      # @param [String] feature_name
+      #   The feature name
       #
       # @param [Hash] data
       #   The parsed feature data.
@@ -33,7 +33,7 @@ module Spinach
         @steps ||= data['steps']
       end
 
-      # @return [Feature]
+      # @return [FeatureSteps]
       #   The feature object used to run this scenario.
       #
       # @api public

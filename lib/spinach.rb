@@ -25,7 +25,7 @@ require_relative 'spinach/generators'
 module Spinach
   @@feature_steps = []
 
-  # @return [Array<Feature>]
+  # @return [Array<FeatureSteps>]
   #   All the registered features.
   #
   # @api public
@@ -45,6 +45,9 @@ module Spinach
   #
   # @param [String] name
   #   The feature name.
+  #
+  # @return [FeatureSteps]
+  #   the {FeatureSteps} class for the given feature name
   #
   # @api public
   def self.find_feature_steps(name)
