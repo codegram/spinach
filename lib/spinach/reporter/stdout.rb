@@ -11,6 +11,8 @@ module Spinach
 
       # The last scenario error
       attr_accessor :scenario_error
+
+      # The last scenario
       attr_accessor :scenario
 
       # Initialitzes the runner
@@ -64,6 +66,9 @@ module Spinach
       # @param [Hash] step
       #   The step in a JSON Gherkin format
       #
+      # @param [Array] step_location
+      #   The step source location
+      #
       def on_successful_step(step, step_location)
         output_step('✔', step, :green, step_location)
         self.scenario = [current_feature, current_scenario, step]
@@ -105,7 +110,7 @@ module Spinach
       #
       def on_undefined_step(step, failure)
         output_step('?', step, :yellow)
-        self.scenario_error = [current_feature, current_scenario, step]
+        self.scenario_error = [current_feature, current_scenario, step, failure]
         undefined_steps << scenario_error
       end
 
@@ -181,7 +186,7 @@ module Spinach
         run_summary
       end
 
-      # Prints the feature success summaryfor ths run.
+      # Prints the feature success summary for this run.
       #
       def run_summary
         successful_summary = "(".colorize(:green)+successful_steps.length.to_s.colorize(:light_green)+") Successful".colorize(:green)
@@ -191,7 +196,7 @@ module Spinach
         out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{failed_summary}, #{error_summary}\n\n"
       end
 
-      # Prints the errors for ths run.
+      # Prints the errors for this run.
       #
       def error_summary
         error.puts "\nError summary:\n"
@@ -302,13 +307,15 @@ module Spinach
         output += report_exception(exception)
         output +="\n"
 
-        if options[:backtrace]
-          output += "\n"
-          exception.backtrace.map do |line|
-            output << "        #{line}\n"
+        unless exception.kind_of?(Spinach::StepNotDefinedException)
+          if options[:backtrace]
+            output += "\n"
+            exception.backtrace.map do |line|
+              output << "        #{line}\n"
+            end
+          else
+            output << "        #{exception.backtrace[0]}"
           end
-        else
-          output << "        #{exception.backtrace[0]}"
         end
         output
       end

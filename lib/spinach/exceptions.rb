@@ -28,16 +28,20 @@ module Spinach
   class StepNotDefinedException < StandardError
     attr_reader :feature, :step
 
-    # @param [Feature] feature
-    #   The container feature.
-    #
     # @param [Hash] step
     #   The missing step.
     #
     # @api pulic
-    def initialize(feature, step)
-      @feature = feature
+    def initialize(step)
       @step = step
+    end
+
+    # @return [String]
+    #   A custom message when scenario steps aren't found.
+    #
+    # @api public
+    def message
+      "Step '#{@step}' not found"
     end
   end
 end
