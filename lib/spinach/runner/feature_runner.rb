@@ -4,11 +4,8 @@ module Spinach
   class Runner
     # A feature runner handles a particular feature run.
     #
-    class Feature
+    class FeatureRunner
       include Hooks
-
-      # The {Reporter} used in this feature.
-      attr_reader :reporter
 
       # The file that describes the feature.
       attr_reader :filename
@@ -66,7 +63,7 @@ module Spinach
 
         scenarios.each do |scenario|
           if !@scenario_line || scenario['line'].to_s == @scenario_line
-            success = Scenario.new(feature_name, scenario).run
+            success = ScenarioRunner.new(feature_name, scenario).run
             @failed = true unless success
           end
         end

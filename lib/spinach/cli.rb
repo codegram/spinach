@@ -35,7 +35,6 @@ module Spinach
     def init_reporter
       reporter =
         Spinach::Reporter::Stdout.new(options[:reporter])
-      Spinach.config.default_reporter = reporter
       reporter.bind
     end
 

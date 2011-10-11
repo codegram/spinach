@@ -23,7 +23,7 @@ module Spinach
   end
 
   # This class represents the exception raised when Spinach can't find a step
-  # for a {Scenario}.
+  # for a {FeatureSteps}.
   #
   class StepNotDefinedException < StandardError
     attr_reader :feature, :step

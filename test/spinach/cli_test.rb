@@ -49,7 +49,6 @@ describe Spinach::Cli do
       reporter.expects(:bind)
       Spinach::Reporter::Stdout.stubs(new: reporter)
       cli.init_reporter
-      Spinach.config.default_reporter.wont_equal nil
     end
   end
 

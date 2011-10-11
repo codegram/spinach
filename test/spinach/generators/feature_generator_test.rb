@@ -73,7 +73,7 @@ module Spinach::Generators
       it "generates an entire feature_steps class definition" do
         result = subject.generate
         klass = eval(result)
-        feature_runner = Spinach::Runner::Feature.new(stub_everything)
+        feature_runner = Spinach::Runner::FeatureRunner.new(stub_everything)
         feature_runner.stubs(data: data)
         feature_runner.run.must_equal true
       end
