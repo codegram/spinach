@@ -389,7 +389,7 @@ describe Spinach::Reporter::Stdout do
     describe 'when given an undefined step exception' do
       it 'prints the error in yellow' do
         undefined_error = error
-        undefined_error.insert(3, Spinach::StepNotDefinedException.new(anything, anything))
+        undefined_error.insert(3, Spinach::StepNotDefinedException.new(anything))
 
         String.any_instance.expects(:yellow)
 
@@ -455,7 +455,7 @@ describe Spinach::Reporter::Stdout do
 
     describe 'when given an undefined step exception' do
       it 'prints the error in yellow' do
-        undefined_exception = Spinach::StepNotDefinedException.new(anything, anything)
+        undefined_exception = Spinach::StepNotDefinedException.new(anything)
 
         String.any_instance.expects(:yellow)
 

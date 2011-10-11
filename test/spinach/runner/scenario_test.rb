@@ -14,8 +14,8 @@ describe Spinach::Runner::Scenario do
 
   let(:feature) { stub_everything }
   let(:feature_name) { 'My feature' }
-  let(:scenario) { 
-    scenario = Spinach::Runner::Scenario.new(feature_name, data) 
+  let(:scenario) {
+    scenario = Spinach::Runner::Scenario.new(feature_name, data)
     scenario.stubs(feature: feature)
     scenario
   }
@@ -62,7 +62,7 @@ describe Spinach::Runner::Scenario do
 
       it 'rescues a Spinach::StepNotDefinedException' do
         feature.expects(:execute_step).raises(
-          Spinach::StepNotDefinedException.new('foo', 'bar'))
+          Spinach::StepNotDefinedException.new('bar'))
         scenario.expects(:run_hook).with(:before_run, has_value("A cool scenario"))
         scenario.expects(:run_hook).with(:after_run, has_value("A cool scenario"))
         scenario.expects(:run_hook).with(
@@ -96,14 +96,14 @@ describe Spinach::Runner::Scenario do
 
     describe 'hooks' do
       it 'fires up the scenario hooks' do
-        feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
+        feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('bar'))
         feature.expects(:run_hook).with(:before_scenario, has_value("A cool scenario"))
         feature.expects(:run_hook).with(:after_scenario, has_value("A cool scenario"))
         scenario.run
       end
 
       it 'fires up the step hooks' do
-        feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('foo', 'bar'))
+        feature.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('bar'))
         %w{before_step after_step}.each do |hook|
           feature.expects(:run_hook).with(
             hook.to_sym, kind_of(Hash))
