@@ -6,6 +6,8 @@ module Spinach
 
     def self.generate_feature(data)
       FeatureGenerator.new(data).store
+    rescue FeatureGeneratorException => e
+      $stderr.puts e
     end
   end
 end

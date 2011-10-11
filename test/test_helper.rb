@@ -25,9 +25,11 @@ module Kernel
   def capture_stdout
     out = StringIO.new
     $stdout = out
+    $stderr = out
     yield
-    return out
+    return out.string
   ensure
     $stdout = STDOUT
+    $stdout = STDERR
   end
 end

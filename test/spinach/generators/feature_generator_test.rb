@@ -114,7 +114,7 @@ module Spinach::Generators
           f.write("Fake content")
         end
         Proc.new{subject.store}.must_raise(
-          Spinach::Generators::FeatureGenerator::FeatureGeneratorException)
+          Spinach::Generators::FeatureGeneratorException)
         FileUtils.rm_rf("features/steps")
         FakeFS.deactivate!
       end

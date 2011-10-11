@@ -38,5 +38,13 @@ describe Spinach::Generators do
       FileUtils.rm_rf("features/steps")
       FakeFS.deactivate!
     end
+    it "outputs a message if feature cannot be generated" do
+      subject::FeatureGenerator.expects(:new).raises(
+        Spinach::Generators::FeatureGeneratorException.new("File already exists"))
+      capture_stdout do
+        subject.generate_feature(data)
+      end.must_include "File already exists"
+      File.exists?("features/steps/cheezburger_can_i_has.rb").must_equal false
+    end
   end
 end
