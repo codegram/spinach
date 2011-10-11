@@ -7,3 +7,4 @@ Feature: Automatic feature generation
     Given I have defined a "Cheezburger can I has" feature
     When I run spinach with "--generate"
     Then I a feature should exist named "features/steps/cheezburger_can_i_has.rb"
+    And that feature should have the example feature steps
