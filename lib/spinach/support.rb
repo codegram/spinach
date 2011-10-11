@@ -39,7 +39,20 @@ module Spinach
       word
     end
 
-    def self.escape(text)
+    # Escapes the single commas of a given text. Mostly used in the {Generators}
+    # classes
+    #
+    # @param [String] text
+    #   The text to escape
+    #
+    # @return [String]
+    #   The +text+ with escaped commas
+    #
+    # @example
+    #   Spinach::Support.escape_single_commas("I've been bad")
+    #   # => "I\'ve been bad"
+    #
+    def self.escape_single_commas(text)
       text.sub("'", "\\\\'")
     end
   end

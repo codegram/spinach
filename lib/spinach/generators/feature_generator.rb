@@ -11,8 +11,8 @@ module Spinach
       end
 
       # @return [Array<Hash>]
-      #   an array of unique steps found in this scenario, avoiding repetitions
-      #   of name
+      #   an array of unique steps found in this scenario, avoiding name
+      #   repetition
       def steps
         return @steps if @steps
         @steps = []
@@ -43,7 +43,7 @@ module Spinach
       #   an example feature steps definition
       def generate
         result = StringIO.new
-        result.puts "Feature '#{Spinach::Support.escape name}' do"
+        result.puts "Feature '#{Spinach::Support.escape_single_commas name}' do"
         generated_steps = steps.map do |step|
           step_generator = Generators::StepGenerator.new(step)
           step_generator.generate.split("\n").map do |line|

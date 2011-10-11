@@ -17,6 +17,7 @@ describe Spinach::Cli do
         end
       end
     end
+
     describe 'backtrace' do
       %w{-g --generate}.each do |opt|
         it 'inits the generator if #{opt}' do
@@ -26,6 +27,7 @@ describe Spinach::Cli do
         end
       end
     end
+
     describe "version" do
       %w{-v --version}.each do |opt|
         it "outputs the version" do

@@ -24,6 +24,11 @@ module Spinach::Generators
       it "returns the scenario name" do
         subject.name.must_equal 'Cheezburger can I has'
       end
+
+      it "returns nil if no name present" do
+        data['name'] = nil
+        subject.name.must_equal nil
+      end
     end
 
     describe "#steps" do

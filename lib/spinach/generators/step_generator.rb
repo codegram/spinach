@@ -14,7 +14,7 @@ module Spinach
     #   an example step definition
     def generate
       result = StringIO.new
-      result.puts "#{@data['keyword']} '#{Spinach::Support.escape @data['name']}' do"
+      result.puts "#{@data['keyword']} '#{Spinach::Support.escape_single_commas @data['name']}' do"
       result.puts "end"
       result.string
     end
