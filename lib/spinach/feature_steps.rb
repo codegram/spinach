@@ -11,7 +11,7 @@ module Spinach
     #
     # @api public
     def self.inherited(base)
-      Spinach.features << base
+      Spinach.feature_steps << base
     end
   end
 end

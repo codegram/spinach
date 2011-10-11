@@ -40,7 +40,7 @@ describe Spinach::Runner do
     before do
       @feature = stub
       filenames.each do |filename|
-        Spinach::Runner::Feature.expects(:new).
+        Spinach::Runner::FeatureRunner.expects(:new).
           with(filename, anything).
           returns(@feature)
       end

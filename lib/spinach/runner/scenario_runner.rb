@@ -4,8 +4,8 @@ module Spinach
   class Runner
     # A Scenario Runner handles a particular scenario run.
     #
-    class Scenario
-      attr_reader :feature, :feature_name, :data
+    class ScenarioRunner
+      attr_reader :feature_name, :data
 
       include Hooks
 
@@ -17,8 +17,8 @@ module Spinach
       define_hook :on_skipped_step
       define_hook :after_run
 
-      # @param [Feature] feature
-      #   The feature that contains the steps.
+      # @param [String] feature_name
+      #   The feature name
       #
       # @param [Hash] data
       #   The parsed feature data.
@@ -33,12 +33,12 @@ module Spinach
         @steps ||= data['steps']
       end
 
-      # @return [Feature]
+      # @return [FeatureSteps]
       #   The feature object used to run this scenario.
       #
       # @api public
-      def feature
-        @feature ||= Spinach.find_feature(feature_name).new
+      def feature_steps
+        @feature_steps ||= Spinach.find_feature_steps(feature_name).new
       end
 
       # Runs this scenario
@@ -46,12 +46,12 @@ module Spinach
       #   true if this scenario succeeded, false if not
       def run
         run_hook :before_run, data
-        feature.run_hook :before_scenario, data
+        feature_steps.run_hook :before_scenario, data
         steps.each do |step|
-          feature.run_hook :before_step, step
+          feature_steps.run_hook :before_step, step
           unless @exception
             begin
-              step_location = feature.execute_step(step['name'])
+              step_location = feature_steps.execute_step(step['name'])
               run_hook :on_successful_step, step, step_location
             rescue *Spinach.config[:failure_exceptions] => e
               @exception = e
@@ -66,9 +66,9 @@ module Spinach
           else
             run_hook :on_skipped_step, step
           end
-          feature.run_hook :after_step, step
+          feature_steps.run_hook :after_step, step
         end
-        feature.run_hook :after_scenario, data
+        feature_steps.run_hook :after_scenario, data
         run_hook :after_run, data
         !@exception
       end
