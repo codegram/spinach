@@ -11,6 +11,9 @@ module Spinach
     end
 
     # Generates a feature given a parsed feature data
+    #
+    # @param [Hash] data
+    #   the parsed feature data
     def self.generate_feature(data)
       FeatureGenerator.new(data).store
     rescue FeatureGeneratorException => e

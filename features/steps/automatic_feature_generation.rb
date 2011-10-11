@@ -16,15 +16,17 @@ Feature 'Automatic feature generation' do
   Then 'I a feature should exist named "features/steps/cheezburger_can_i_has.rb"' do
     stop_processes!
     in_current_dir do
-      file = 'features/steps/cheezburger_can_i_has.rb'
-      File.exists?(file).must_equal true
-      @content = File.read(file)
+      @file = 'features/steps/cheezburger_can_i_has.rb'
+      File.exists?(@file).must_equal true
     end
   end
   
   And "that feature should have the example feature steps" do
-    @content.must_include "I haz a sad"
-    @content.must_include "I get some lulz"
-    @content.must_include "I haz a happy"
+    in_current_dir do
+      content = File.read(@file)
+      content.must_include "I haz a sad"
+      content.must_include "I get some lulz"
+      content.must_include "I haz a happy"
+    end
   end
 end
