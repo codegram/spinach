@@ -8,7 +8,7 @@ module Integration
       base.class_eval do
         before_scenario do
           in_current_dir do
-            run "rm -fR features"
+            FileUtils.rm_rf("features")
           end
         end
         before_scenario do

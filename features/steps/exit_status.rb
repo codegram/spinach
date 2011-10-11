@@ -1,5 +1,3 @@
-require 'aruba/api'
-
 Feature "Exit status" do
   include Integration::SpinachRunner
 
