@@ -66,16 +66,17 @@ module Spinach
 
         scenarios.each do |scenario|
           if !@scenario_line || scenario['line'].to_s == @scenario_line
-            @success = Scenario.new(feature_name, scenario).run
+            success = Scenario.new(feature_name, scenario).run
+            @failed = true unless success
           end
         end
 
-        run_hook :after_run, data
-
       rescue Spinach::FeatureStepsNotFoundException => e
         run_hook :when_not_found, data, e
+        @failed = true
       ensure
-        return !!@success
+        run_hook :after_run, data
+        return !@failed
       end
     end
   end
