@@ -67,7 +67,7 @@ module Spinach
       successful = true
 
       filenames.each do |filename|
-        success = Feature.new(filename).run
+        success = FeatureRunner.new(filename).run
         successful = false unless success
       end
 
@@ -113,5 +113,5 @@ module Spinach
   end
 end
 
-require_relative 'runner/feature'
-require_relative 'runner/scenario'
+require_relative 'runner/feature_runner'
+require_relative 'runner/scenario_runner'

@@ -10,13 +10,13 @@ describe Spinach::FeatureSteps do
   describe 'class methods' do
     describe '#inherited' do
       it 'registers any feature subclass' do
-        @feature1 = Class.new(Spinach::FeatureSteps)
-        @feature2 = Class.new(Spinach::FeatureSteps)
-        @feature3 = Class.new
+        @feature_steps1 = Class.new(Spinach::FeatureSteps)
+        @feature_steps2 = Class.new(Spinach::FeatureSteps)
+        @feature_steps3 = Class.new
 
-        Spinach.features.must_include @feature1
-        Spinach.features.must_include @feature2
-        Spinach.features.wont_include @feature3
+        Spinach.feature_steps.must_include @feature_steps1
+        Spinach.feature_steps.must_include @feature_steps2
+        Spinach.feature_steps.wont_include @feature_steps3
       end
     end
   end
@@ -55,7 +55,7 @@ describe Spinach::FeatureSteps do
         end
       end
 
-      Spinach.features.must_include feature
+      Spinach.feature_steps.must_include feature
 
       instance = feature.new
       instance.execute_step('Test')

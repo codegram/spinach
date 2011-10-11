@@ -5,7 +5,7 @@ module Spinach
   module Generators
     # Binds the feature generator to the "feature not found" hook
     def self.bind
-      Spinach::Runner::Feature.when_not_found do |data|
+      Spinach::Runner::FeatureRunner.when_not_found do |data|
         Spinach::Generators.generate_feature(data)
       end
     end

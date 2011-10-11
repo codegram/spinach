@@ -22,8 +22,8 @@ describe Spinach::Generators do
     it "binds the generator to the missing feature hook" do
       subject.expects(:generate_feature).with(data)
       subject.bind
-      Spinach::Runner::Feature.new(stub_everything).run_hook :when_not_found, data
-      Spinach::Runner::Feature._when_not_found_callbacks = []
+      Spinach::Runner::FeatureRunner.new(stub_everything).run_hook :when_not_found, data
+      Spinach::Runner::FeatureRunner._when_not_found_callbacks = []
     end
   end
 

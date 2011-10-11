@@ -23,22 +23,22 @@ require_relative 'spinach/generators'
 #     scenarios.
 #
 module Spinach
-  @@features = []
+  @@feature_steps = []
 
   # @return [Array<Feature>]
   #   All the registered features.
   #
   # @api public
-  def self.features
-    @@features
+  def self.feature_steps
+    @@feature_steps
   end
 
   # Resets Spinach to a pristine state, as if no feature was ever registered.
   # Mostly useful in Spinach's own testing.
   #
   # @api semipublic
-  def self.reset_features
-    @@features = []
+  def self.reset_feature_steps
+    @@feature_steps = []
   end
 
   # Finds a feature given a feature name.
@@ -47,9 +47,9 @@ module Spinach
   #   The feature name.
   #
   # @api public
-  def self.find_feature(name)
+  def self.find_feature_steps(name)
     klass = Spinach::Support.camelize(name)
-    @@features.detect do |feature|
+    feature_steps.detect do |feature|
       feature.feature_name.to_s == name.to_s ||
       feature.name == klass
     end || raise(Spinach::FeatureStepsNotFoundException, [klass, name])

@@ -44,8 +44,8 @@ module Spinach
       scenario_runner.after_run method(:clear_current_scenario)
     end
 
-    def feature_runner; Runner::Feature; end
-    def scenario_runner; Runner::Scenario; end
+    def feature_runner; Runner::FeatureRunner; end
+    def scenario_runner; Runner::ScenarioRunner; end
     def runner; Runner; end
 
     def after_run(*args); end;
