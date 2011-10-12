@@ -66,7 +66,7 @@ Just run `spinach --generate` and it will create a corresponding
 
 ``` ruby
 
-Feature 'Test how spinach works' do
+class TestHowSpinachWorks < Spinach::FeatureSteps
   Given 'I have an empty array' do
   end
 
@@ -92,7 +92,7 @@ use private methods, mix in modules or whatever!
 
 ``` ruby
 
-Feature 'Test how spinach works' do
+class TestHowSpinachWorks < Spinach::FeatureSteps
   Given 'I have an empty array' do
     @array = Array.new
   end
