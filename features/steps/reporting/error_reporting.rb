@@ -1,4 +1,7 @@
-Feature "Error reporting" do
+class ErrorReporting < Spinach::FeatureSteps
+
+  feature "Error reporting"
+
   include Integration::SpinachRunner
   include Integration::ErrorReporting
 
@@ -12,7 +15,9 @@ Feature "Error reporting" do
                ')
 
     write_file('features/steps/failure_feature.rb',
-               'Feature "Feature with failures" do
+               'class FeatureWithFailures < Spinach::FeatureSteps
+                  feature "Feature with failures"
+
                   Given "true is false" do
                     true.must_equal false
                   end

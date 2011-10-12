@@ -1,6 +1,9 @@
 require 'aruba/api'
 
-Feature "Show step source location" do
+class ShowStepSourceLocation < Spinach::FeatureSteps
+
+  feature "Show step source location"
+
   include Integration::SpinachRunner
 
   Given "I have a feature that has no error or failure" do
@@ -11,7 +14,8 @@ Feature "Show step source location" do
         Then I succeed
      ')
     write_file('features/steps/success_feature.rb',
-    'Feature "A success feature" do
+    'class ASuccessFeature < Spinach::FeatureSteps
+      feature "A success feature"
       Then "I succeed" do
       end
      end')
@@ -24,7 +28,7 @@ Feature "Show step source location" do
 
   Then "I should see the source location of each step of every scenario" do
     all_stdout.must_match(
-      /I succeed.*features\/steps\/success_feature\.rb.*2/
+      /I succeed.*features\/steps\/success_feature\.rb.*3/
     )
   end
 
@@ -36,7 +40,8 @@ Feature "Show step source location" do
         Given this is a external step
      ')
     write_file('features/steps/success_feature.rb',
-    'Feature "A feature that uses external steps" do
+    'class AFeatureThatUsesExternalSteps < Spinach::FeatureSteps
+      feature "A feature that uses external steps"
       include ExternalSteps
      end')
     write_file('features/support/external_steps.rb',
@@ -54,4 +59,3 @@ Feature "Show step source location" do
     )
   end
 end
-

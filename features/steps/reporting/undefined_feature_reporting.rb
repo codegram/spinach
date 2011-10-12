@@ -1,4 +1,7 @@
-Feature "Undefined feature reporting" do
+class UndefinedFeatureReporting < Spinach::FeatureSteps
+
+  feature "Undefined feature reporting"
+
   include Integration::SpinachRunner
 
   Given "I've written a feature but not its steps" do

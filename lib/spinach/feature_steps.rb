@@ -15,11 +15,3 @@ module Spinach
     end
   end
 end
-
-# Syntactic sugar. Define the "Feature do" syntax.
-Object.send(:define_method, :Feature) do |name, &block|
-  Class.new(Spinach::FeatureSteps) do
-    feature name
-    class_eval &block
-  end
-end

@@ -97,7 +97,7 @@ module Spinach::Generators
           must_include 'features/steps/cheezburger_can_i_has.rb'
       end
     end
-    
+
     describe "#store" do
       it "stores the generated feature into a file" do
         FakeFS.activate!

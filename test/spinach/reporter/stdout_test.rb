@@ -193,7 +193,7 @@ describe Spinach::Reporter::Stdout do
     end
 
     it 'tells the user what to write in the file' do
-      @out.string.must_include 'Feature \'This feature does not exist\' do'
+      @out.string.must_include 'This feature does not exist'
     end
   end
 

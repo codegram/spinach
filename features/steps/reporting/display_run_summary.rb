@@ -1,6 +1,9 @@
 require 'aruba/api'
 
-Feature "Display run summary" do
+class DisplayRunSummary < Spinach::FeatureSteps
+
+  feature 'automatic'
+
   include Integration::SpinachRunner
 
   Given "I have a feature that has some successful, undefined, failed and error steps" do
@@ -24,7 +27,9 @@ Feature "Display run summary" do
         Then I must succeed
      ')
     write_file('features/steps/test_feature.rb',
-    'Feature "A test feature" do
+    'class ATestFeature < Spinach::FeatureSteps
+      feature "A test feature"
+
       Given "I am a fool" do
       end
 
@@ -65,5 +70,3 @@ Feature "Display run summary" do
     )
   end
 end
-
-

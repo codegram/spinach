@@ -1,4 +1,7 @@
-Feature 'Automatic feature generation' do
+class AutomaticFeatureGeneration < Spinach::FeatureSteps
+
+  feature 'Automatic feature generation'
+
   include Integration::SpinachRunner
   Given 'I have defined a "Cheezburger can I has" feature' do
     write_file('features/cheezburger_can_i_has.feature',
@@ -20,7 +23,7 @@ Feature 'Automatic feature generation' do
       File.exists?(@file).must_equal true
     end
   end
-  
+
   And "that feature should have the example feature steps" do
     in_current_dir do
       content = File.read(@file)

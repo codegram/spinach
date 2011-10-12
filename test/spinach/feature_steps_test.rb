@@ -46,21 +46,4 @@ describe Spinach::FeatureSteps do
     end
   end
 
-  describe 'Object#Feature' do
-    it 'creates a feature class' do
-      feature = Feature('Hola') do
-        attr_accessor :test
-        When 'Test' do
-          self.test = true
-        end
-      end
-
-      Spinach.feature_steps.must_include feature
-
-      instance = feature.new
-      instance.execute_step('Test')
-
-      instance.test.must_equal true
-    end
-  end
 end

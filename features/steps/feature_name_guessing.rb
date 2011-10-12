@@ -1,4 +1,7 @@
-Feature "Feature name guessing" do
+class FeatureNameGuessing < Spinach::FeatureSteps
+
+  feature "Feature name guessing"
+
   include Integration::SpinachRunner
 
   Given 'I am writing a feature called "My cool feature"' do

@@ -1,6 +1,6 @@
 module Spinach
   module Generators
-    # A feature generator generates and/or writes an example feature steps class 
+    # A feature generator generates and/or writes an example feature steps class
     # given the parsed feture data
     class FeatureGenerator
 
@@ -43,7 +43,8 @@ module Spinach
       #   an example feature steps definition
       def generate
         result = StringIO.new
-        result.puts "Feature '#{Spinach::Support.escape_single_commas name}' do"
+        result.puts "class #{Spinach::Support.camelize name} < Spinach::FeatureSteps"
+        result.puts "  feature \'#{Spinach::Support.escape_single_commas name}\'\n"
         generated_steps = steps.map do |step|
           step_generator = Generators::StepGenerator.new(step)
           step_generator.generate.split("\n").map do |line|

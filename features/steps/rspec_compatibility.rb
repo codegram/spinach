@@ -1,4 +1,7 @@
-Feature "RSpec compatibility" do
+class RSpecCompatibility < Spinach::FeatureSteps
+
+  feature "RSpec compatibility"
+
   include Integration::SpinachRunner
   include Integration::ErrorReporting
 
@@ -12,7 +15,8 @@ Feature "RSpec compatibility" do
                ')
 
     write_file('features/steps/failure_feature.rb',
-               'Feature "Feature with failures" do
+               'class FeatureWithFailures < Spinach::FeatureSteps
+                  feature "Feature with failures"
                   Given "true is false" do
                     true.should == false
                   end

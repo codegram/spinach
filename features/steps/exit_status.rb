@@ -1,4 +1,7 @@
-Feature "Exit status" do
+class ExitStatus < Spinach::FeatureSteps
+
+  feature "Exit status"
+
   include Integration::SpinachRunner
 
   Given "I have a feature that has no error or failure" do
@@ -9,7 +12,8 @@ Feature "Exit status" do
         Then I succeed
      ')
     write_file('features/steps/success_feature.rb',
-    'Feature "A success feature" do
+    'class ASuccessFeature < Spinach::FeatureSteps
+      feature "A success feature"
       Then "I succeed" do
       end
      end')
@@ -24,7 +28,8 @@ Feature "Exit status" do
         Then I fail
      ')
     write_file('features/steps/failure_feature.rb',
-    'Feature "A failure feature" do
+    'class AFailureFeature < Spinach::FeatureSteps
+      feature "A failure feature"
       Then "I fail" do
         true.must_equal false
       end
