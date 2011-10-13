@@ -34,13 +34,14 @@ module Spinach
       #   true if this scenario succeeded, false if not
       def run
         Spinach.hooks.run_before_scenario data
-        feature_steps.run_hook :before_scenario, data
         steps.each do |step|
           Spinach.hooks.run_before_step step
           unless @exception
             begin
               step_location = feature_steps.execute_step(step['name'])
               Spinach.hooks.run_on_successful_step step, step_location
+            rescue Spinach::FeatureStepsNotFoundException => e
+              raise e
             rescue *Spinach.config[:failure_exceptions] => e
               @exception = e
               Spinach.hooks.run_on_failed_step step, @exception, step_location

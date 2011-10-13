@@ -52,7 +52,7 @@ module Spinach
       #
       # @api public
       def run
-        Spinach.hooks.run_before_run data
+        Spinach.hooks.run_before_feature data
 
         scenarios.each do |scenario|
           if !@scenario_line || scenario['line'].to_s == @scenario_line
@@ -65,7 +65,7 @@ module Spinach
         Spinach.hooks.run_on_undefined_feature data, e
         @failed = true
       ensure
-        Spinach.hooks.run_after_run data
+        Spinach.hooks.run_after_feature data
         return !@failed
       end
     end

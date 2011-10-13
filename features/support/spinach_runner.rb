@@ -5,15 +5,8 @@ module Integration
     include Aruba::Api
 
     def self.included(base)
-      base.class_eval do
-        before_scenario do
-          in_current_dir do
-            FileUtils.rm_rf("features")
-          end
-        end
-        before_scenario do
-          @aruba_timeout_seconds = 6
-        end
+      Spinach.hooks.before_scenario do
+        @aruba_timeout_seconds = 6
       end
     end
 

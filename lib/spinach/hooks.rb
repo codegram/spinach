@@ -35,7 +35,7 @@ module Spinach
 
     def run_hook(name, *args)
       if callbacks = @hooks[name.to_sym]
-        callbacks.each{ |c| c.call(args) }
+        callbacks.each{ |c| c.call(*args) }
       end
     end
 

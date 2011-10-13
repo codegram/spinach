@@ -56,7 +56,7 @@ module Spinach
       require_dependencies
       require_suites
 
-      run_hook :before_run
+      Spinach.hooks.run_before_run
 
       successful = true
 
@@ -65,7 +65,7 @@ module Spinach
         successful = false unless success
       end
 
-      run_hook :after_run, successful
+      Spinach.hooks.run_after_run(successful)
 
       successful
     end

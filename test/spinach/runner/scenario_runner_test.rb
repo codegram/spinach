@@ -65,8 +65,6 @@ describe Spinach::Runner::ScenarioRunner do
         Spinach.hooks.expects("run_after_scenario").with(has_value("A cool scenario"))
         Spinach.hooks.expects("run_on_undefined_step").with(
           anything, anything, anything)
-        Spinach.hooks.expects("run_on_undefined_step").with(
-          anything, anything, anything)
         Spinach.hooks.expects("run_on_skipped_step").with(
           anything, anything).twice
         subject.run
