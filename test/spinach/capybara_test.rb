@@ -50,7 +50,7 @@ describe Spinach::FeatureSteps::Capybara do
 
     Spinach::Runner::ScenarioRunner.any_instance.stubs(feature_steps: @feature)
 
-    Capybara.current_session.expects(:reset!).twice
+    Capybara.current_session.expects(:reset!).times(3)
 
     @feature_runner.run
   end

@@ -24,10 +24,9 @@ module Spinach
       def self.included(base)
         base.class_eval do
           include ::Capybara::DSL
-
-          after_scenario do
-            ::Capybara.current_session.reset! if ::Capybara.app
-          end
+        end
+        Spinach.hooks.before_scenario do
+          ::Capybara.current_session.reset! if ::Capybara.app
         end
       end
     end
