@@ -87,7 +87,7 @@ describe Spinach::Runner::FeatureRunner do
       subject.stubs(:scenarios).raises(exception)
       subject.stubs(:data).returns(data)
       not_found_called = false
-      subject.class.when_not_found do |data, exception|
+      Spinach.hooks.on_undefined_feature do |data, exception|
         not_found_called = [data, exception]
       end
       subject.run

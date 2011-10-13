@@ -51,35 +51,33 @@ describe Spinach::Runner::ScenarioRunner do
     describe 'when throwing exceptions' do
       it 'rescues a MiniTest::Assertion' do
         feature_steps.expects(:execute_step).raises(MiniTest::Assertion)
-        subject.expects(:run_hook).with(:before_run, has_value("A cool scenario"))
-        subject.expects(:run_hook).with(:after_run, has_value("A cool scenario"))
-        subject.expects(:run_hook).with(
-          :on_failed_step, anything, anything, anything)
-        subject.expects(:run_hook).with(
-          :on_skipped_step, anything, anything).twice
+        Spinach.hooks.expects("run_before_scenario").with(has_value("A cool scenario"))
+        Spinach.hooks.expects("run_after_scenario").with(has_value("A cool scenario"))
+        Spinach.hooks.expects('run_on_failed_step').with(anything, anything, anything)
+        Spinach.hooks.expects('run_on_skipped_step').with(anything, anything).twice
         subject.run
       end
 
       it 'rescues a Spinach::StepNotDefinedException' do
         feature_steps.expects(:execute_step).raises(
           Spinach::StepNotDefinedException.new('bar'))
-        subject.expects(:run_hook).with(:before_run, has_value("A cool scenario"))
-        subject.expects(:run_hook).with(:after_run, has_value("A cool scenario"))
-        subject.expects(:run_hook).with(
-          :on_undefined_step, anything, anything, anything)
-        subject.expects(:run_hook).with(
-          :on_skipped_step, anything, anything).twice
+        Spinach.hooks.expects("run_before_scenario").with(has_value("A cool scenario"))
+        Spinach.hooks.expects("run_after_scenario").with(has_value("A cool scenario"))
+        Spinach.hooks.expects("run_on_undefined_step").with(
+          anything, anything, anything)
+        Spinach.hooks.expects("run_on_undefined_step").with(
+          anything, anything, anything)
+        Spinach.hooks.expects("run_on_skipped_step").with(
+          anything, anything).twice
         subject.run
       end
 
       it 'rescues any other error' do
         feature_steps.expects(:execute_step).raises
-        subject.expects(:run_hook).with(:after_run, has_value("A cool scenario"))
-        subject.expects(:run_hook).with(:before_run, has_value("A cool scenario"))
-        subject.expects(:run_hook).with(
-          :on_error_step, anything, anything, anything)
-        subject.expects(:run_hook).with(
-          :on_skipped_step, anything, anything).twice
+        Spinach.hooks.expects("run_after_scenario").with(has_value("A cool scenario"))
+        Spinach.hooks.expects("run_before_scenario").with(has_value("A cool scenario"))
+        Spinach.hooks.expects("run_on_error_step").with(anything, anything, anything)
+        Spinach.hooks.expects("run_on_skipped_step").with(anything, anything).twice
         subject.run
       end
 
@@ -97,20 +95,15 @@ describe Spinach::Runner::ScenarioRunner do
     describe 'hooks' do
       it 'fires up the scenario hooks' do
         feature_steps.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('bar'))
-        feature_steps.expects(:run_hook).with(:before_scenario, has_value("A cool scenario"))
-        feature_steps.expects(:run_hook).with(:after_scenario, has_value("A cool scenario"))
+        Spinach.hooks.expects(:run_before_scenario).with(has_value("A cool scenario"))
+        Spinach.hooks.expects(:run_after_scenario).with(has_value("A cool scenario"))
         subject.run
       end
 
       it 'fires up the step hooks' do
         feature_steps.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('bar'))
         %w{before_step after_step}.each do |hook|
-          feature_steps.expects(:run_hook).with(
-            hook.to_sym, kind_of(Hash))
-          feature_steps.expects(:run_hook).with(
-            hook.to_sym, kind_of(Hash))
-          feature_steps.expects(:run_hook).with(
-            hook.to_sym, kind_of(Hash))
+          Spinach.hooks.expects("run_#{hook}").with(kind_of(Hash)).times(3)
         end
 
         subject.run
