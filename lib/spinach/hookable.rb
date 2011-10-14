@@ -14,7 +14,7 @@ module Spinach
       #
       # @example
       #   class
-      def define_hook(hook)
+      def hook(hook)
         define_method hook do |&block|
           add_hook(hook, &block)
         end

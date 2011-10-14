@@ -9,7 +9,7 @@ describe Spinach::Hookable do
 
   describe ".define_hook" do
     it "defines a new hook" do
-      subject.class.define_hook :before_save
+      subject.class.hook :before_save
       subject.must_respond_to :before_save
     end
   end
