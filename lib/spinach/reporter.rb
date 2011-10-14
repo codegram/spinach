@@ -57,22 +57,31 @@ module Spinach
     def on_undefined_step(*args); end;
     def on_skipped_step(*args); end;
 
+    # Stores the current feature
+    #
+    # @param [Hash]
+    #   the data for this feature
     def set_current_feature(data)
       @current_feature = data
     end
 
+    # Clears this current feature
     def clear_current_feature(*args)
       @current_feature = nil
     end
 
+    # Stores the current scenario
+    #
+    # @param [Hash]
+    #   the data for this scenario
     def set_current_scenario(data)
       @current_scenario = data
     end
 
+    # Clears this current scenario
     def clear_current_scenario(*args)
       @current_scenario = nil
     end
-
   end
 end
 

@@ -12,6 +12,7 @@ describe Spinach::Hooks do
       it "responds to #{callback}" do
         subject.must_respond_to callback
       end
+
       it "executes the hook with params" do
         array = []
         block = Proc.new do |arg1, arg2|
@@ -24,5 +25,4 @@ describe Spinach::Hooks do
       end
     end
   end
-
 end
