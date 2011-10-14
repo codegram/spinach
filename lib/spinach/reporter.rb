@@ -19,35 +19,31 @@ module Spinach
 
     # A Hash with options for the reporter
     #
-    attr_reader :options
-
-    attr_accessor :current_feature, :current_scenario
+    attr_reader :options, :current_feature, :current_scenario
 
     attr_reader :undefined_steps, :failed_steps, :error_steps, :undefined_features, :successful_steps
 
     # Hooks the reporter to the runner endpoints
     def bind
-      runner.after_run method(:after_run)
-      feature_runner.before_run method(:before_feature_run)
-      feature_runner.after_run method(:after_feature_run)
-      feature_runner.when_not_found method(:on_feature_not_found)
-      scenario_runner.before_run method(:before_scenario_run)
-      scenario_runner.after_run method(:after_scenario_run)
-      scenario_runner.on_successful_step method(:on_successful_step)
-      scenario_runner.on_undefined_step method(:on_undefined_step)
-      scenario_runner.on_failed_step method(:on_failed_step)
-      scenario_runner.on_error_step method(:on_error_step)
-      scenario_runner.on_skipped_step method(:on_skipped_step)
+      Spinach.hooks.tap do |hooks|
+        hooks.after_run { |*args| after_run(*args) }
+        hooks.before_feature { |*args| before_feature_run(*args) }
+        hooks.after_feature { |*args| after_feature_run(*args) }
+        hooks.on_undefined_feature { |*args| on_feature_not_found(*args) }
+        hooks.before_scenario { |*args| before_scenario_run(*args) }
+        hooks.after_scenario { |*args| after_scenario_run(*args) }
+        hooks.on_successful_step { |*args| on_successful_step(*args) }
+        hooks.on_undefined_step { |*args| on_undefined_step(*args) }
+        hooks.on_failed_step { |*args| on_failed_step(*args) }
+        hooks.on_error_step { |*args| on_error_step(*args) }
+        hooks.on_skipped_step { |*args| on_skipped_step(*args) }
 
-      feature_runner.before_run method(:current_feature=)
-      feature_runner.after_run method(:clear_current_feature)
-      scenario_runner.before_run method(:current_scenario=)
-      scenario_runner.after_run method(:clear_current_scenario)
+        hooks.before_feature { |*args| set_current_feature(*args) }
+        hooks.after_feature { |*args| clear_current_feature(*args) }
+        hooks.before_scenario { |*args| set_current_scenario(*args) }
+        hooks.after_scenario { |*args| clear_current_scenario(*args) }
+      end
     end
-
-    def feature_runner; Runner::FeatureRunner; end
-    def scenario_runner; Runner::ScenarioRunner; end
-    def runner; Runner; end
 
     def after_run(*args); end;
     def before_feature_run(*args); end
@@ -61,14 +57,31 @@ module Spinach
     def on_undefined_step(*args); end;
     def on_skipped_step(*args); end;
 
+    # Stores the current feature
+    #
+    # @param [Hash]
+    #   the data for this feature
+    def set_current_feature(data)
+      @current_feature = data
+    end
+
+    # Clears this current feature
     def clear_current_feature(*args)
-      self.current_feature = nil
+      @current_feature = nil
     end
 
+    # Stores the current scenario
+    #
+    # @param [Hash]
+    #   the data for this scenario
+    def set_current_scenario(data)
+      @current_scenario = data
+    end
+
+    # Clears this current scenario
     def clear_current_scenario(*args)
-      self.current_scenario = nil
+      @current_scenario = nil
     end
-
   end
 end
 

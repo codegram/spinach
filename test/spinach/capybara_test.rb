@@ -1,4 +1,5 @@
 require 'test_helper'
+require 'spinach'
 require 'spinach/capybara'
 require 'sinatra'
 
@@ -50,7 +51,7 @@ describe Spinach::FeatureSteps::Capybara do
 
     Spinach::Runner::ScenarioRunner.any_instance.stubs(feature_steps: @feature)
 
-    Capybara.current_session.expects(:reset!).twice
+    Capybara.current_session.expects(:reset!).at_least_once
 
     @feature_runner.run
   end

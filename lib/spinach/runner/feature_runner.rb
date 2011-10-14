@@ -1,18 +1,11 @@
-require 'hooks'
-
 module Spinach
   class Runner
     # A feature runner handles a particular feature run.
     #
     class FeatureRunner
-      include Hooks
 
       # The file that describes the feature.
       attr_reader :filename
-
-      define_hook :before_run
-      define_hook :after_run
-      define_hook :when_not_found
 
       # @param [String] filename
       #   path to the feature file. Scenario line could be passed to run just
@@ -59,7 +52,7 @@ module Spinach
       #
       # @api public
       def run
-        run_hook :before_run, data
+        Spinach.hooks.run_before_feature data
 
         scenarios.each do |scenario|
           if !@scenario_line || scenario['line'].to_s == @scenario_line
@@ -69,10 +62,10 @@ module Spinach
         end
 
       rescue Spinach::FeatureStepsNotFoundException => e
-        run_hook :when_not_found, data, e
+        Spinach.hooks.run_on_undefined_feature data, e
         @failed = true
       ensure
-        run_hook :after_run, data
+        Spinach.hooks.run_after_feature data
         return !@failed
       end
     end

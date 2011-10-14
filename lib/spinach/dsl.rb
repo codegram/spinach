@@ -1,5 +1,3 @@
-require 'hooks'
-
 module Spinach
   # Spinach DSL aims to provide an easy way to define steps and hooks into your
   # feature classes.
@@ -13,13 +11,6 @@ module Spinach
       base.class_eval do
         include InstanceMethods
         extend ClassMethods
-        include Hooks
-
-        define_hook :before_scenario
-        define_hook :after_scenario
-        define_hook :before_step
-        define_hook :after_step
-
       end
     end
 

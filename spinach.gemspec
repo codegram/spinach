@@ -10,9 +10,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "http://github.com/codegram/spinach"
 
   gem.add_runtime_dependency 'gherkin'
-  gem.add_runtime_dependency 'minitest'
   gem.add_runtime_dependency 'colorize'
-  gem.add_runtime_dependency 'hooks'
   gem.add_development_dependency 'purdytest'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'mocha'

@@ -10,11 +10,6 @@ module Spinach
       @reporter = Reporter.new(@options)
     end
 
-    describe "#initialize" do
-      it "initializes the option hash" do
-      end
-    end
-
     describe "#options" do
       it "returns the options passed to the reporter" do
         @reporter.options[:backtrace].must_equal true
@@ -52,124 +47,84 @@ module Spinach
         @reporter.stubs(:method)
       end
 
-      it "binds a callback after running all the suite" do
-        @reporter.expects(:method).with(:after_run).returns(@callback)
-        @reporter.runner.expects(:after_run).with(@callback)
-        @reporter.bind
-      end
+      describe "bindings" do
+        before do
+          @reporter.bind
+        end
 
-      it "binds a callback before running every feature" do
-        @reporter.expects(:method).with(:before_feature_run).returns(@callback)
-        @reporter.feature_runner.expects(:before_run).with(@callback)
-        @reporter.bind
-      end
+        after do
+          Spinach.hooks.reset
+        end
 
-      it "binds a callback after running every feature" do
-        @reporter.expects(:method).with(:after_feature_run).returns(@callback)
-        @reporter.feature_runner.expects(:after_run).with(@callback)
-        @reporter.bind
-      end
+        it "binds a callback after running" do
+          @reporter.expects(:after_run)
+          Spinach.hooks.run_after_run
+        end
 
-      it "binds a callback for not defined features" do
-        @reporter.expects(:method).with(:on_feature_not_found).returns(@callback)
-        @reporter.feature_runner.expects(:when_not_found).with(@callback)
-        @reporter.bind
-      end
+        it "binds a callback before running every feature" do
+          @reporter.expects(:before_feature_run)
+          Spinach.hooks.run_before_feature(anything)
+        end
 
-      it "binds a callback before running every scenario" do
-        @reporter.expects(:method).with(:before_scenario_run).returns(@callback)
-        @reporter.scenario_runner.expects(:before_run).with(@callback)
-        @reporter.bind
-      end
+        it "binds a callback after running every feature" do
+          @reporter.expects(:after_feature_run)
+          Spinach.hooks.run_after_feature
+        end
 
-      it "binds a callback after running every feature" do
-        @reporter.expects(:method).with(:after_scenario_run).returns(@callback)
-        @reporter.scenario_runner.expects(:after_run).with(@callback)
-        @reporter.bind
-      end
+        it "binds a callback when a feature is not found" do
+          @reporter.expects(:on_feature_not_found)
+          Spinach.hooks.run_on_undefined_feature
+        end
 
-      describe "when running steps" do
-        %w{successful failed error undefined skipped}.each do |type|
-          it "binds a callback after running a #{type} step" do
-            @reporter.expects(:method).with(:"on_#{type}_step").returns(@callback)
-            @reporter.scenario_runner.expects(:"on_#{type}_step").with(@callback)
-            @reporter.bind
+        it "binds a callback before every scenario" do
+          @reporter.expects(:before_scenario_run)
+          Spinach.hooks.run_before_scenario(anything)
+        end
+
+        it "binds a callback after every scenario" do
+          @reporter.expects(:after_scenario_run)
+          Spinach.hooks.run_after_scenario
+        end
+
+        it "binds a callback after every successful step" do
+          @reporter.expects(:on_successful_step)
+          Spinach.hooks.run_on_successful_step
+        end
+
+        it "binds a callback after every failed step" do
+          @reporter.expects(:on_failed_step)
+          Spinach.hooks.run_on_failed_step
+        end
+
+        it "binds a callback after every error step" do
+          @reporter.expects(:on_error_step)
+          Spinach.hooks.run_on_error_step
+        end
+
+        it "binds a callback after every skipped step" do
+          @reporter.expects(:on_skipped_step)
+          Spinach.hooks.run_on_skipped_step
+        end
+
+        describe "internals" do
+          it "binds a callback before running" do
+            @reporter.expects(:set_current_feature)
+            Spinach.hooks.run_before_feature({})
           end
-        end
-      end
 
-      describe "binds the context methods" do
-        it "binds the current feature setter" do
-          @reporter.expects(:method).with(:current_feature=).returns(@callback)
-          @reporter.feature_runner.expects(:before_run).with(@callback)
-          @reporter.bind
-        end
+          it "binds a callback after running" do
+            @reporter.expects(:clear_current_feature)
+            Spinach.hooks.run_after_feature
+          end
 
-        it "binds the current feature clearer" do
-          @reporter.expects(:method).with(:clear_current_feature).returns(@callback)
-          @reporter.feature_runner.expects(:after_run).with(@callback)
-          @reporter.bind
-        end
+          it "binds a callback before every scenario" do
+            @reporter.expects(:set_current_scenario)
+            Spinach.hooks.run_before_scenario
+          end
 
-        it "binds the current scenario setter" do
-          @reporter.expects(:method).with(:current_scenario=).returns(@callback)
-          @reporter.scenario_runner.expects(:before_run).with(@callback)
-          @reporter.bind
-        end
-
-        it "binds the current feature clearer" do
-          @reporter.expects(:method).with(:clear_current_scenario).returns(@callback)
-          @reporter.scenario_runner.expects(:after_run).with(@callback)
-          @reporter.bind
-        end
-      end
-    end
-
-    describe "#clear_current_feature" do
-      it "clears the current feature" do
-        @reporter.current_feature = mock
-        @reporter.clear_current_feature
-        @reporter.current_feature.must_equal nil
-      end
-    end
-
-    describe "#clear_current_scenario" do
-      it "clears the current scenario" do
-        @reporter.current_scenario = mock
-        @reporter.clear_current_scenario
-        @reporter.current_scenario.must_equal nil
-      end
-    end
-
-    describe "runner classes" do
-      describe "#feature_runner" do
-        it "returns a runner class" do
-          @reporter.feature_runner.must_be_kind_of Class
-        end
-      end
-
-      describe "#scenario_runner" do
-        it "returns a runner class" do
-          @reporter.scenario_runner.must_be_kind_of Class
-        end
-      end
-
-      describe "#runner" do
-        it "returns a runner class" do
-          @reporter.runner.must_be_kind_of Class
-        end
-      end
-    end
-
-    describe "callback methods" do
-      %w{
-        after_run before_feature_run after_feature_run before_scenario_run
-        after_scenario_run on_successful_step on_failed_step on_error_step
-        on_undefined_step on_skipped_step
-      }.each do |callback|
-        describe "##{callback}" do
-          it "does nothing" do
-            @reporter.send(callback)
+          it "binds a callback after every scenario" do
+            @reporter.expects(:clear_current_scenario)
+            Spinach.hooks.run_after_scenario
           end
         end
       end
