@@ -1,24 +1,9 @@
 require_relative 'hookable'
 
 module Spinach
-  # The hooks class is a subscription/notification mechanism that allows you to
-  # hook into signals provided by the runner and perform certain actions on
-  # it.
-  #
-  # @example
-  #   Spinach.hooks.before_run do
-  #     # Runs before the entire spinach execution
-  #   end
-  #
-  #   Spinach.hooks.before_scenario do |scenario_data|
-  #     # Runs before every scenario and passes a hash of the parsed scenario
-  #     # data to the block as argument
-  #   end
-  #
-  #   Spinach.hooks.on_failed_step do |step_data|
-  #     # Runs before every failed stepand passes a hash of the parsed step
-  #     # data to the block as argument
-  #   end
+  # Spinach's hooks is a subscription mechanism to allow developers to define
+  # certain callbacks given several Spinach signals, like running a feature,
+  # executing a particular step and such.
   class Hooks
     include Hookable
 
@@ -143,7 +128,5 @@ module Spinach
     #     # step_data contains a hash with this step's data
     #   end
     hook :on_skipped_step
-
   end
-
 end

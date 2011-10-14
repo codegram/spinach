@@ -56,5 +56,4 @@ describe Spinach::Hookable do
       end
     end
   end
-
 end
