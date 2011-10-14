@@ -1,21 +1,9 @@
-require 'hooks'
-
 module Spinach
   class Runner
     # A Scenario Runner handles a particular scenario run.
     #
     class ScenarioRunner
       attr_reader :feature_name, :data
-
-      include Hooks
-
-      define_hook :before_run
-      define_hook :on_successful_step
-      define_hook :on_failed_step
-      define_hook :on_error_step
-      define_hook :on_undefined_step
-      define_hook :on_skipped_step
-      define_hook :after_run
 
       # @param [String] feature_name
       #   The feature name
@@ -45,31 +33,31 @@ module Spinach
       # @return [True, False]
       #   true if this scenario succeeded, false if not
       def run
-        run_hook :before_run, data
-        feature_steps.run_hook :before_scenario, data
+        Spinach.hooks.run_before_scenario data
         steps.each do |step|
-          feature_steps.run_hook :before_step, step
+          Spinach.hooks.run_before_step step
           unless @exception
             begin
               step_location = feature_steps.execute_step(step['name'])
-              run_hook :on_successful_step, step, step_location
+              Spinach.hooks.run_on_successful_step step, step_location
+            rescue Spinach::FeatureStepsNotFoundException => e
+              raise e
             rescue *Spinach.config[:failure_exceptions] => e
               @exception = e
-              run_hook :on_failed_step, step, @exception, step_location
+              Spinach.hooks.run_on_failed_step step, @exception, step_location
             rescue Spinach::StepNotDefinedException => e
               @exception = e
-              run_hook :on_undefined_step, step, @exception
+              Spinach.hooks.run_on_undefined_step step, @exception
             rescue Exception => e
               @exception = e
-              run_hook :on_error_step, step, @exception, step_location
+              Spinach.hooks.run_on_error_step step, @exception, step_location
             end
           else
-            run_hook :on_skipped_step, step
+            Spinach.hooks.run_on_skipped_step step
           end
-          feature_steps.run_hook :after_step, step
+          Spinach.hooks.run_after_step step
         end
-        feature_steps.run_hook :after_scenario, data
-        run_hook :after_run, data
+        Spinach.hooks.run_after_scenario data
         !@exception
       end
     end

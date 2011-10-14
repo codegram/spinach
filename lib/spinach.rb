@@ -1,5 +1,7 @@
 require_relative 'spinach/version'
 require_relative 'spinach/config'
+require_relative 'spinach/hookable'
+require_relative 'spinach/hooks'
 require_relative 'spinach/support'
 require_relative 'spinach/exceptions'
 require_relative 'spinach/runner'
@@ -39,6 +41,13 @@ module Spinach
   # @api semipublic
   def self.reset_feature_steps
     @@feature_steps = []
+  end
+
+  # Returns a new hook object that will receive all the messages from the run
+  # and fire up the appropiate callbacks when needed.
+  #
+  def self.hooks
+    @@hooks ||= Hooks.new
   end
 
   # Finds a feature given a feature name.

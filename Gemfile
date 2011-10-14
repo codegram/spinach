@@ -6,6 +6,7 @@ gemspec
 group :test do
   gem 'guard'
   gem 'guard-minitest'
+  gem 'guard-spinach'
 end
 
 group :darwin do

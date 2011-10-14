@@ -1,11 +1,8 @@
-require 'hooks'
-
 module Spinach
   # Runner gets the parsed data from the feature and performs the actual calls
   # to the feature classes.
   #
   class Runner
-    include Hooks
 
     # The feature files to run
     attr_reader :filenames
@@ -15,9 +12,6 @@ module Spinach
 
     # The default path where the support files are located
     attr_reader :support_path
-
-    define_hook :before_run
-    define_hook :after_run
 
     # Initializes the runner with a parsed feature
     #
@@ -62,7 +56,7 @@ module Spinach
       require_dependencies
       require_suites
 
-      run_hook :before_run
+      Spinach.hooks.run_before_run
 
       successful = true
 
@@ -71,7 +65,7 @@ module Spinach
         successful = false unless success
       end
 
-      run_hook :after_run, successful
+      Spinach.hooks.run_after_run(successful)
 
       successful
     end
