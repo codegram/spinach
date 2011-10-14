@@ -1,5 +1,6 @@
 require_relative 'spinach/version'
 require_relative 'spinach/config'
+require_relative 'spinach/hookable'
 require_relative 'spinach/hooks'
 require_relative 'spinach/support'
 require_relative 'spinach/exceptions'
