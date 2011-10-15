@@ -17,6 +17,7 @@ require 'purdytest'
 require 'stringio'
 require 'pry'
 require 'fakefs/safe'
+require 'turn'
 
 require 'spinach'
 require 'spinach/capybara'
