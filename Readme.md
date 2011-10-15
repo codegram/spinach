@@ -40,7 +40,7 @@ require 'rspec'
 
 Then, create a `features` folder in your app and write in your first feature:
 
-```
+``` gherkin
 ## features/test_how_spinach_works.feature
 
 Feature: Test how spinach works
