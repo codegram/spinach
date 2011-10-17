@@ -9,6 +9,7 @@ Rake::TestTask.new do |t|
   # t.loader = :direct
 end
 
+desc 'Run spinach features'
 task :spinach do
   exec "bundle exec spinach"
 end
