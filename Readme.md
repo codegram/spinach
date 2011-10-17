@@ -25,7 +25,7 @@ group :test do
   gem 'spinach'
   # along with gem 'minitest' or gem 'rspec'
 end
-``
+```
 
 Spinach works with your favorite test suite, you just have to tell it which
 one are you going to use in `features/support/env.rb`:
@@ -36,7 +36,7 @@ require 'minitest/spec'
 
 # If you want to use rspec:
 require 'rspec'
-``
+```
 
 Now create a `features` folder in your app or library and write your first
 feature:
@@ -60,7 +60,7 @@ Feature: Test how spinach works
     And I append only my first name to it
     When I pass it to my super-duper method
     Then the output should contain a casual greeting
-``
+```
 
 Now for the steps file. Remember that in Spinach steps are just Ruby classes,
 following a camelcase naming convention. Spinach generator will do some
@@ -92,7 +92,7 @@ class TestHowSpinachWorks < Spinach::FeatureSteps
   Then 'the output should contain a casual greeting' do
   end
 end
-``
+```
 
 Then, you can fill it in with your logic - remember, it's just a class, you can
 use private methods, mix in modules or whatever!
@@ -137,7 +137,7 @@ class TestHowSpinachWorks < Spinach::FeatureSteps
     out.string
   end
 end
-``
+```
 
 Then run your feature again running `spinach` and watch it all turn green! :)
 
