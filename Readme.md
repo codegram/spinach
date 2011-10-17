@@ -1,44 +1,45 @@
-# About Spinach
-Spinach is a BDD framework for ruby on top of gherkin. Its main goals are:
+# Spinach - BDD framework on top of Gherkin [![Build Status](https://secure.travis-ci.org/codegram/spinach.png)](http://travis-ci.org/codegram/spinach)
 
-* *Step reusability*: All the steps of a feature live in a common class space.
-* *Step maintainability*: Since feature steps are just classes, you can use the
-  good practices you already know about ruby.
-* *Easy to use and to understand*: Spinach's codebase is well-written and
-  well-documented - there's no magic involved.
+Spinach is a high-level BDD framework that leverages the expressive
+[Gherkin language][gherkin] (used by [Cucumber][cucumber]) to help you define
+executable specifications of your application or library's acceptance criteria.
 
-# Compatibility
+Conceived as an alternative to Cucumber, here are some of its design goals:
 
-Spinach is tested against MRI 1.9.2-1.9.3. We're working to make it compatible
-with as many implementations as possible. Rubinius 2.0 support is in the way.
+* Step maintanability: since features map to their own classes, their steps are
+  just methods of that class. This encourages step encapsulation.
 
-We're not planning to make it compatible with 1.8.7 since, you know, this would
-be irresponsible :).
+* Step reusability: In case you want to reuse steps across features, you can
+  always wrap those in plain ol' Ruby modules.
 
-# Getting started
+Spinach is tested against MRI 1.9.2, 1.9.3, and Rubinius 2.0. We are not
+planning to make it compatible with MRI 1.8.7 since, you know, this would be
+irresponsible :)
 
-Just add spinach in your Gemfile:
+## Getting started
+
+Start by adding spinach to your Gemfile:
 
 ``` ruby
 group :test do
   gem 'spinach'
-  gem 'minitest'  # If you wanna use minitest
-  gem 'rspec'     # If you wanna use rspec
+  # along with gem 'minitest' or gem 'rspec'
 end
-```
+``
 
-It's your shoice what underlying suite to use, so you will have to fill in a
-little environment in `features/support/env.rb`:
+Spinach works with your favorite test suite, you just have to tell it which
+one are you going to use in `features/support/env.rb`:
 
 ``` ruby
-# If you wanna use minitest:
+# If you want to use minitest:
 require 'minitest/spec'
 
-#If you wanna use rspec
+# If you want to use rspec:
 require 'rspec'
-```
+``
 
-Then, create a `features` folder in your app and write in your first feature:
+Now create a `features` folder in your app or library and write your first
+feature:
 
 ``` gherkin
 ## features/test_how_spinach_works.feature
@@ -48,23 +49,29 @@ Feature: Test how spinach works
   As a developer
   I want it to behave in an expected way
 
-  Scenario: Formal salutation
+  Scenario: Formal greeting
     Given I have an empty array
     And I append my first name and my last name to it
     When I pass it to my super-duper method
-    Then the output should contain a formal salutation
+    Then the output should contain a formal greeting
 
-  Scenario: Informal salutacion
+  Scenario: Informal greeting
     Given I have an empty array
     And I append only my first name to it
     When I pass it to my super-duper method
-    Then the output should contain a casual salutation
-```
+    Then the output should contain a casual greeting
+``
 
-Just run `spinach --generate` and it will create a corresponding
-`features/steps/test_how_spinach_works.rb` that looks like the following:
+Now for the steps file. Remember that in Spinach steps are just Ruby classes,
+following a camelcase naming convention. Spinach generator will do some
+scaffolding for you:
+
+    $ spinach --generate
+
+Spinach will detect your features and generate the following class:
 
 ``` ruby
+## features/steps/test_how_spinach_works.rb
 
 class TestHowSpinachWorks < Spinach::FeatureSteps
   Given 'I have an empty array' do
@@ -76,22 +83,21 @@ class TestHowSpinachWorks < Spinach::FeatureSteps
   When 'I pass it to my super-duper method' do
   end
 
-  Then 'the output should contain a formal salutation' do
+  Then 'the output should contain a formal greeting' do
   end
 
   And 'I append only my first name to it' do
   end
 
-  Then 'the output should contain a casual salutation' do
+  Then 'the output should contain a casual greeting' do
   end
 end
-```
+``
 
 Then, you can fill it in with your logic - remember, it's just a class, you can
 use private methods, mix in modules or whatever!
 
 ``` ruby
-
 class TestHowSpinachWorks < Spinach::FeatureSteps
   Given 'I have an empty array' do
     @array = Array.new
@@ -103,7 +109,7 @@ class TestHowSpinachWorks < Spinach::FeatureSteps
 
   When 'I pass it to my super-duper method' do
     @output = capture_output do
-      SalutationMachine.salutate(@array)
+      Greeter.greet(@array)
     end
   end
 
@@ -131,14 +137,24 @@ class TestHowSpinachWorks < Spinach::FeatureSteps
     out.string
   end
 end
+``
 
-```
+Then run your feature again running `spinach` and watch it all turn green! :)
 
-Then run your feature again using `spinach` and watch it all turn green! :)
+## Contributing
 
-# Documentation
-[Spinach documentation at rubydoc.info](http://rubydoc.info/github/codegram/spinach/master/frames)
+You can easily contribute to Spinach. Its codebase is simple and
+[extensively documented][documentation].
 
+* Fork the project.
+* Make your feature addition or bug fix.
+* Add specs for it. This is important so we don't break it in a future
+  version unintentionally.
+* Commit, do not mess with rakefile, version, or history.
+  If you want to have your own version, that is fine but bump version
+  in a commit by itself I can ignore when I pull.
+* Send me a pull request. Bonus points for topic branches.
 
-# Build status
-[![Build Status](https://secure.travis-ci.org/codegram/spinach.png)](http://travis-ci.org/codegram/spinach)
+[gherkin]: http://github.com/cucumber/gherkin
+[cucumber]: http://github.com/cucumber/cucumber
+[documentation]: http://rubydoc.info/github/codegram/spinach/master/frames
