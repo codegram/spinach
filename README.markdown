@@ -157,6 +157,10 @@ Full hook documentation is here:
 [Spinach's hook documentation on rubydoc](http://rubydoc.info/github/codegram/spinach/master/Spinach/Hooks)
 
 
+## Wanna use it with Rails?
+
+Use [spinach-rails](http://github.com/codegram/spinach-rails)
+
 ## Contributing
 
 You can easily contribute to Spinach. Its codebase is simple and
