@@ -140,17 +140,17 @@ after any feature, scenario or step execution.
 
 So, for example, you could:
 
-  Spinach.before_scenario do |data|
-    clear_database
-  end
+    Spinach.before_scenario do |data|
+      clear_database
+    end
 
-  Spinach.on_successful_step do |step_data, location|
-    count_steps(step_data)
-  end
+    Spinach.on_successful_step do |step_data, location|
+      count_steps(step_data)
+    end
 
-  Spinach.after_run do |status|
-    send_mail if status == 0
-  end
+    Spinach.after_run do |status|
+      send_mail if status == 0
+    end
 
 Full hook documentation is here:
 
