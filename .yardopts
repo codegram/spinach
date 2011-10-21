@@ -1,6 +1,0 @@
---title "Spinach"
---no-private
--m markdown
--r Readme.md
-lib/**/*.rb
-Readme.md
