@@ -133,6 +133,30 @@ use private methods, mix in modules or whatever!
 
 Then run your feature again running `spinach` and watch it all turn green! :)
 
+## Hook architecture
+
+Spinach provides several hooks to allow you performing certain steps before or
+after any feature, scenario or step execution.
+
+So, for example, you could:
+
+  Spinach.before_scenario do |data|
+    clear_database
+  end
+
+  Spinach.on_successful_step do |step_data, location|
+    count_steps(step_data)
+  end
+
+  Spinach.after_run do |status|
+    send_mail if status == 0
+  end
+
+Full hook documentation is here:
+
+[Spinach's hook documentation on rubydoc](http://rubydoc.info/github/codegram/spinach/master/Spinach/Hooks)
+
+
 ## Contributing
 
 You can easily contribute to Spinach. Its codebase is simple and
