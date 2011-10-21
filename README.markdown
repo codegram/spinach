@@ -174,3 +174,7 @@ You can easily contribute to Spinach. Its codebase is simple and
 [gherkin]: http://github.com/cucumber/gherkin
 [cucumber]: http://github.com/cucumber/cucumber
 [documentation]: http://rubydoc.info/github/codegram/spinach/master/frames
+
+## License
+
+MIT License. Copyright 2011 [Codegram Technologies](http://codegram.com)
