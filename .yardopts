@@ -3,3 +3,4 @@
 -m markdown
 -r Readme.md
 lib/**/*.rb
+Readme.md
