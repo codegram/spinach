@@ -153,9 +153,13 @@ Full hook documentation is here:
 [Spinach's hook documentation on rubydoc](http://rubydoc.info/github/codegram/spinach/master/Spinach/Hooks)
 
 
-## Wanna use it with Rails?
+## Wanna use it with Rails 3?
 
 Use [spinach-rails](http://github.com/codegram/spinach-rails)
+
+## Other rack-based frameworks
+
+Check out our [spinach-sinatra demo](https://github.com/codegram/spinach-sinatra-demo)
 
 ## Contributing
 
