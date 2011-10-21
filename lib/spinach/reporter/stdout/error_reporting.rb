@@ -69,7 +69,7 @@ module Spinach
         #   The format to output the error. Currently supproted formats are
         #   :summarized (default) and :full
         #
-        # @returns [String]
+        # @return [String]
         #  The error report
         #
         def report_error(error, format=:summarized)
@@ -88,7 +88,7 @@ module Spinach
         # @param [Array] error
         #  An array containing the feature, scenario, step and exception
         #
-        # @returns [String]
+        # @return [String]
         #  The summarized error report
         #
         def summarized_error(error)
@@ -106,7 +106,7 @@ module Spinach
         # @param [Array] error
         #  An array containing the feature, scenario, step and exception
         #
-        # @returns [String]
+        # @return [String]
         #  The coplete error report
         #
         def full_error(error)
@@ -142,7 +142,7 @@ module Spinach
         # @param [Exception] exception
         #   The exception to report
         #
-        # @returns [String]
+        # @return [String]
         #  The exception report
         #
         def report_exception(exception)
