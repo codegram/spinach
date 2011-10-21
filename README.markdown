@@ -27,13 +27,9 @@ Start by adding spinach to your Gemfile:
       # along with gem 'minitest' or gem 'rspec'
     end
 
-Spinach works with your favorite test suite, you just have to tell it which
-one are you going to use in `features/support/env.rb`:
+Spinach works out-of-the-box with your favorite test suite, but you can also
+use it with RSpec as well if you put the following in `features/support/env.rb`:
 
-    # If you want to use minitest:
-    require 'minitest/spec'
-
-    # If you want to use rspec:
     require 'rspec'
 
 Now create a `features` folder in your app or library and write your first
