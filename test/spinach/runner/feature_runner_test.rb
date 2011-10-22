@@ -45,6 +45,7 @@ describe Spinach::Runner::FeatureRunner do
     end
 
     it 'calls the steps as expected' do
+      Spinach.expects(:find_feature_steps).returns(true)
       seq = sequence('feature')
       3.times do
         Spinach::Runner::ScenarioRunner.
@@ -56,18 +57,21 @@ describe Spinach::Runner::FeatureRunner do
     end
 
     it 'returns true if the execution succeeds' do
+      Spinach.expects(:find_feature_steps).returns(true)
       Spinach::Runner::ScenarioRunner.any_instance.
         expects(run: true).times(3)
       subject.run.must_equal true
     end
 
     it 'returns false if the execution fails' do
+      Spinach.expects(:find_feature_steps).returns(true)
       Spinach::Runner::ScenarioRunner.any_instance.
         expects(run: false).times(3)
       subject.run.must_equal false
     end
 
     it 'calls only the given scenario' do
+      Spinach.expects(:find_feature_steps).returns(true)
       @filename = 'feature/a_cool_feature.feature:12'
       @feature = Spinach::Runner::FeatureRunner.new(@filename)
       @feature.stubs(data: {
@@ -82,16 +86,15 @@ describe Spinach::Runner::FeatureRunner do
     end
 
     it "fires a hook if the feature is not defined" do
-      data = mock
-      exception = Spinach::FeatureStepsNotFoundException.new([anything, anything])
-      subject.stubs(:scenarios).raises(exception)
+      data = stub_everything
+      Spinach.expects(:find_feature_steps).returns(false)
       subject.stubs(:data).returns(data)
       not_found_called = false
-      Spinach.hooks.on_undefined_feature do |data, exception|
-        not_found_called = [data, exception]
+      Spinach.hooks.on_undefined_feature do |data|
+        not_found_called = data
       end
       subject.run
-      not_found_called.must_equal [data, exception]
+      not_found_called.must_equal data
     end
   end
 end

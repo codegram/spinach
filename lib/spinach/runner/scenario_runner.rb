@@ -40,8 +40,6 @@ module Spinach
             begin
               step_location = feature_steps.execute_step(step['name'])
               Spinach.hooks.run_on_successful_step step, step_location
-            rescue Spinach::FeatureStepsNotFoundException => e
-              raise e
             rescue *Spinach.config[:failure_exceptions] => e
               @exception = e
               Spinach.hooks.run_on_failed_step step, @exception, step_location
