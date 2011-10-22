@@ -24,6 +24,7 @@ module Spinach
       def self.included(base)
         base.class_eval do
           include ::Capybara::DSL
+          include ::Capybara::RSpecMatchers if defined?(RSpec)
         end
         Spinach.hooks.before_scenario do
           ::Capybara.current_session.reset! if ::Capybara.app
