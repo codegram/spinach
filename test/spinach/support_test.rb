@@ -59,8 +59,8 @@ describe Spinach::Support do
   describe "#escape" do
     it "escapes the name" do
       Spinach::Support.escape_single_commas(
-        "I've been doing bad things"
-      ).must_include "I\\'ve been doing bad things"
+        "I've been doing things I shouldn't be doing"
+      ).must_include "I\\'ve been doing things I shouldn\\'t be doing"
     end
   end
 end
