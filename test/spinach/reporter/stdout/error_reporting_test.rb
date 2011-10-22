@@ -208,33 +208,48 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#full_error' do
-    before do
-      @reporter.expects(:report_exception).with(exception).returns('Exception backtrace')
-    end
+    describe "when dealing with general errors" do
+      before do
+        @reporter.expects(:report_exception).with(exception).returns('Exception backtrace')
+      end
 
-    it 'returns the exception data' do
-      exception.expects(:backtrace).returns(['first backtrace line'])
-      output = @reporter.full_error(error)
+      it 'returns the exception data' do
+        exception.expects(:backtrace).returns(['first backtrace line'])
+        output = @reporter.full_error(error)
 
-      output.must_include 'Exception backtrace'
-    end
+        output.must_include 'Exception backtrace'
+      end
 
-    it 'returns the first backtrace line' do
-      exception.expects(:backtrace).returns(['first backtrace line'])
-      output = @reporter.full_error(error)
-
-      output.must_include 'first backtrace line'
-    end
-
-    describe 'when the user wants to print the full backtrace' do
-      it 'prints the full backtrace' do
-        @reporter.stubs(:options).returns({backtrace: true})
-        exception.expects(:backtrace).returns(['first backtrace line', 'second backtrace line'])
-
+      it 'returns the first backtrace line' do
+        exception.expects(:backtrace).returns(['first backtrace line'])
         output = @reporter.full_error(error)
 
         output.must_include 'first backtrace line'
-        output.must_include 'second backtrace line'
+      end
+
+      describe 'when the user wants to print the full backtrace' do
+        it 'prints the full backtrace' do
+          @reporter.stubs(:options).returns({backtrace: true})
+          exception.expects(:backtrace).returns(['first backtrace line', 'second backtrace line'])
+
+          output = @reporter.full_error(error)
+
+          output.must_include 'first backtrace line'
+          output.must_include 'second backtrace line'
+        end
+      end
+    end
+
+    describe "when it's a step not defined exception" do
+      it "returns a suggestion" do
+        @exception = Spinach::StepNotDefinedException.new("foo")
+        @error = [{'name' => 'My feature'},
+          {'name' => 'A scenario'},
+          {'keyword' => 'Given', 'name' => 'foo'},
+          @exception]
+        output = @reporter.full_error(@error)
+        output.must_include "Given"
+        output.must_include "foo"
       end
     end
   end

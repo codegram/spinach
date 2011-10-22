@@ -64,6 +64,6 @@ module Spinach
     feature_steps.detect do |feature|
       feature.feature_name.to_s == name.to_s ||
       feature.name == klass
-    end || raise(Spinach::FeatureStepsNotFoundException, [klass, name])
+    end
   end
 end

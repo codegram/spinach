@@ -171,16 +171,12 @@ describe Spinach::Reporter::Stdout do
         'name' => 'This feature does not exist'
       }
       Spinach.config.stubs(:step_definitions_path).returns('my/path')
-      exception = stub(
-        message: "This is a \nmultiple line error message",
-        missing_class: "ThisFeatureDoesNotExist"
-      )
-      @reporter.on_feature_not_found(@feature, exception)
+      @reporter.on_feature_not_found(@feature)
     end
     it "outputs a message" do
+      @out.string.must_include "This feature does not exist"
       @out.string.must_include "this_feature_does_not_exist.rb"
-      @out.string.must_include "This is a"
-      @out.string.must_include "multiple line error message"
+      @out.string.must_include "ThisFeatureDoesNotExist"
       @reporter.undefined_features.must_include @feature
     end
 

@@ -6,7 +6,7 @@ describe Spinach do
     @feature_steps2 = OpenStruct.new(feature_name: 'Slip management')
     @feature_steps3 = OpenStruct.new(feature_name: 'File attachments')
     @feature_steps4 = OpenStruct.new(name: 'UserSendsAMessage')
-    [@feature_steps1, @feature_steps2, 
+    [@feature_steps1, @feature_steps2,
       @feature_steps3, @feature_steps4].each do |feature|
       Spinach.feature_steps << feature
     end
@@ -41,10 +41,8 @@ describe Spinach do
         Spinach.find_feature_steps('User sends a message').must_equal @feature_steps4
       end
 
-      it 'raises when it cannot find the class' do
-        exception = proc {
-          Spinach.find_feature_steps('This feature does not exist')
-        }.must_raise Spinach::FeatureStepsNotFoundException
+      it 'returns nil when it cannot find the class' do
+        Spinach.find_feature_steps('This feature does not exist').must_equal nil
       end
     end
   end

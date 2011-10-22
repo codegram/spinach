@@ -50,6 +50,7 @@ describe Spinach::Runner::ScenarioRunner do
 
     describe 'when throwing exceptions' do
       it 'rescues a MiniTest::Assertion' do
+        Spinach.config[:failure_exceptions] << MiniTest::Assertion
         feature_steps.expects(:execute_step).raises(MiniTest::Assertion)
         Spinach.hooks.expects("run_before_scenario").with(has_value("A cool scenario"))
         Spinach.hooks.expects("run_after_scenario").with(has_value("A cool scenario"))
