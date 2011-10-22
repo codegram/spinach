@@ -15,6 +15,7 @@ describe Spinach::FeatureSteps::Capybara do
 
     @feature = Class.new(Spinach::FeatureSteps) do
       include Spinach::FeatureSteps::Capybara
+      feature 'A test feature'
       Given 'Hello' do
       end
       Then 'Goodbye' do

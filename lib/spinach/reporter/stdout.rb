@@ -125,10 +125,9 @@ module Spinach
       # @param [Spinach::FeatureNotFoundException] exception
       #   the related exception
       #
-      def on_feature_not_found(feature, exception)
-        lines = "#{exception.message}\n"
-
+      def on_feature_not_found(feature)
         generator = Generators::FeatureGenerator.new(feature)
+        lines = "Could not find steps for `#{feature['name']}` feature\n\n"
         lines << "\nPlease create the file #{generator.filename} at #{generator.path}, with:\n\n"
 
         lines << generator.generate

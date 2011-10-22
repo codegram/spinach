@@ -53,20 +53,19 @@ module Spinach
       # @api public
       def run
         Spinach.hooks.run_before_feature data
-
-        scenarios.each do |scenario|
-          if !@scenario_line || scenario['line'].to_s == @scenario_line
-            success = ScenarioRunner.new(feature_name, scenario).run
-            @failed = true unless success
+        if Spinach.find_feature_steps(feature_name)
+          scenarios.each do |scenario|
+            if !@scenario_line || scenario['line'].to_s == @scenario_line
+              success = ScenarioRunner.new(feature_name, scenario).run
+              @failed = true unless success
+            end
           end
+        else
+          Spinach.hooks.run_on_undefined_feature data
+          @failed = true
         end
-
-      rescue Spinach::FeatureStepsNotFoundException => e
-        Spinach.hooks.run_on_undefined_feature data, e
-        @failed = true
-      ensure
         Spinach.hooks.run_after_feature data
-        return !@failed
+        !@failed
       end
     end
   end
