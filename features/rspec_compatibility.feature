@@ -7,3 +7,8 @@ Feature: RSpec compatibility
     Given I have a feature with some failed expectations
     When I run "spinach" with rspec
     Then I should see the failure count along with their messages
+
+  Scenario: RSpec with capybara
+    Given I have a sinatra app with some capybara-based expectations
+    When I run "spinach" with rspec
+    Then there should be no error

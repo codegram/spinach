@@ -25,13 +25,56 @@ class RSpecCompatibility < Spinach::FeatureSteps
                     # joking!
                   end
                 end')
+    @feature = 'feature_with_failures'
   end
 
   When "I run \"spinach\" with rspec" do
-    run_feature 'features/feature_with_failures.feature', suite: :rspec
+    @feature =
+    run_feature "features/#{@feature}.feature", suite: :rspec
   end
 
   Then "I should see the failure count along with their messages" do
     check_error_messages(1)
   end
+
+  Given  'I have a sinatra app with some capybara-based expectations' do
+    write_file("features/support/app.rb", '
+      require "sinatra"
+      require "spinach/capybara"
+      app = Sinatra::Application.new do
+        get "/" do
+          \'Hello world!\'
+        end
+      end
+      Capybara.app = app
+    ')
+
+    write_file('features/greeting.feature',
+               'Feature: Greeting
+
+                Scenario: Greeting
+                  Given I am on the front page
+                  Then I should see hello world
+               ')
+
+    write_file('features/steps/greeting.rb',
+               'require "spinach/capybara"
+                class Greeting < Spinach::FeatureSteps
+                  include Spinach::FeatureSteps::Capybara
+
+                  Given "I am on the front page" do
+                    visit "/"
+                  end
+
+                  Then "I should see hello world" do
+                    page.should have_content("Hello world")
+                  end
+                end')
+    @feature = 'greeting'
+  end
+
+  Given  'There should be no error' do
+    last_exit_status.must_equal 0
+  end
+
 end

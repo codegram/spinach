@@ -7,6 +7,11 @@ module Integration
     def self.included(base)
       Spinach.hooks.before_scenario do
         @aruba_timeout_seconds = 6
+        if respond_to?(:in_current_dir)
+          in_current_dir do
+            run "rm -fR rails_app"
+          end
+        end
       end
     end
 
