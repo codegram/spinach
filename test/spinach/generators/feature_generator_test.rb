@@ -75,6 +75,9 @@ module Spinach::Generators
         klass = eval(result)
         feature_runner = Spinach::Runner::FeatureRunner.new(stub_everything)
         feature_runner.stubs(data: data)
+        error_count = 0
+        CheezburgerCanIHas.any_instance.
+          expects(:raise).with("step not implemented").times(6).returns(nil)
         feature_runner.run.must_equal true
       end
     end

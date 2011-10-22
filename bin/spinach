@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+require "bundler/setup" rescue nil
 
 begin
   require 'spinach'

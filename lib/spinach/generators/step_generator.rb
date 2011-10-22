@@ -15,6 +15,7 @@ module Spinach
     def generate
       result = StringIO.new
       result.puts "#{@data['keyword']} '#{Spinach::Support.escape_single_commas @data['name']}' do"
+      result.puts "  raise 'step not implemented'"
       result.puts "end"
       result.string
     end
