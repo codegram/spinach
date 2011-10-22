@@ -27,7 +27,7 @@ module Spinach
           if defined?(RSpec)
             require 'rspec/matchers'
             require 'capybara/rspec'
-            include ::Capybara::RSpecMatchers if defined?(RSpec)
+            include ::Capybara::RSpecMatchers
           end
         end
         Spinach.hooks.before_scenario do
