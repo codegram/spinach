@@ -53,7 +53,7 @@ module Spinach
     #   # => "I\'ve been bad"
     #
     def self.escape_single_commas(text)
-      text.sub("'", "\\\\'")
+      text.gsub("'", "\\\\'")
     end
   end
 end
