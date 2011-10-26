@@ -136,15 +136,15 @@ after any feature, scenario or step execution.
 
 So, for example, you could:
 
-    Spinach.before_scenario do |data|
+    Spinach.hooks.before_scenario do |data|
       clear_database
     end
 
-    Spinach.on_successful_step do |step_data, location|
+    Spinach.hooks.on_successful_step do |step_data, location|
       count_steps(step_data)
     end
 
-    Spinach.after_run do |status|
+    Spinach.hooks.after_run do |status|
       send_mail if status == 0
     end
 
