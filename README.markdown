@@ -24,7 +24,7 @@ Start by adding spinach to your Gemfile:
 
     group :test do
       gem 'spinach'
-      # along with gem 'minitest' or gem 'rspec'
+      # gem 'rspec'
     end
 
 Spinach works out-of-the-box with your favorite test suite, but you can also
