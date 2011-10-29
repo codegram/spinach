@@ -128,5 +128,24 @@ module Spinach
     #     # step_data contains a hash with this step's data
     #   end
     hook :on_skipped_step
+
+    # Runs before running a scenario with a particular tag
+    #
+    # @param [String] tag
+    #   the tag to match
+    #
+    # @example
+    #   Spinach.hooks.on_tag('javascript') do
+    #     # change capybara driver
+    #   end
+    def on_tag(tag)
+      before_scenario do |data|
+        next unless data["tags"]
+        tags = data["tags"].map{ |tag| tag["name"] }
+        if tags.include? tag.to_s
+          yield(data)
+        end
+      end
+    end
   end
 end
