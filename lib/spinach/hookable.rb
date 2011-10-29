@@ -21,12 +21,25 @@ module Spinach
       # @example
       #   class
       def hook(hook)
-        define_method hook do |&block|
-          add_hook(hook, &block)
+        define_method hook, ->(options = nil, &block) do
+          add_hook(hook, options, &block)
         end
         define_method "run_#{hook}" do |*args|
           run_hook(hook, *args)
         end
+      end
+
+      #@param [Hash] data
+      #  The data of which the tags will be tested
+      #@return [Boolean]
+      #  If the data passes the filter or not
+      #
+      def filter_by_tags data, options
+        d = data["tags"] rescue nil
+        if d && f=[options[:tags]].flatten
+          return (d.map{|e| e["name"]} & f).any?
+        end
+        true
       end
     end
 
@@ -51,8 +64,12 @@ module Spinach
       #   the hook's name
       #
       def run_hook(name, *args)
-        if callbacks = hooks[name.to_sym]
-          callbacks.each{ |c| c.call(*args) }
+        if hooks_for_name = hooks[name.to_sym]
+          hooks_for_name.each do |h|
+            if self.class.filter_by_tags args.last, h[:options]
+              h[:callback].call(*args) 
+            end
+          end
         end
       end
 
@@ -72,9 +89,9 @@ module Spinach
       #
       # @param [Proc] block
       #   an action to perform once that hook is executed
-      def add_hook(name, &block)
+      def add_hook(name, options = nil, &block)
         hooks[name.to_sym] ||= []
-        hooks[name.to_sym] << block
+        hooks[name.to_sym] << {:options => options || {}, :callback => block}
       end
     end
   end

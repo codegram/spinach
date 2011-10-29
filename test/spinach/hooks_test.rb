@@ -52,4 +52,32 @@ describe Spinach::Hooks do
       end
     end
   end
+
+  describe "hooks with tag filters" do
+    before do
+      feature_data = {
+        'name' => 'My ridiculously awesome feature',
+        'elements' => [
+          {"name" => "scenario", "steps" => ["",""]}
+        ],
+        "tags" => [{"name" => "@cool", "line" => 1}]
+      }
+      @feature = Spinach::Runner::FeatureRunner.new("my_feature")
+      @feature.stubs(:data).returns(feature_data)
+      @@flag = 0
+    end
+
+    it "if any tag filter is set only executes those that match it" do
+      Spinach.hooks.before_feature :tags => "@cool" do |data|
+        @@flag = 1
+      end
+      Spinach.hooks.before_feature :tags => ["@lame","@so_so"] do |data|
+        @@flag = 2
+      end
+
+      @@flag.must_equal 0
+      @feature.run
+      @@flag.must_equal 1
+    end
+  end
 end
