@@ -73,7 +73,7 @@ describe Spinach::Runner do
     it 'requires environment files first' do
       runner.stubs(:step_definition_path).returns('steps')
       runner.stubs(:support_path).returns('support')
-      runner.stubs(:support_files).returns(['/support/bar.rb', '/support/env.rb', '/support/quz.rb'])
+      Dir.stubs(:glob).returns(['/support/bar.rb', '/support/env.rb', '/support/quz.rb'])
       runner.stubs(:step_definition_files).returns(['/steps/bar.feature'])
       runner.required_files.must_equal(['/support/env.rb', '/support/bar.rb', '/support/quz.rb', '/steps/bar.feature'])
     end

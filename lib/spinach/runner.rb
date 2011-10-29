@@ -96,30 +96,21 @@ module Spinach
       )
     end
 
+    # Returns an array of support files inside the support_path. Will
+    # put "env.rb" in the beginning
+    #
     # @return [Array<String>] files
     #   The support files.
     #
     # @api public
     def support_files
-      Dir.glob(
+      support_files = Dir.glob(
         File.expand_path File.join(support_path, '**', '*.rb')
       )
-    end
-
-    # @return [Array<String>] files
-    #   The environment support file env.rb.
-    #
-    # @api public
-    def environment_file
-      support_files.select {|f| f =~ %r{#{File::SEPARATOR}#{support_path}#{File::SEPARATOR}env.rb} }
-    end
-
-    # @return [Array<String>] files
-    #   The support files excluding env.rb
-    #
-    # @api public
-    def support_files_minus_env
-      support_files - environment_file
+      environment_file = support_files.find do |f|
+        f.include?(File.join support_path, 'env.rb')
+      end
+      support_files.unshift(environment_file).compact.uniq
     end
 
     # @return [Array<String>] files
@@ -128,9 +119,8 @@ module Spinach
     #
     # @api public
     def required_files
-      environment_file + support_files_minus_env + step_definition_files
+      support_files + step_definition_files
     end
-
   end
 end
 
