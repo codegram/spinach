@@ -29,9 +29,10 @@ describe Spinach::Hooks do
     describe "#on_tag" do
       let(:data) do
         {
-          'tags' => [{'name' => 'javascript'}, {'name' => 'capture'}]
+          'tags' => [{'name' => '@javascript'}, {'name' => '@capture'}]
         }
       end
+
       it "calls the block if the scenario includes the tag" do
         assertion = false
         subject.on_tag('javascript') do

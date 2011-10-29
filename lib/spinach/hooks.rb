@@ -141,7 +141,7 @@ module Spinach
     def on_tag(tag)
       before_scenario do |data|
         next unless data["tags"]
-        tags = data["tags"].map{ |tag| tag["name"] }
+        tags = data["tags"].map{ |tag| tag["name"].gsub(/^@/, "") }
         yield(data) if tags.include? tag.to_s
       end
     end
