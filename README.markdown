@@ -182,6 +182,8 @@ Check out our [spinach-sinatra demo](https://github.com/codegram/spinach-sinatra
 
 ## Contributing
 
+* [List of spinach contributors](https://github.com/codegram/spinach/contributors)
+
 You can easily contribute to Spinach. Its codebase is simple and
 [extensively documented][documentation].
 
