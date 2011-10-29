@@ -161,6 +161,25 @@ Use [spinach-rails](http://github.com/codegram/spinach-rails)
 
 Check out our [spinach-sinatra demo](https://github.com/codegram/spinach-sinatra-demo)
 
+## Resources
+
+* [Landing page](http://codegram.github.com/spinach)
+* [Slides](http://codegram.github.com/spinach-presentation)
+* [Blog post](http://blog.codegram.com/2011/10/how-to-achieve-more-clean-encapsulated-modular-step-definitions-with-spinach)
+* [API Documentation](http://blog.codegram.com/2011/10/how-to-achieve-more-clean-encapsulated-modular-step-definitions-with-spinach)
+* [Google group](http://blog.codegram.com/2011/10/how-to-achieve-more-clean-encapsulated-modular-step-definitions-with-spinach)
+
+### Related gems
+
+* [guard-spinach](http://github.com/codegram/guard-spinach)
+* [spinach-rails](http://github.com/codegram/spinach-rails)
+
+### Demos
+
+* [spinach rails demo](https://github.com/codegram/spinach-rails-demo)
+* [spinach sinatra demo](https://github.com/codegram/spinach-sinatra-demo)
+
+
 ## Contributing
 
 You can easily contribute to Spinach. Its codebase is simple and
