@@ -166,8 +166,8 @@ Check out our [spinach-sinatra demo](https://github.com/codegram/spinach-sinatra
 * [Landing page](http://codegram.github.com/spinach)
 * [Slides](http://codegram.github.com/spinach-presentation)
 * [Blog post](http://blog.codegram.com/2011/10/how-to-achieve-more-clean-encapsulated-modular-step-definitions-with-spinach)
-* [API Documentation](http://blog.codegram.com/2011/10/how-to-achieve-more-clean-encapsulated-modular-step-definitions-with-spinach)
-* [Google group](http://blog.codegram.com/2011/10/how-to-achieve-more-clean-encapsulated-modular-step-definitions-with-spinach)
+* [API Documentation](http://rubydoc.info/github/codegram/spinach/master/frames)
+* [Google group](https://groups.google.com/forum/#!forum/spinach_bdd)
 
 ### Related gems
 
