@@ -56,15 +56,27 @@ describe Spinach::Runner do
       runner.run
     end
   end
+
   describe '#require_dependencies' do
     it 'requires support files and step definitions' do
       runner.stubs(
-        support_files: ['a', 'b'], step_definition_files: ['c', 'd']
+        required_files: ['a', 'b']
       )
-      %w{a b c d}.each do |file|
+      %w{a b}.each do |file|
         runner.expects(:require).with(file)
       end
       runner.require_dependencies
     end
   end
+
+  describe '#required_files' do
+    it 'requires environment files first' do
+      runner.stubs(:step_definition_path).returns('steps')
+      runner.stubs(:support_path).returns('support')
+      Dir.stubs(:glob).returns(['/support/bar.rb', '/support/env.rb', '/support/quz.rb'])
+      runner.stubs(:step_definition_files).returns(['/steps/bar.feature'])
+      runner.required_files.must_equal(['/support/env.rb', '/support/bar.rb', '/support/quz.rb', '/steps/bar.feature'])
+    end
+  end
+
 end

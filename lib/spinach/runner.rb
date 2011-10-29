@@ -70,11 +70,12 @@ module Spinach
       successful
     end
 
-    # Loads step definitions and support files.
+    # Loads support files and step definitions, ensuring that env.rb is loaded
+    # first.
     #
     # @api public
     def require_dependencies
-      (support_files + step_definition_files).each do |file|
+      required_files.each do |file|
         require file
       end
     end
@@ -95,14 +96,30 @@ module Spinach
       )
     end
 
+    # Returns an array of support files inside the support_path. Will
+    # put "env.rb" in the beginning
+    #
     # @return [Array<String>] files
     #   The support files.
     #
     # @api public
     def support_files
-      Dir.glob(
+      support_files = Dir.glob(
         File.expand_path File.join(support_path, '**', '*.rb')
       )
+      environment_file = support_files.find do |f|
+        f.include?(File.join support_path, 'env.rb')
+      end
+      support_files.unshift(environment_file).compact.uniq
+    end
+
+    # @return [Array<String>] files
+    #   All support files with env.rb ordered first, followed by the step
+    #   definitions.
+    #
+    # @api public
+    def required_files
+      support_files + step_definition_files
     end
   end
 end
