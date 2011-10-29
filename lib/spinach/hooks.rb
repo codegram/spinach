@@ -142,9 +142,7 @@ module Spinach
       before_scenario do |data|
         next unless data["tags"]
         tags = data["tags"].map{ |tag| tag["name"] }
-        if tags.include? tag.to_s
-          yield(data)
-        end
+        yield(data) if tags.include? tag.to_s
       end
     end
   end
