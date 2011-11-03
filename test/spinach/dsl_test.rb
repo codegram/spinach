@@ -18,15 +18,6 @@ describe Spinach::DSL do
         @feature.new.execute_step('I say goodbye')
         step_executed.must_equal true
       end
-
-      it 'returns step source location' do
-        @feature.When('I say goodbye') do
-          'You say hello'
-        end
-
-        @feature.new.execute_step('I say goodbye').first.must_include '/dsl_test.rb'
-        @feature.new.execute_step('I say goodbye').last.must_be_kind_of Fixnum
-      end
     end
 
     describe '#When, #Then, #And, #But' do
@@ -48,6 +39,17 @@ describe Spinach::DSL do
       it "responds with a feature's name" do
         @feature.feature("A cool feature")
         @feature.new.name.must_equal "A cool feature"
+      end
+    end
+
+    describe '#get_step_location' do
+      it 'returns step source location' do
+        @feature.When('I say goodbye') do
+          'You say hello'
+        end
+
+        @feature.new.get_step_location('I say goodbye').first.must_include '/dsl_test.rb'
+        @feature.new.get_step_location('I say goodbye').last.must_be_kind_of Fixnum
       end
     end
   end
