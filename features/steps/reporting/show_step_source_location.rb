@@ -58,4 +58,51 @@ class ShowStepSourceLocation < Spinach::FeatureSteps
       /this is a external step.*features\/support\/external_steps\.rb.*3/
     )
   end
+
+  Given "I have a feature that has an error" do
+    write_file('features/error_feature.feature',
+     'Feature: An error feature
+
+      Scenario: This is scenario will not succeed
+        Then I do not succeed
+     ')
+    write_file('features/steps/error_feature.rb',
+    'class AnErrorFeature < Spinach::FeatureSteps
+      feature "An error feature"
+      Then "I do not succeed" do
+        i_do_not_exist.must_be_equal "Your Mumma"
+      end
+     end')
+    @feature = "features/error_feature.feature"
+  end
+
+  Then "I should see the source location of each step, even ones with errors" do
+    all_stdout.must_match(
+      /I do not succeed.*features\/steps\/error_feature\.rb.*3/
+    )
+  end
+
+  Given "I have a feature that has a failure" do
+    write_file('features/failure_feature.feature',
+     'Feature: A failure feature
+
+      Scenario: This is scenario will not succeed
+        Then I do not succeed
+     ')
+    write_file('features/steps/failure_feature.rb',
+    'class AFailureFeature < Spinach::FeatureSteps
+      feature "A failure feature"
+      Then "I do not succeed" do
+        i_exist = "Your Pappa"
+        i_exist.must_be_equal "Your Mumma"
+      end
+     end')
+    @feature = "features/failure_feature.feature"
+  end
+
+  Then "I should see the source location of each step, even ones with failures" do
+    all_stdout.must_match(
+      /I do not succeed.*features\/steps\/failure_feature\.rb.*3/
+    )
+  end
 end
