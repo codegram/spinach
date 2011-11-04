@@ -102,7 +102,7 @@ use private methods, mix in modules or whatever!
         end
       end
 
-      Then 'the output should contain a formal salutation' do
+      Then 'the output should contain a formal greeting' do
         @output.must_include "Hello, mr. John Doe"
       end
 
@@ -110,20 +110,29 @@ use private methods, mix in modules or whatever!
         @array += ["John"]
       end
 
-      Then 'the output should contain a casual salutation' do
+      Then 'the output should contain a casual greeting' do
         @output.must_include "Yo, John! Whassup?"
       end
 
       private
 
       def capture_output
-        out = String.new
+        out = StringIO.new
         $stdout = out
         $stderr = out
         yield
         $stdout = STDOUT
         $stderr = STDERR
         out.string
+      end
+    end
+    module Greeter
+      def self.greet(name)
+        if name.length > 1
+          puts "Hello, mr. #{name.join(' ')}"
+        else
+          puts "Yo, #{name.first}! Whassup?"                                                                                                                                                                                                                                  
+        end
       end
     end
 
