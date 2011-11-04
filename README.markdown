@@ -117,7 +117,7 @@ use private methods, mix in modules or whatever!
       private
 
       def capture_output
-        out = StreamIO.new
+        out = String.new
         $stdout = out
         $stderr = out
         yield
