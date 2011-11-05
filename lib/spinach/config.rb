@@ -23,6 +23,13 @@ module Spinach
     attr_writer :features_path, :step_definitions_path, :default_reporter, :support_path,
       :failure_exceptions
 
+    # The "features path" holds the place where your features will be
+    # searched for. Defaults to 'features'
+    #
+    # @return [String]
+    #    The features path.
+    #
+    # @api public
     def features_path
       @features_path || 'features'
     end
