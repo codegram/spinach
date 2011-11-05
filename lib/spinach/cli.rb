@@ -24,7 +24,7 @@ module Spinach
       features = if @args.any?
         @args
       else
-        Dir.glob(File.join 'features', '**', '*.feature')
+        Dir.glob(File.join Spinach.config[:features_path], '**', '*.feature')
       end
       Spinach::Runner.new(features).run
     end

@@ -5,6 +5,17 @@ describe Spinach::Config do
     Spinach::Config.new
   end
 
+ describe '#features_path' do
+   it 'returns a default' do
+     subject[:features_path].must_be_kind_of String
+   end
+   
+   it 'can be overwritten' do
+     subject[:features_path] = 'test'
+     subject[:features_path].must_equal 'test'
+   end
+ end
+
   describe '#step_definitions_path' do
     it 'returns a default' do
       subject[:step_definitions_path].must_be_kind_of String
