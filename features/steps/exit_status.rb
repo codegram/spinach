@@ -39,14 +39,13 @@ class ExitStatus < Spinach::FeatureSteps
 
   When "I run it" do
     run_feature @feature
-    all_stdout # Hack to get a correct exit status
   end
 
   Then "the exit status should be 0" do
-    last_exit_status.must_equal 0
+    @last_exit_status.must_equal 0
   end
 
   Then "the exit status should be 1" do
-    last_exit_status.must_equal 1
+    @last_exit_status.must_equal 1
   end
 end

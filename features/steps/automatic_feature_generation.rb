@@ -17,7 +17,6 @@ class AutomaticFeatureGeneration < Spinach::FeatureSteps
   end
 
   Then 'I a feature should exist named "features/steps/cheezburger_can_i_has.rb"' do
-    stop_processes!
     in_current_dir do
       @file = 'features/steps/cheezburger_can_i_has.rb'
       File.exists?(@file).must_equal true
