@@ -38,7 +38,7 @@ class ErrorReporting < Spinach::FeatureSteps
 
   Then 'I should see the failure count along with their messages' do
     check_error_messages(1)
-    all_stderr.wont_match /gems.*minitest.*assert_equal/
+    @all_stderr.wont_match /gems.*minitest.*assert_equal/
   end
 
   Then 'I should see the error count along with their messages and backtrace' do

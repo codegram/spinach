@@ -30,6 +30,6 @@ class FeatureNameGuessing < Spinach::FeatureSteps
   end
 
   Then 'I want "MyCoolFeature" class to be used to run it' do
-    last_exit_status.must_equal 0
+    @last_exit_status.must_equal 0
   end
 end

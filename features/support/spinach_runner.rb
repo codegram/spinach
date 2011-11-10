@@ -1,12 +1,11 @@
-require 'aruba/api'
+require_relative 'filesystem'
 
 module Integration
   module SpinachRunner
-    include Aruba::Api
+    include Filesystem
 
     def self.included(base)
       Spinach.hooks.before_scenario do
-        @aruba_timeout_seconds = 6
         if respond_to?(:in_current_dir)
           in_current_dir do
             run "rm -fR rails_app"

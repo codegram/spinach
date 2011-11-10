@@ -1,5 +1,3 @@
-require 'aruba/api'
-
 class ShowStepSourceLocation < Spinach::FeatureSteps
 
   feature "Show step source location"
@@ -27,7 +25,7 @@ class ShowStepSourceLocation < Spinach::FeatureSteps
   end
 
   Then "I should see the source location of each step of every scenario" do
-    all_stdout.must_match(
+    @stdout.must_match(
       /I succeed.*features\/steps\/success_feature\.rb.*3/
     )
   end
@@ -54,7 +52,7 @@ class ShowStepSourceLocation < Spinach::FeatureSteps
   end
 
   Then "I should see the source location of each step, even external ones" do
-    all_stdout.must_match(
+    @stdout.must_match(
       /this is a external step.*features\/support\/external_steps\.rb.*3/
     )
   end
@@ -77,7 +75,7 @@ class ShowStepSourceLocation < Spinach::FeatureSteps
   end
 
   Then "I should see the source location of each step, even ones with errors" do
-    all_stdout.must_match(
+    @stdout.must_match(
       /I do not succeed.*features\/steps\/error_feature\.rb.*3/
     )
   end
@@ -101,7 +99,7 @@ class ShowStepSourceLocation < Spinach::FeatureSteps
   end
 
   Then "I should see the source location of each step, even ones with failures" do
-    all_stdout.must_match(
+    @stdout.must_match(
       /I do not succeed.*features\/steps\/failure_feature\.rb.*3/
     )
   end
