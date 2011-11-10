@@ -1,5 +1,3 @@
-require 'aruba/api'
-
 class DisplayRunSummary < Spinach::FeatureSteps
 
   feature 'automatic'
@@ -65,7 +63,7 @@ class DisplayRunSummary < Spinach::FeatureSteps
   end
 
   Then "I should see a summary with steps status information" do
-    all_stdout.must_match(
+    @stdout.must_match(
       /Summary:.*4.*Successful.*1.*Undefined.*1.*Failed.*1.*Error/
     )
   end

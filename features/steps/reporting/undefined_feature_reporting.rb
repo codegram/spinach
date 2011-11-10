@@ -19,6 +19,6 @@ class UndefinedFeatureReporting < Spinach::FeatureSteps
   end
 
   Then "I should see a message telling me that there's an undefined feature" do
-    all_stderr.must_match /Undefined features.*1/
+    @stderr.must_match /Undefined features.*1/
   end
 end
