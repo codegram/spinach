@@ -3,30 +3,19 @@ module Spinach
     # A feature runner handles a particular feature run.
     #
     class FeatureRunner
+      attr_reader :feature
 
-      # The file that describes the feature.
-      attr_reader :filename
-
-      # @param [String] filename
-      #   path to the feature file. Scenario line could be passed to run just
-      #   that scenario.
-      #   @example feature/a_cool_feature.feature:12
+      # @param [Gherkin::AST::Feature] feature
+      #   The feature to run.
+      #
+      # @param [#to_i] line
+      #   If a scenario line is passed, then only the scenario defined on that
+      #   line will be run.
       #
       # @api public
-      def initialize(filename)
-        @filename, @scenario_line = filename.split(':')
-      end
-
-      # The file taht describes the feature.
-      #
-      attr_reader :filename
-
-      # @return [Hash]
-      #   The parsed data for this feature.
-      #
-      # @api public
-      def data
-        @data ||= Spinach::Parser.open_file(filename).parse
+      def initialize(feature, line=nil)
+        @feature = feature
+        @line    = line.to_i if line
       end
 
       # @return [String]
@@ -34,15 +23,15 @@ module Spinach
       #
       # @api public
       def feature_name
-        @feature_name ||= data['name']
+        @feature.name
       end
 
-      # @return [Hash]
+      # @return [Array<Gherkin::AST::Scenario>]
       #   The parsed scenarios for this runner's feature.
       #
       # @api public
       def scenarios
-        @scenarios ||= (data['elements'] || [])
+        @feature.scenarios
       end
 
       # Runs this feature.
@@ -52,20 +41,30 @@ module Spinach
       #
       # @api public
       def run
-        Spinach.hooks.run_before_feature data
+        Spinach.hooks.run_before_feature @feature
         if Spinach.find_feature_steps(feature_name)
-          scenarios.each do |scenario|
-            if !@scenario_line || scenario['line'].to_s == @scenario_line
-              success = ScenarioRunner.new(feature_name, scenario).run
-              @failed = true unless success
-            end
-          end
+          run_scenarios!
         else
-          Spinach.hooks.run_on_undefined_feature data
-          @failed = true
+          undefined_steps!
         end
-        Spinach.hooks.run_after_feature data
+        Spinach.hooks.run_after_feature @feature
         !@failed
+      end
+
+      private
+
+      def run_scenarios!
+        scenarios.each do |scenario|
+          if !@scenario_line || (scenario.line == @scenario_line)
+            success = ScenarioRunner.new(feature_name, scenario).run
+            @failed = true unless success
+          end
+        end
+      end
+
+      def undefined_steps!
+        Spinach.hooks.run_on_undefined_feature @feature
+        @failed = true
       end
     end
   end

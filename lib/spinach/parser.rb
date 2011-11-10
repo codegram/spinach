@@ -1,5 +1,4 @@
-require 'gherkin'
-require 'gherkin/formatter/json_formatter'
+require_relative '../../../gherkin/lib/gherkin'
 
 module Spinach
   # Parser leverages Gherkin to parse the feature definition.
@@ -11,8 +10,6 @@ module Spinach
     # @api public
     def initialize(content)
       @content = content
-      @formatter = Gherkin::Formatter::JSONFormatter.new(nil)
-      @parser = Gherkin::Parser::Parser.new(@formatter)
     end
 
     # @param [String] filename
@@ -31,15 +28,14 @@ module Spinach
     # @api public
     attr_reader :content
 
-    # Parses the feature file and returns an AST as a Hash.
+    # Parses the feature file and returns an AST.
     #
-    # @return [Hash]
-    #   The parsed Gherkin output.
+    # @return [Gherkin::AST::Feature]
+    #   The AST Feature.
     #
     # @api public
     def parse
-      @parser.parse(content, @filename, __LINE__-1)
-      @formatter.gherkin_object
+      Gherkin.parse(@content.strip)
     end
   end
 end

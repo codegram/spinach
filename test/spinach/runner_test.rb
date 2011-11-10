@@ -44,6 +44,7 @@ describe Spinach::Runner do
           with(filename, anything).
           returns(@feature)
       end
+      runner.stubs(required_files: [])
     end
 
     it 'instantiates a new Feature and runs it with every file' do
