@@ -8,7 +8,7 @@ module Spinach::Generators
     end
 
     let(:step) do
-      stub(name: 'I has a sad')
+      stub(keyword: 'Given', name: 'I has a sad')
     end
 
     describe "#generate" do

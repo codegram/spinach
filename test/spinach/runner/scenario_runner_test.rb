@@ -65,7 +65,7 @@ module Spinach
 
         describe 'when the step is successful' do
           it 'runs the successful hooks' do
-            @step_definitions.stubs(:execute).with('Go shopping').returns true
+            @step_definitions.stubs(:execute).with(@step).returns true
             Spinach.hooks.expects(:run_on_successful_step).with(@step, @location)
 
             subject.run_step(@step)
@@ -76,7 +76,7 @@ module Spinach
           before do
             @failure_exception = Class.new(StandardError)
             Spinach.stubs(:config).returns({ failure_exceptions: [@failure_exception] })
-            @step_definitions.stubs(:execute).with('Go shopping').raises @failure_exception
+            @step_definitions.stubs(:execute).with(@step).raises @failure_exception
           end
 
           it 'sets the exception' do
@@ -92,7 +92,7 @@ module Spinach
 
         describe 'when the step is undefined' do
           before do
-            @step_definitions.stubs(:execute).with('Go shopping').raises Spinach::StepNotDefinedException, @step
+            @step_definitions.stubs(:execute).with(@step).raises Spinach::StepNotDefinedException, @step
           end
 
           it 'sets the exception' do
@@ -108,7 +108,7 @@ module Spinach
 
         describe 'when the step raises an error' do
           before do
-            @step_definitions.stubs(:execute).with('Go shopping').raises StandardError
+            @step_definitions.stubs(:execute).with(@step).raises StandardError
           end
 
           it 'sets the exception' do

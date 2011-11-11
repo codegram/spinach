@@ -96,7 +96,7 @@ module Spinach
 
       describe '#visit_Step' do
         before do
-          @node  = stub(name: 'Baz', line: 3)
+          @node  = stub(name: 'Baz', line: 3, keyword: 'Given')
           @steps = [stub(name: 'Foo'), stub(name: 'Bar')]
         end
 
@@ -115,6 +115,15 @@ module Spinach
           visitor.visit_Step(@node)
 
           scenario.steps.first.name.must_equal 'Baz'
+        end
+
+        it 'sets the keyword' do
+          scenario = stub(steps: [])
+          visitor.instance_variable_set(:@current_scenario, scenario)
+
+          visitor.visit_Step(@node)
+
+          scenario.steps.first.keyword.must_equal 'Given'
         end
 
         it 'sets the line' do

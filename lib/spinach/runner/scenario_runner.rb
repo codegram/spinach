@@ -68,7 +68,7 @@ module Spinach
       # @api semipublic
       def run_step(step)
         step_location = step_definitions.step_location_for(step.name)
-        step_definitions.execute(step.name)
+        step_definitions.execute(step)
         Spinach.hooks.run_on_successful_step step, step_location
       rescue *Spinach.config[:failure_exceptions] => e
         @exception = e

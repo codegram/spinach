@@ -75,8 +75,9 @@ module Spinach
       # @api public
       def visit_Step(node)
         step = Step.new(@current_scenario)
-        step.name = node.name
-        step.line = node.line
+        step.name    = node.name
+        step.line    = node.line
+        step.keyword = node.keyword
 
         @current_scenario.steps << step
       end

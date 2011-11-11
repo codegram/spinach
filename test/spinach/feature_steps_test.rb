@@ -33,14 +33,14 @@ describe Spinach::FeatureSteps do
 
     describe 'execute' do
       it 'runs defined step correctly' do
-        feature.execute('I go to the toilet')
+        feature.execute(stub(name: 'I go to the toilet'))
 
         feature.pee.must_equal true
       end
 
       it 'raises an exception if step is not defined' do
         proc {
-          feature.execute 'I am lost'
+          feature.execute(stub(name: 'I am lost'))
         }.must_raise Spinach::StepNotDefinedException
       end
     end
