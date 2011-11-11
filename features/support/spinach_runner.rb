@@ -15,9 +15,9 @@ module Integration
     end
 
     def run_feature(command, options={})
-      options[:suite] ||= :minitest
-      use_minitest if options[:suite] == :minitest
-      use_rspec if options[:suite] == :rspec
+      options[:framework] ||= :minitest
+      use_minitest if options[:framework] == :minitest
+      use_rspec if options[:framework] == :rspec
       run "../../bin/spinach #{command} #{options[:append]}"
     end
 

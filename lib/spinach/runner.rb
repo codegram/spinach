@@ -54,7 +54,7 @@ module Spinach
     # @api public
     def run
       require_dependencies
-      require_suites
+      require_frameworks
 
       Spinach.hooks.run_before_run
 
@@ -83,10 +83,10 @@ module Spinach
       end
     end
 
-    # Requires the test suite support
+    # Requires the test framework support
     #
-    def require_suites
-      require_relative 'suites'
+    def require_frameworks
+      require_relative 'frameworks'
     end
 
     # @return [Array<String>] files

@@ -75,7 +75,7 @@ module Spinach
         describe 'when the step fails' do
           before do
             @failure_exception = Class.new(StandardError)
-            Spinach.config[:failure_exceptions] = [@failure_exception]
+            Spinach.stubs(:config).returns({ failure_exceptions: [@failure_exception] })
             @step_definitions.stubs(:execute).with('Go shopping').raises @failure_exception
           end
 

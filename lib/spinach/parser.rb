@@ -11,7 +11,6 @@ module Spinach
     # @api public
     def initialize(content)
       @content = content
-      @visitor = Visitor.new
     end
 
     # @param [String] filename
@@ -37,9 +36,8 @@ module Spinach
     #
     # @api public
     def parse
-      ast     = Gherkin.parse(@content.strip)
-      feature = Feature.new
-      Visitor.new(feature).visit(ast)
+      ast = Gherkin.parse(@content.strip)
+      Visitor.new.visit(ast)
     end
   end
 end

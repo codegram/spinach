@@ -30,7 +30,7 @@ class RSpecCompatibility < Spinach::FeatureSteps
 
   When "I run \"spinach\" with rspec" do
     @feature =
-      run_feature "features/#{@feature}.feature", suite: :rspec
+      run_feature "features/#{@feature}.feature", framework: :rspec
   end
 
   Then "I should see the failure count along with their messages" do
