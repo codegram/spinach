@@ -4,11 +4,11 @@ require_relative '../../../lib/spinach/generators'
 module Spinach::Generators
   describe StepGenerator do
     subject do
-      StepGenerator.new(data)
+      StepGenerator.new(step)
     end
 
-    let(:data) do
-      {'keyword' => 'Given', 'name' => "I has a sad"}
+    let(:step) do
+      stub(keyword: 'Given', name: 'I has a sad')
     end
 
     describe "#generate" do

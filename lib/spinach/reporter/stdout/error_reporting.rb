@@ -36,7 +36,7 @@ module Spinach
           if undefined_features.any?
             error.puts "  Undefined features (#{undefined_features.length})".light_yellow
             undefined_features.each do |feature|
-              error.puts "    #{feature['name']}".yellow
+              error.puts "    #{feature.name}".yellow
             end
           end
         end
@@ -93,7 +93,7 @@ module Spinach
         #
         def summarized_error(error)
           feature, scenario, step, exception = error
-          summary = "    #{feature['name']} :: #{scenario['name']} :: #{full_step step}"
+          summary = "    #{feature.name} :: #{scenario.name} :: #{full_step step}"
           if exception.kind_of?(Spinach::StepNotDefinedException)
             summary.yellow
           else

@@ -3,61 +3,82 @@ module Spinach
     # A Scenario Runner handles a particular scenario run.
     #
     class ScenarioRunner
-      attr_reader :feature_name, :data
-
-      # @param [String] feature_name
-      #   The feature name
-      #
-      # @param [Hash] data
-      #   The parsed feature data.
+      # @param [Gherkin::AST::Scenario] scenario
+      #   The scenario.
       #
       # @api public
-      def initialize(feature_name, data)
-        @feature_name = feature_name
-        @data = data
+      def initialize(scenario)
+        @scenario = scenario
       end
 
+      # @return [Gherkin::AST::Feature>]
+      #   The feature containing the scenario.
+      #
+      # @api public
+      def feature
+        @scenario.feature
+      end
+
+      # @return [Array<Gherkin::AST::Step>]
+      #   An array of steps.
+      #
+      # @api public
       def steps
-        @steps ||= data['steps']
+        @scenario.steps
       end
 
       # @return [FeatureSteps]
-      #   The feature object used to run this scenario.
+      #   The step definitions for the current feature.
       #
       # @api public
-      def feature_steps
-        @feature_steps ||= Spinach.find_feature_steps(feature_name).new
+      def step_definitions
+        @step_definitions ||= Spinach.find_step_definitions(feature.name).new
       end
 
-      # Runs this scenario
-      # @return [True, False]
-      #   true if this scenario succeeded, false if not
+      # Runs the scenario, capturing any exception, and running the
+      # corresponding hooks.
+      #
+      # @return [true, false]
+      #   Whether the scenario succeeded or not.
+      #
+      # @api public
       def run
-        Spinach.hooks.run_before_scenario data
+        Spinach.hooks.run_before_scenario @scenario
+
         steps.each do |step|
           Spinach.hooks.run_before_step step
-          unless @exception
-            begin
-              step_location = feature_steps.get_step_location(step['name'])
-              feature_steps.execute_step(step['name'])
-              Spinach.hooks.run_on_successful_step step, step_location
-            rescue *Spinach.config[:failure_exceptions] => e
-              @exception = e
-              Spinach.hooks.run_on_failed_step step, @exception, step_location
-            rescue Spinach::StepNotDefinedException => e
-              @exception = e
-              Spinach.hooks.run_on_undefined_step step, @exception
-            rescue Exception => e
-              @exception = e
-              Spinach.hooks.run_on_error_step step, @exception, step_location
-            end
-          else
+
+          if @exception
             Spinach.hooks.run_on_skipped_step step
+          else
+            run_step(step)
           end
+
           Spinach.hooks.run_after_step step
         end
-        Spinach.hooks.run_after_scenario data
+        Spinach.hooks.run_after_scenario @scenario
         !@exception
+      end
+
+      # Runs a particular step.
+      #
+      # @param [Gherkin::AST::Step] step
+      #   The step to be run.
+      #
+      # @api semipublic
+      def run_step(step)
+        step_location = step_definitions.step_location_for(step.name)
+        step_definitions.execute(step)
+        Spinach.hooks.run_on_successful_step step, step_location
+      rescue *Spinach.config[:failure_exceptions] => e
+        @exception = e
+        Spinach.hooks.run_on_failed_step step, @exception, step_location
+      rescue Spinach::StepNotDefinedException => e
+        @exception = e
+        Spinach.hooks.run_on_undefined_step step, @exception
+      rescue Exception => e
+        @exception = e
+        Spinach.hooks.run_on_error_step step, @exception, step_location
       end
     end
   end

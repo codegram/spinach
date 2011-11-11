@@ -1,8 +1,8 @@
 require_relative '../../test_helper'
 
-describe "minitest suite" do
+describe "minitest framework" do
   before do
-    require_relative '../../../lib/spinach/suites/minitest'
+    require_relative '../../../lib/spinach/frameworks/minitest'
   end
 
   it "adds MiniTest::Assertion into the failure exceptions" do

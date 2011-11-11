@@ -4,12 +4,13 @@ class AutomaticFeatureGeneration < Spinach::FeatureSteps
 
   include Integration::SpinachRunner
   Given 'I have defined a "Cheezburger can I has" feature' do
-    write_file('features/cheezburger_can_i_has.feature',
-     'Feature: Cheezburger can I has
-        Scenario: Some Lulz
-          Given I haz a sad
-          When I get some lulz
-          Then I haz a happy')
+    write_file('features/cheezburger_can_i_has.feature', """
+Feature: Cheezburger can I has
+  Scenario: Some Lulz
+    Given I haz a sad
+    When I get some lulz
+    Then I haz a happy
+""")
   end
 
   When 'I run spinach with "--generate"' do

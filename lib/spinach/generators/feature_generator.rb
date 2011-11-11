@@ -4,39 +4,23 @@ module Spinach
     # given the parsed feture data
     class FeatureGenerator
 
-      # @param [Hash] data
-      #   the parsed feature data returned from the {Parser}
-      def initialize(data)
-        @data = data
+      # @param [Feature] feature
+      #   The feature returned from the {Parser}
+      def initialize(feature)
+        @feature = feature
       end
 
       # @return [Array<Hash>]
       #   an array of unique steps found in this scenario, avoiding name
       #   repetition
       def steps
-        return @steps if @steps
-        @steps = []
-        if scenarios = @data['elements']
-          scenarios.each do  |scenario|
-            if scenario_steps = scenario['steps']
-              scenario_steps.each do |step|
-                unless @steps.any?{|s| s['name'] == step['name']}
-                  @steps << {
-                    'keyword' => step['keyword'].strip,
-                    'name' => step['name'].strip
-                  }
-                end
-              end
-            end
-          end
-        end
-        @steps
+        @feature.scenarios.map(&:steps).flatten.uniq(&:name)
       end
 
       # @return [String]
       #   this feature's name
       def name
-        @data['name'].strip if @data['name']
+        @feature.name
       end
 
       # @return [String]

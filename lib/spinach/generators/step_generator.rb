@@ -4,17 +4,17 @@ module Spinach
   #
   class Generators::StepGenerator
 
-    # @param [Hash] data
-    #   the parsed step data returned from the {Parser}
-    def initialize(data)
-      @data = data
+    # @param [Step] step
+    #   The step.
+    def initialize(step)
+      @step = step
     end
 
     # @return [String]
     #   an example step definition
     def generate
       result = StringIO.new
-      result.puts "#{@data['keyword']} '#{Spinach::Support.escape_single_commas @data['name']}' do"
+      result.puts "#{@step.keyword} '#{Spinach::Support.escape_single_commas @step.name}' do"
       result.puts "  raise 'step not implemented'"
       result.puts "end"
       result.string

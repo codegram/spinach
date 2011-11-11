@@ -37,20 +37,17 @@ describe Spinach::FeatureSteps::Capybara do
   end
 
   it 'resets the capybara session after each scenario' do
-    @feature_runner = Spinach::Runner::FeatureRunner.new(
-      'a_feature.feature')
+    feature = Spinach::Parser.new("""
+Feature: A test feature
+  Scenario: A test scenario
+    Given Hello
+    Then Goodbye
+  Scenario: Another test scenario
+    Given Hello
+    Then Goodbye
+""").parse
 
-    @feature_runner.stubs(data: Spinach::Parser.new('
-      Feature: A test feature
-        Scenario: A test scenario
-          Given Hello
-          Then Goodbye
-        Scenario: Another test scenario
-          Given Hello
-          Then Goodbye
-    ').parse).at_least_once
-
-    Spinach::Runner::ScenarioRunner.any_instance.stubs(feature_steps: @feature)
+    @feature_runner = Spinach::Runner::FeatureRunner.new(feature)
 
     Capybara.current_session.expects(:reset!).at_least_once
 

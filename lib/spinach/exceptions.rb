@@ -18,7 +18,7 @@ module Spinach
     #
     # @api public
     def message
-      "Step '#{@step}' not found"
+      "Step '#{@step.name}' not found"
     end
   end
 end

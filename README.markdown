@@ -35,8 +35,6 @@ use it with RSpec as well if you put the following in `features/support/env.rb`:
 Now create a `features` folder in your app or library and write your first
 feature:
 
-    ## features/test_how_spinach_works.feature
-
     Feature: Test how spinach works
       In order to know what the heck is spinach
       As a developer
@@ -62,7 +60,7 @@ scaffolding for you:
 
 Spinach will detect your features and generate the following class:
 
-    ## features/steps/test_how_spinach_works.rb
+## features/steps/test_how_spinach_works.rb
 
     class TestHowSpinachWorks < Spinach::FeatureSteps
       Given 'I have an empty array' do
@@ -131,7 +129,7 @@ use private methods, mix in modules or whatever!
         if name.length > 1
           puts "Hello, mr. #{name.join(' ')}"
         else
-          puts "Yo, #{name.first}! Whassup?"                                                                                                                                                                                                                                  
+          puts "Yo, #{name.first}! Whassup?"
         end
       end
     end
@@ -145,12 +143,12 @@ after any feature, scenario or step execution.
 
 So, for example, you could:
 
-    Spinach.hooks.before_scenario do |data|
+    Spinach.hooks.before_scenario do |scenario|
       clear_database
     end
 
-    Spinach.hooks.on_successful_step do |step_data, location|
-      count_steps(step_data)
+    Spinach.hooks.on_successful_step do |step, location|
+      count_steps(step.scenario.steps)
     end
 
     Spinach.hooks.after_run do |status|
@@ -160,7 +158,6 @@ So, for example, you could:
 Full hook documentation is here:
 
 [Spinach's hook documentation on rubydoc](http://rubydoc.info/github/codegram/spinach/master/Spinach/Hooks)
-
 
 ## Wanna use it with Rails 3?
 
@@ -188,7 +185,6 @@ Check out our [spinach-sinatra demo](https://github.com/codegram/spinach-sinatra
 * [spinach rails demo](https://github.com/codegram/spinach-rails-demo)
 * [spinach sinatra demo](https://github.com/codegram/spinach-sinatra-demo)
 
-
 ## Contributing
 
 * [List of spinach contributors](https://github.com/codegram/spinach/contributors)
@@ -205,10 +201,11 @@ You can easily contribute to Spinach. Its codebase is simple and
   in a commit by itself I can ignore when I pull.
 * Send me a pull request. Bonus points for topic branches.
 
-[gherkin]: http://github.com/cucumber/gherkin
+[gherkin]: http://github.com/codegram/gherkin-ruby
 [cucumber]: http://github.com/cucumber/cucumber
 [documentation]: http://rubydoc.info/github/codegram/spinach/master/frames
 
 ## License
 
 MIT License. Copyright 2011 [Codegram Technologies](http://codegram.com)
+

@@ -59,10 +59,10 @@ module Spinach
 
     # Stores the current feature
     #
-    # @param [Hash]
-    #   the data for this feature
-    def set_current_feature(data)
-      @current_feature = data
+    # @param [Feature]
+    #   The feature.
+    def set_current_feature(feature)
+      @current_feature = feature
     end
 
     # Clears this current feature
@@ -74,8 +74,8 @@ module Spinach
     #
     # @param [Hash]
     #   the data for this scenario
-    def set_current_scenario(data)
-      @current_scenario = data
+    def set_current_scenario(scenario)
+      @current_scenario = scenario
     end
 
     # Clears this current scenario

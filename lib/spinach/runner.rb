@@ -54,14 +54,17 @@ module Spinach
     # @api public
     def run
       require_dependencies
-      require_suites
+      require_frameworks
 
       Spinach.hooks.run_before_run
 
       successful = true
 
-      filenames.each do |filename|
-        success = FeatureRunner.new(filename).run
+      filenames.map do |filename|
+        filename.split(':')
+      end.each do |filename, line|
+        feature = Parser.open_file(filename).parse
+        success = FeatureRunner.new(feature, line).run
         successful = false unless success
       end
 
@@ -80,10 +83,10 @@ module Spinach
       end
     end
 
-    # Requires the test suite support
+    # Requires the test framework support
     #
-    def require_suites
-      require_relative 'suites'
+    def require_frameworks
+      require_relative 'frameworks'
     end
 
     # @return [Array<String>] files
