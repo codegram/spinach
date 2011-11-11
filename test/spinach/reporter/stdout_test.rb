@@ -6,9 +6,9 @@ describe Spinach::Reporter::Stdout do
   let(:exception) { StandardError.new('Something went wrong') }
 
   let(:error) do
-    [{'name' => 'My feature'},
-      {'name' => 'A scenario'},
-      {'keyword' => 'Keyword', 'name' => 'step name'},
+    [stub(name: 'My feature'),
+      stub(name: 'A scenario'),
+      stub(keyword: 'Keyword', name: 'step name'),
       exception]
   end
 
@@ -28,7 +28,8 @@ describe Spinach::Reporter::Stdout do
 
   describe '#before_feature_run' do
     it 'outputs the feature' do
-      @reporter.before_feature_run('name' => 'A cool feature')
+      feature = stub_everything(name: 'A cool feature')
+      @reporter.before_feature_run(feature)
 
       @out.string.must_include 'Feature'
       @out.string.must_include 'A cool feature'
@@ -37,7 +38,8 @@ describe Spinach::Reporter::Stdout do
 
   describe '#before_scenario_run' do
     it 'outputs the scenario' do
-      @reporter.before_scenario_run('name' => 'Arbitrary scenario')
+      scenario = stub_everything(name: 'Arbitrary scenario', steps: [])
+      @reporter.before_scenario_run(scenario)
 
       @out.string.must_include 'Scenario'
       @out.string.must_include 'Arbitrary scenario'
@@ -68,7 +70,7 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#on_successful_step' do
-    let(:step) { {'keyword' => 'Given', 'name' => 'I am too cool'} }
+    let(:step) { stub(keyword: 'Given', name: 'I am too cool') }
     let(:step_location){['error_step_location', 1]}
     it 'adds the step to the output buffer' do
       @reporter.on_successful_step(step, step_location)
@@ -92,7 +94,7 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#on_failed_step' do
-    let(:step) { {'keyword' => 'Then', 'name' => 'I write failing steps'} }
+    let(:step) { stub(keyword: 'Then', name: 'I write failing steps') }
     let(:step_location){['error_step_location', 1]}
 
     it 'adds the step to the output buffer' do
@@ -117,7 +119,7 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#on_error_step' do
-    let(:step) { {'keyword' => 'And', 'name' => 'I even make syntax errors'} }
+    let(:step) { stub(keyword: 'And', name: 'I even make syntax errors') }
     let(:step_location){['error_step_location', 1]}
 
     it 'adds the step to the output buffer' do
@@ -142,7 +144,7 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#on_undefined_step' do
-    let(:step) { {'keyword' => 'When', 'name' => 'I forgot to write steps'} }
+    let(:step) { stub(keyword: 'When', name: 'I forgot to write steps') }
 
     it 'adds the step to the output buffer' do
       @reporter.on_undefined_step(step, anything)
@@ -167,9 +169,7 @@ describe Spinach::Reporter::Stdout do
 
   describe "#on_feature_not_found" do
     before do
-      @feature = {
-        'name' => 'This feature does not exist'
-      }
+      @feature = stub(name: 'This feature does not exist', scenarios: [])
       Spinach.config.stubs(:step_definitions_path).returns('my/path')
       @reporter.on_feature_not_found(@feature)
     end
@@ -195,7 +195,7 @@ describe Spinach::Reporter::Stdout do
 
   describe '#on_skipped_step' do
     it 'adds the step to the output buffer' do
-      @reporter.on_skipped_step({'keyword' => 'Then', 'name' => 'some steps are not even called'})
+      @reporter.on_skipped_step(stub(keyword: 'Then', name: 'some steps are not even called'))
 
       @out.string.must_include '~'
       @out.string.must_include 'Then'
@@ -205,7 +205,7 @@ describe Spinach::Reporter::Stdout do
 
   describe '#output_step' do
     it 'adds a step to the output buffer with nice colors' do
-      step = {'keyword' => 'Keyword', 'name' => 'step name'}
+      step = stub(keyword: 'Keyword', name: 'step name')
       @reporter.output_step('symbol', step, :blue)
 
       @out.string.must_include 'symbol'
@@ -236,11 +236,7 @@ describe Spinach::Reporter::Stdout do
 
   describe '#full_step' do
     it 'returns the step with keyword and name' do
-      @reporter.full_step({'keyword' => 'Keyword', 'name' => 'step name'}).must_equal 'Keyword step name'
-    end
-
-    it 'strips the arguments' do
-      @reporter.full_step({'keyword' => '   Keyword    ', 'name' => '   step name   '}).must_equal 'Keyword step name'
+      @reporter.full_step(stub(keyword: 'Keyword', name: 'step name')).must_equal 'Keyword step name'
     end
   end
 end

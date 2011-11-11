@@ -6,9 +6,9 @@ describe Spinach::Reporter::Stdout do
   let(:exception) { StandardError.new('Something went wrong') }
 
   let(:error) do
-    [{'name' => 'My feature'},
-      {'name' => 'A scenario'},
-      {'keyword' => 'Keyword', 'name' => 'step name'},
+    [stub(name: 'My feature'),
+      stub(name: 'A scenario'),
+      stub(keyword: 'Keyword', name: 'step name'),
       exception]
   end
 
@@ -110,7 +110,7 @@ describe Spinach::Reporter::Stdout do
   describe '#report_undefined_features' do
     describe 'when some features are undefined' do
       it 'outputs the undefined features' do
-        @reporter.undefined_features << {'name' => 'Undefined feature name'}
+        @reporter.undefined_features << stub(name: 'Undefined feature name')
         @reporter.report_undefined_features
 
         @error.string.must_include "Undefined features (1)"
@@ -242,10 +242,10 @@ describe Spinach::Reporter::Stdout do
 
     describe "when it's a step not defined exception" do
       it "returns a suggestion" do
-        @exception = Spinach::StepNotDefinedException.new("foo")
-        @error = [{'name' => 'My feature'},
-          {'name' => 'A scenario'},
-          {'keyword' => 'Given', 'name' => 'foo'},
+        @exception = Spinach::StepNotDefinedException.new(stub(name: "foo"))
+        @error = [stub(name: 'My feature'),
+          stub(name: 'A scenario'),
+          stub(keyword: 'Given', name: 'foo'),
           @exception]
         output = @reporter.full_error(@error)
         output.must_include "Given"
@@ -269,7 +269,7 @@ describe Spinach::Reporter::Stdout do
 
     describe 'when given an undefined step exception' do
       it 'prints the error in yellow' do
-        undefined_exception = Spinach::StepNotDefinedException.new(anything)
+        undefined_exception = Spinach::StepNotDefinedException.new(stub(name: 'some step'))
 
         String.any_instance.expects(:yellow)
 

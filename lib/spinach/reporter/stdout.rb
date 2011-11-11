@@ -36,8 +36,8 @@ module Spinach
       # @param [Hash] data
       #   The feature in a JSON Gherkin format
       #
-      def before_feature_run(data)
-        name = data['name']
+      def before_feature_run(feature)
+        name = feature.name
         out.puts "\n#{'Feature:'.magenta} #{name.light_magenta}"
       end
 
@@ -46,9 +46,9 @@ module Spinach
       # @param [Hash] data
       #   The feature in a JSON Gherkin format
       #
-      def before_scenario_run(data)
-        @max_step_name_length = data['steps'].map{|step| step['name'].length}.max if data['steps']
-        name = data['name']
+      def before_scenario_run(scenario)
+        @max_step_name_length = scenario.steps.map(&:name).map(&:length).max if scenario.steps.any?
+        name = scenario.name
         out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
       end
 
@@ -57,7 +57,7 @@ module Spinach
       # @param [Hash] data
       #   The feature in a JSON Gherkin format
       #
-      def after_scenario_run(data)
+      def after_scenario_run(scenario)
         if scenario_error
           report_error(scenario_error, :full)
           self.scenario_error = nil
@@ -66,8 +66,8 @@ module Spinach
 
       # Adds a passed step to the output buffer.
       #
-      # @param [Hash] step
-      #   The step in a JSON Gherkin format
+      # @param [Step] step
+      #   The step.
       #
       # @param [Array] step_location
       #   The step source location
@@ -127,7 +127,7 @@ module Spinach
       #
       def on_feature_not_found(feature)
         generator = Generators::FeatureGenerator.new(feature)
-        lines = "Could not find steps for `#{feature['name']}` feature\n\n"
+        lines = "Could not find steps for `#{feature.name}` feature\n\n"
         lines << "\nPlease create the file #{generator.filename} at #{generator.path}, with:\n\n"
 
         lines << generator.generate
@@ -167,8 +167,18 @@ module Spinach
       def output_step(symbol, step, color, step_location = nil)
         step_location = step_location.first.gsub("#{File.expand_path('.')}/", '# ')+":#{step_location.last.to_s}" if step_location
         max_length = @max_step_name_length + 60 # Colorize and output format correction
+
         # REMEMBER TO CORRECT PREVIOUS MAX LENGTH IF OUTPUT FORMAT IS MODIFIED
-        out.puts "    #{symbol.colorize(:"light_#{color}")}  #{step['keyword'].strip.colorize(:"light_#{color}")} #{step['name'].strip.colorize(color)} ".ljust(max_length) + step_location.to_s.colorize(:grey)
+        buffer = []
+        buffer << indent(4)
+        buffer << symbol.colorize(:"light_#{color}")
+        buffer << indent(2)
+        buffer << step.keyword.colorize(:"light_#{color}")
+        buffer << indent(1)
+        buffer << step.name.colorize(color)
+        joined = buffer.join.ljust(max_length)
+
+        out.puts(joined + step_location.to_s.colorize(:grey))
       end
 
       # It prints the error summary if the run has failed
@@ -186,22 +196,37 @@ module Spinach
       # Prints the feature success summary for this run.
       #
       def run_summary
-        successful_summary = "(".colorize(:green)+successful_steps.length.to_s.colorize(:light_green)+") Successful".colorize(:green)
-        undefined_summary = "(".colorize(:yellow)+undefined_steps.length.to_s.colorize(:light_yellow)+") Undefined".colorize(:yellow)
-        failed_summary = "(".colorize(:red)+failed_steps.length.to_s.colorize(:light_red)+") Failed".colorize(:red)
-        error_summary = "(".colorize(:red)+error_steps.length.to_s.colorize(:light_red)+") Error".colorize(:red)
+        successful_summary = format_summary(:green,  successful_steps, 'Successful')
+        undefined_summary  = format_summary(:yellow, undefined_steps,  'Undefined')
+        failed_summary     = format_summary(:red,    failed_steps,     'Failed')
+        error_summary      = format_summary(:red,    error_steps,      'Error')
+
         out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{failed_summary}, #{error_summary}\n\n"
       end
 
       # Constructs the full step definition
       #
       # @param [Hash] step
-      #   The step in a JSON Gherkin format
+      #   The step.
       #
       def full_step(step)
-        "#{step['keyword'].strip} #{step['name'].strip}"
+        "#{step.keyword} #{step.name}"
       end
 
+      private
+
+      def indent(n = 1)
+        " " * n
+      end
+
+      def format_summary(color, steps, message)
+        buffer = []
+        buffer << "(".colorize(color)
+        buffer << steps.length.to_s.colorize(:"light_#{color}")
+        buffer << ") ".colorize(color)
+        buffer << message.colorize(color)
+        buffer.join
+      end
     end
   end
 end

@@ -5,25 +5,27 @@ class DisplayRunSummary < Spinach::FeatureSteps
   include Integration::SpinachRunner
 
   Given "I have a feature that has some successful, undefined, failed and error steps" do
-    write_file('features/test_feature.feature',
-     'Feature: A test feature
+    write_file('features/test_feature.feature', """
 
-      Scenario: Undefined scenario
-        Given I am a fool
-        When I jump from Codegrams roof
-        Then I must be pwned by floor
+Feature: A test feature
 
-      Scenario: Failed scenario
-        Given I love risk
-        When I jump from Codegrams roof
-        Then my parachute must open
-        Then I must not be pwned by floor
+  Scenario: Undefined scenario
+    Given I am a fool
+    When I jump from Codegrams roof
+    Then I must be pwned by floor
 
-      Scenario: Error scenario
-        Given I am not a fool
-        When I go downstairs
-        Then I must succeed
-     ')
+  Scenario: Failed scenario
+    Given I love risk
+    When I jump from Codegrams roof
+    Then my parachute must open
+    Then I must not be pwned by floor
+
+  Scenario: Error scenario
+    Given I am not a fool
+    When I go downstairs
+    Then I must succeed
+""")
+
     write_file('features/steps/test_feature.rb',
     'class ATestFeature < Spinach::FeatureSteps
       feature "A test feature"

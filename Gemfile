@@ -3,6 +3,8 @@ source 'http://rubygems.org'
 # Specify your gem's dependencies in spinach.gemspec
 gemspec
 
+gem 'rake'
+
 group :test do
   gem 'guard'
   gem 'guard-minitest'

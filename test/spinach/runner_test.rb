@@ -38,22 +38,26 @@ describe Spinach::Runner do
 
   describe '#run' do
     before do
-      @feature = stub
+      @feature_runner = stub
       filenames.each do |filename|
+        Spinach::Parser.expects(:open_file).with(filename).returns parser = stub
+        parser.stubs(:parse).returns feature = stub
         Spinach::Runner::FeatureRunner.expects(:new).
-          with(filename, anything).
-          returns(@feature)
+          with(feature, anything).
+          returns(@feature_runner)
       end
+
+      runner.stubs(required_files: [])
     end
 
     it 'instantiates a new Feature and runs it with every file' do
-      @feature.stubs(run: true)
+      @feature_runner.stubs(:run).returns(true)
       runner.run.must_equal true
     end
 
     it 'returns false if it fails' do
-      @feature.stubs(run: false)
-      runner.run
+      @feature_runner.stubs(:run).returns(false)
+      runner.run.must_equal false
     end
   end
 

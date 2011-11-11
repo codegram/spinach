@@ -6,13 +6,13 @@ class ErrorReporting < Spinach::FeatureSteps
   include Integration::ErrorReporting
 
   Given "I have a feature with some failures" do
-    write_file('features/feature_with_failures.feature',
-               'Feature: Feature with failures
+    write_file('features/feature_with_failures.feature', """
+Feature: Feature with failures
 
-                Scenario: This scenario will fail
-                  Given true is false
-                  Then remove all the files in my hard drive
-               ')
+  Scenario: This scenario will fail
+    Given true is false
+    Then remove all the files in my hard drive
+""")
 
     write_file('features/steps/failure_feature.rb',
                'class FeatureWithFailures < Spinach::FeatureSteps
