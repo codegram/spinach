@@ -6,16 +6,16 @@ describe Spinach::Generators do
   end
 
   let(:data) do
-    Spinach::Parser.new("
-      Feature: Cheezburger can I has
-        Scenario: Some Lulz
-          Given I haz a sad
-          When I get some lulz
-          Then I haz a happy
-        Scenario: Some sad
-          Given I haz a happy
-          When I get some lulz
-          Then I am OMG ROFLMAO").parse
+    Spinach::Parser.new("""
+Feature: Cheezburger can I has
+  Scenario: Some Lulz
+    Given I haz a sad
+    When I get some lulz
+    Then I haz a happy
+  Scenario: Some sad
+    Given I haz a happy
+    When I get some lulz
+    Then I am OMG ROFLMAO""").parse
   end
 
   describe "#bind" do

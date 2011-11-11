@@ -5,12 +5,12 @@ class ExitStatus < Spinach::FeatureSteps
   include Integration::SpinachRunner
 
   Given "I have a feature that has no error or failure" do
-    write_file('features/success_feature.feature',
-     'Feature: A success feature
+    write_file('features/success_feature.feature', """
+Feature: A success feature
 
-      Scenario: This is scenario will succeed
-        Then I succeed
-     ')
+  Scenario: This is scenario will succeed
+    Then I succeed
+""")
     write_file('features/steps/success_feature.rb',
     'class ASuccessFeature < Spinach::FeatureSteps
       feature "A success feature"
@@ -21,12 +21,12 @@ class ExitStatus < Spinach::FeatureSteps
   end
 
   Given "I have a feature that has a failure" do
-    write_file('features/failure_feature.feature',
-     'Feature: A failure feature
+    write_file('features/failure_feature.feature', """
+Feature: A failure feature
 
-      Scenario: This is scenario will fail
-        Then I fail
-     ')
+  Scenario: This is scenario will fail
+    Then I fail
+""")
     write_file('features/steps/failure_feature.rb',
     'class AFailureFeature < Spinach::FeatureSteps
       feature "A failure feature"

@@ -5,13 +5,13 @@ class UndefinedFeatureReporting < Spinach::FeatureSteps
   include Integration::SpinachRunner
 
   Given "I've written a feature but not its steps" do
-    write_file('features/feature_without_steps.feature',
-               'Feature: Feature without steps
+    write_file('features/feature_without_steps.feature', """
+Feature: Feature without steps
 
-                Scenario: A scenario without steps
-                  Given I have no steps
-                  Then I should do nothing
-               ')
+  Scenario: A scenario without steps
+    Given I have no steps
+    Then I should do nothing
+""")
   end
 
   When "I run spinach" do

@@ -40,15 +40,15 @@ describe Spinach::FeatureSteps::Capybara do
     @feature_runner = Spinach::Runner::FeatureRunner.new(
       'a_feature.feature')
 
-    @feature_runner.stubs(data: Spinach::Parser.new('
-      Feature: A test feature
-        Scenario: A test scenario
-          Given Hello
-          Then Goodbye
-        Scenario: Another test scenario
-          Given Hello
-          Then Goodbye
-    ').parse).at_least_once
+    @feature_runner.stubs(data: Spinach::Parser.new("""
+Feature: A test feature
+  Scenario: A test scenario
+    Given Hello
+    Then Goodbye
+  Scenario: Another test scenario
+    Given Hello
+    Then Goodbye
+""").parse).at_least_once
 
     Spinach::Runner::ScenarioRunner.any_instance.stubs(feature_steps: @feature)
 

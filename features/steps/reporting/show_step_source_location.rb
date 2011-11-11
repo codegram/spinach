@@ -5,12 +5,13 @@ class ShowStepSourceLocation < Spinach::FeatureSteps
   include Integration::SpinachRunner
 
   Given "I have a feature that has no error or failure" do
-    write_file('features/success_feature.feature',
-     'Feature: A success feature
+    write_file('features/success_feature.feature', """
+Feature: A success feature
 
-      Scenario: This is scenario will succeed
-        Then I succeed
-     ')
+  Scenario: This is scenario will succeed
+    Then I succeed
+""")
+
     write_file('features/steps/success_feature.rb',
     'class ASuccessFeature < Spinach::FeatureSteps
       feature "A success feature"
@@ -31,12 +32,13 @@ class ShowStepSourceLocation < Spinach::FeatureSteps
   end
 
   Given "I have a feature that has no error or failure and use external steps" do
-    write_file('features/success_feature.feature',
-     'Feature: A feature that uses external steps
+    write_file('features/success_feature.feature', """
+Feature: A feature that uses external steps
 
-      Scenario: This is scenario will succeed
-        Given this is a external step
-     ')
+  Scenario: This is scenario will succeed
+    Given this is a external step
+""")
+
     write_file('features/steps/success_feature.rb',
     'class AFeatureThatUsesExternalSteps < Spinach::FeatureSteps
       feature "A feature that uses external steps"
@@ -58,12 +60,13 @@ class ShowStepSourceLocation < Spinach::FeatureSteps
   end
 
   Given "I have a feature that has an error" do
-    write_file('features/error_feature.feature',
-     'Feature: An error feature
+    write_file('features/error_feature.feature', """
+Feature: An error feature
 
-      Scenario: This is scenario will not succeed
-        Then I do not succeed
-     ')
+  Scenario: This is scenario will not succeed
+    Then I do not succeed
+""")
+
     write_file('features/steps/error_feature.rb',
     'class AnErrorFeature < Spinach::FeatureSteps
       feature "An error feature"
@@ -81,12 +84,13 @@ class ShowStepSourceLocation < Spinach::FeatureSteps
   end
 
   Given "I have a feature that has a failure" do
-    write_file('features/failure_feature.feature',
-     'Feature: A failure feature
+    write_file('features/failure_feature.feature', """
+Feature: A failure feature
 
-      Scenario: This is scenario will not succeed
-        Then I do not succeed
-     ')
+  Scenario: This is scenario will not succeed
+    Then I do not succeed
+""")
+
     write_file('features/steps/failure_feature.rb',
     'class AFailureFeature < Spinach::FeatureSteps
       feature "A failure feature"

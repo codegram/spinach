@@ -6,13 +6,13 @@ class RSpecCompatibility < Spinach::FeatureSteps
   include Integration::ErrorReporting
 
   Given "I have a feature with some failed expectations" do
-    write_file('features/feature_with_failures.feature',
-               'Feature: Feature with failures
+    write_file('features/feature_with_failures.feature', """
+Feature: Feature with failures
 
-                Scenario: This scenario will fail
-                  Given true is false
-                  Then remove all the files in my hard drive
-               ')
+  Scenario: This scenario will fail
+    Given true is false
+    Then remove all the files in my hard drive
+""")
 
     write_file('features/steps/failure_feature.rb',
                'class FeatureWithFailures < Spinach::FeatureSteps
@@ -49,13 +49,13 @@ class RSpecCompatibility < Spinach::FeatureSteps
       Capybara.app = app
     ')
 
-    write_file('features/greeting.feature',
-               'Feature: Greeting
+    write_file('features/greeting.feature', """
+Feature: Greeting
 
-                Scenario: Greeting
-                  Given I am on the front page
-                  Then I should see hello world
-               ')
+  Scenario: Greeting
+    Given I am on the front page
+    Then I should see hello world
+""")
 
     write_file('features/steps/greeting.rb',
                'require "spinach/capybara"

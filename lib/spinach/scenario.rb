@@ -4,9 +4,9 @@ module Spinach
     attr_accessor :name, :steps, :tags, :feature
 
     def initialize(feature)
-      @feature   = feature
-      @scenarios = []
-      @tags      = []
+      @feature = feature
+      @steps   = []
+      @tags    = []
     end
   end
 end

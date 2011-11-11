@@ -5,13 +5,13 @@ class FeatureNameGuessing < Spinach::FeatureSteps
   include Integration::SpinachRunner
 
   Given 'I am writing a feature called "My cool feature"' do
-    write_file('features/my_cool_feature.feature',
-               'Feature: My cool feature
+    write_file('features/my_cool_feature.feature', """
+Feature: My cool feature
 
-                Scenario: This is scenario is cool
-                  When this is so meta
-                  Then the world is crazy
-               ')
+  Scenario: This is scenario is cool
+    When this is so meta
+    Then the world is crazy
+""")
   end
 
   And 'I write a class named "MyCoolFeature"' do
