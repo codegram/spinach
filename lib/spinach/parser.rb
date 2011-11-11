@@ -1,4 +1,4 @@
-require_relative '../../../gherkin/lib/gherkin'
+require 'gherkin'
 require_relative 'parser/visitor'
 
 module Spinach
