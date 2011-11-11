@@ -45,7 +45,12 @@ module Spinach
         before do
           @steps = [stub_everything, stub_everything, stub_everything]
           @tags  = [stub_everything, stub_everything, stub_everything]
-          @node  = stub(tags: @tags, steps: @steps, name: 'Go shopping on Saturday morning')
+          @node  = stub(
+            tags:  @tags,
+            steps: @steps,
+            name:  'Go shopping on Saturday morning',
+            line: 3
+          )
         end
 
         it 'adds the scenario to the feature' do
@@ -56,6 +61,11 @@ module Spinach
         it 'sets the name' do
           visitor.visit_Scenario(@node)
           visitor.feature.scenarios.first.name.must_equal 'Go shopping on Saturday morning'
+        end
+
+        it 'sets the line' do
+          visitor.visit_Scenario(@node)
+          visitor.feature.scenarios.first.line.must_equal 3
         end
 
         it 'sets the tags' do
@@ -86,7 +96,7 @@ module Spinach
 
       describe '#visit_Step' do
         before do
-          @node  = stub(name: 'Baz')
+          @node  = stub(name: 'Baz', line: 3)
           @steps = [stub(name: 'Foo'), stub(name: 'Bar')]
         end
 
@@ -105,6 +115,15 @@ module Spinach
           visitor.visit_Step(@node)
 
           scenario.steps.first.name.must_equal 'Baz'
+        end
+
+        it 'sets the line' do
+          scenario = stub(steps: [])
+          visitor.instance_variable_set(:@current_scenario, scenario)
+
+          visitor.visit_Step(@node)
+
+          scenario.steps.first.line.must_equal 3
         end
       end
     end

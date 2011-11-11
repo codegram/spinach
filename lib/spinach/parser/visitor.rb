@@ -49,6 +49,7 @@ module Spinach
       def visit_Scenario(node)
         @current_scenario      = Scenario.new(@feature)
         @current_scenario.name = node.name
+        @current_scenario.line = node.line
 
         node.tags.each  { |tag|  tag.accept(self)  }
         node.steps.each { |step| step.accept(self) }
@@ -75,6 +76,7 @@ module Spinach
       def visit_Step(node)
         step = Step.new(@current_scenario)
         step.name = node.name
+        step.line = node.line
 
         @current_scenario.steps << step
       end
