@@ -4,11 +4,7 @@ module Spinach
   class Parser
     describe Visitor do
       let(:feature) { Feature.new }
-      let(:visitor) { Visitor.new(feature) }
-
-      it 'initializes with a Feature' do
-        visitor.feature.must_equal feature
-      end
+      let(:visitor) { Visitor.new }
 
       describe '#visit' do
         it 'makes ast accept self' do
@@ -16,6 +12,12 @@ module Spinach
           ast.expects(:accept).with(visitor)
 
           visitor.visit(ast)
+        end
+
+        it 'returns the feature' do
+          ast = stub_everything
+          visitor.instance_variable_set(:@feature, feature)
+          visitor.visit(ast).must_equal feature
         end
       end
 
@@ -27,7 +29,7 @@ module Spinach
 
         it 'sets the name' do
           visitor.visit_Feature(@node)
-          feature.name.must_equal 'Go shopping'
+          visitor.feature.name.must_equal 'Go shopping'
         end
 
         it 'iterates over its children' do
@@ -48,12 +50,12 @@ module Spinach
 
         it 'adds the scenario to the feature' do
           visitor.visit_Scenario(@node)
-          feature.scenarios.length.must_equal 1
+          visitor.feature.scenarios.length.must_equal 1
         end
 
         it 'sets the name' do
           visitor.visit_Scenario(@node)
-          feature.scenarios.first.name.must_equal 'Go shopping on Saturday morning'
+          visitor.feature.scenarios.first.name.must_equal 'Go shopping on Saturday morning'
         end
 
         it 'sets the tags' do
@@ -68,6 +70,41 @@ module Spinach
             step.expects(:accept).with visitor
           end
           visitor.visit_Scenario(@node)
+        end
+      end
+
+      describe '#visit_Tag' do
+        it 'adds the tag to the current scenario' do
+          tags     = ['tag1', 'tag2', 'tag3']
+          scenario = stub(tags: tags)
+          visitor.instance_variable_set(:@current_scenario, scenario)
+
+          visitor.visit_Tag(stub(name: 'tag4'))
+          scenario.tags.must_equal ['tag1', 'tag2', 'tag3', 'tag4']
+        end
+      end
+
+      describe '#visit_Step' do
+        before do
+          @node  = stub(name: 'Baz')
+          @steps = [stub(name: 'Foo'), stub(name: 'Bar')]
+        end
+
+        it 'adds the scenario to the feature' do
+          scenario = stub(steps: @steps)
+          visitor.instance_variable_set(:@current_scenario, scenario)
+
+          visitor.visit_Step(@node)
+          scenario.steps.length.must_equal 3
+        end
+
+        it 'sets the name' do
+          scenario = stub(steps: [])
+          visitor.instance_variable_set(:@current_scenario, scenario)
+
+          visitor.visit_Step(@node)
+
+          scenario.steps.first.name.must_equal 'Baz'
         end
       end
     end

@@ -1,11 +1,12 @@
 module Spinach
   class Scenario
     attr_accessor :line
-    attr_accessor :name, :steps, :tags
+    attr_accessor :name, :steps, :tags, :feature
 
-    def initialize
+    def initialize(feature)
+      @feature   = feature
       @scenarios = []
-      @tags = []
+      @tags      = []
     end
   end
 end
