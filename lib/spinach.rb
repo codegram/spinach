@@ -12,6 +12,9 @@ require_relative 'spinach/reporter'
 require_relative 'spinach/cli'
 require_relative 'spinach/generators'
 
+require_relative 'spinach/feature'
+require_relative 'spinach/scenario'
+
 # Spinach is a BDD framework leveraging the great Gherkin language. This
 # language is the one used defining features in Cucumber, the BDD framework
 # Spinach is inspired upon.
@@ -50,20 +53,20 @@ module Spinach
     @@hooks ||= Hooks.new
   end
 
-  # Finds a feature given a feature name.
+  # Finds step definitions given a feature name.
   #
   # @param [String] name
-  #   The feature name.
+  #   The feature name to get the definitions for.
   #
-  # @return [FeatureSteps]
-  #   the {FeatureSteps} class for the given feature name
+  # @return [StepDefinitions]
+  #   the {StepDefinitions} class for the given feature name
   #
   # @api public
-  def self.find_feature_steps(name)
+  def self.find_step_definitions(name)
     klass = Spinach::Support.camelize(name)
     feature_steps.detect do |feature|
       feature.feature_name.to_s == name.to_s ||
-      feature.name == klass
+        feature.name == klass
     end
   end
 end

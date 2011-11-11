@@ -29,20 +29,20 @@ describe Spinach do
     end
   end
 
-  describe '#find_feature_steps' do
+  describe '#find_step_definitions' do
     it 'finds a feature by name' do
-      Spinach.find_feature_steps('User authentication').must_equal @feature_steps1
-      Spinach.find_feature_steps('Slip management').must_equal @feature_steps2
-      Spinach.find_feature_steps('File attachments').must_equal @feature_steps3
+      Spinach.find_step_definitions('User authentication').must_equal @feature_steps1
+      Spinach.find_step_definitions('Slip management').must_equal @feature_steps2
+      Spinach.find_step_definitions('File attachments').must_equal @feature_steps3
     end
 
-    describe 'when a feature class does no set a feature_name' do
+    describe 'when a feature class does not set a feature_name' do
       it 'guesses the feature class from the feature name' do
-        Spinach.find_feature_steps('User sends a message').must_equal @feature_steps4
+        Spinach.find_step_definitions('User sends a message').must_equal @feature_steps4
       end
 
       it 'returns nil when it cannot find the class' do
-        Spinach.find_feature_steps('This feature does not exist').must_equal nil
+        Spinach.find_step_definitions('This feature does not exist').must_equal nil
       end
     end
   end

@@ -15,7 +15,7 @@ describe Spinach::DSL do
           step_executed = true
         end
 
-        @feature.new.execute_step('I say goodbye')
+        @feature.new.execute('I say goodbye')
         step_executed.must_equal true
       end
     end

@@ -66,7 +66,7 @@ module Spinach
       # Executes a given step.
       #
       # @api public
-      def execute_step(step)
+      def execute(step)
         underscored_step = Spinach::Support.underscore(step)
         if self.respond_to?(underscored_step)
           self.send(underscored_step)
@@ -75,14 +75,14 @@ module Spinach
         end
       end
 
-      # Gets current step source location
+      # Gets current step source location.
       #
       # @param [String] step
       #   The step name to execute.
       #
       # @return [String]
       #   The file and line where the step was defined.
-      def get_step_location(step)
+      def step_location_for(step)
         underscored_step = Spinach::Support.underscore(step)
         location = method(underscored_step).source_location if self.respond_to?(underscored_step)
       end

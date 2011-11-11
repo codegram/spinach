@@ -26,7 +26,7 @@ describe Spinach::Runner::FeatureRunner do
     it 'runs the hooks in order' do
       hooks = sequence('hooks')
       Spinach.hooks.expects(:run_before_feature).with(feature).in_sequence(hooks)
-      Spinach.expects(:find_feature_steps).returns(false).in_sequence(hooks)
+      Spinach.expects(:find_step_definitions).returns(false).in_sequence(hooks)
       Spinach.hooks.expects(:run_after_feature).with(feature).in_sequence(hooks)
 
       subject.run
@@ -35,7 +35,7 @@ describe Spinach::Runner::FeatureRunner do
     describe 'when the steps exist' do
       before do
         @feature = stub('feature', name: 'Feature')
-        Spinach.stubs(:find_feature_steps).returns(true)
+        Spinach.stubs(:find_step_definitions).returns(true)
         @scenarios = [
           scenario         = stub,
           another_scenario = stub
@@ -48,7 +48,7 @@ describe Spinach::Runner::FeatureRunner do
         it 'runs the scenarios and returns true' do
           @scenarios.each do |scenario|
             runner = stub(run: true)
-            Spinach::Runner::ScenarioRunner.expects(:new).with('Feature', scenario).returns runner
+            Spinach::Runner::ScenarioRunner.expects(:new).with(scenario).returns runner
           end
 
           @runner.run.must_equal true
@@ -59,7 +59,7 @@ describe Spinach::Runner::FeatureRunner do
         it 'runs the scenarios and returns false' do
           @scenarios.each do |scenario|
             runner = stub(run: false)
-            Spinach::Runner::ScenarioRunner.expects(:new).with('Feature', scenario).returns runner
+            Spinach::Runner::ScenarioRunner.expects(:new).with(scenario).returns runner
           end
 
           @runner.run.must_equal false
@@ -69,7 +69,7 @@ describe Spinach::Runner::FeatureRunner do
 
     describe "when the steps don't exist" do
       it 'runs the corresponding hooks and returns false' do
-        Spinach.stubs(:find_feature_steps).returns(false)
+        Spinach.stubs(:find_step_definitions).returns(false)
         Spinach.hooks.expects(:run_on_undefined_feature).with(feature)
         subject.run.must_equal false
       end

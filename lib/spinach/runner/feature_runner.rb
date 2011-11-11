@@ -42,7 +42,7 @@ module Spinach
       # @api public
       def run
         Spinach.hooks.run_before_feature @feature
-        if Spinach.find_feature_steps(feature_name)
+        if Spinach.find_step_definitions(feature_name)
           run_scenarios!
         else
           undefined_steps!
@@ -56,7 +56,7 @@ module Spinach
       def run_scenarios!
         scenarios.each do |scenario|
           if !@scenario_line || (scenario.line == @scenario_line)
-            success = ScenarioRunner.new(feature_name, scenario).run
+            success = ScenarioRunner.new(scenario).run
             @failed = true unless success
           end
         end

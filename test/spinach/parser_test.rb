@@ -17,7 +17,9 @@ Feature: User authentication
 
   describe '#parse' do
     it 'parses the file' do
-      Gherkin.expects(:parse).with @contents.strip
+      Gherkin.expects(:parse).with(@contents.strip).returns ast = stub
+      Visitor.expects(:new).with(kind_of(Feature)).returns visitor = stub
+      visitor.expects(:visit).with ast
       @parser.parse
     end
   end

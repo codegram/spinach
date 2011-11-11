@@ -1,4 +1,5 @@
 require_relative '../../../gherkin/lib/gherkin'
+require_relative 'parser/visitor'
 
 module Spinach
   # Parser leverages Gherkin to parse the feature definition.
@@ -10,6 +11,7 @@ module Spinach
     # @api public
     def initialize(content)
       @content = content
+      @visitor = Visitor.new
     end
 
     # @param [String] filename
@@ -28,14 +30,16 @@ module Spinach
     # @api public
     attr_reader :content
 
-    # Parses the feature file and returns an AST.
+    # Parses the feature file and returns a Feature.
     #
-    # @return [Gherkin::AST::Feature]
-    #   The AST Feature.
+    # @return [Feature]
+    #   The Feature.
     #
     # @api public
     def parse
-      Gherkin.parse(@content.strip)
+      ast     = Gherkin.parse(@content.strip)
+      feature = Feature.new
+      Visitor.new(feature).visit(ast)
     end
   end
 end
