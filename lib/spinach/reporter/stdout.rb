@@ -223,8 +223,8 @@ module Spinach
         buffer = []
         buffer << "(".colorize(color)
         buffer << steps.length.to_s.colorize(:"light_#{color}")
-        buffer << ") "
-        buffer << message
+        buffer << ") ".colorize(color)
+        buffer << message.colorize(color)
         buffer.join
       end
     end
