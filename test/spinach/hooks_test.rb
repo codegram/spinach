@@ -26,11 +26,10 @@ describe Spinach::Hooks do
         end
       end
     end
+
     describe "#on_tag" do
-      let(:data) do
-        {
-          'tags' => [{'name' => '@javascript'}, {'name' => '@capture'}]
-        }
+      let(:scenario) do
+        stub(tags: ['javascript', 'capture'])
       end
 
       it "calls the block if the scenario includes the tag" do
@@ -38,7 +37,7 @@ describe Spinach::Hooks do
         subject.on_tag('javascript') do
           assertion = true
         end
-        subject.run_before_scenario(data)
+        subject.run_before_scenario(scenario)
         assertion.must_equal true
       end
 
@@ -47,7 +46,7 @@ describe Spinach::Hooks do
         subject.on_tag('screenshot') do
           assertion = true
         end
-        subject.run_before_scenario(data)
+        subject.run_before_scenario(scenario)
         assertion.wont_equal true
       end
     end
