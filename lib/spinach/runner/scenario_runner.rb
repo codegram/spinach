@@ -65,9 +65,9 @@ module Spinach
       # @param [Gherkin::AST::Step] step
       #   The step to be run.
       #
-      # @api public
+      # @api semipublic
       def run_step(step)
-        step_location = feature_steps.step_location_for(step.name)
+        step_location = step_definitions.step_location_for(step.name)
         step_definitions.execute(step.name)
         Spinach.hooks.run_on_successful_step step, step_location
       rescue *Spinach.config[:failure_exceptions] => e

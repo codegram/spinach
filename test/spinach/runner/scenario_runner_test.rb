@@ -55,99 +55,73 @@ module Spinach
         end
       end
 
-      # describe '#run'
+      describe '#run_step' do
+        before do
+          @step             = stub(name: 'Go shopping')
+          @step_definitions = stub
+          @step_definitions.stubs(:step_location_for).with('Go shopping').returns @location = stub
+          subject.stubs(:step_definitions).returns @step_definitions
+        end
 
+        describe 'when the step is successful' do
+          it 'runs the successful hooks' do
+            @step_definitions.stubs(:execute).with('Go shopping').returns true
+            Spinach.hooks.expects(:run_on_successful_step).with(@step, @location)
 
-      # describe '#initialize' do
-      #   it 'lists all the steps' do
-      #     subject.steps.count.must_equal 3
-      #   end
+            subject.run_step(@step)
+          end
+        end
 
-      #   it 'sets the feature' do
-      #     subject.feature_steps.must_equal feature_steps
-      #   end
-      # end
+        describe 'when the step fails' do
+          before do
+            @failure_exception = Class.new(StandardError)
+            Spinach.config[:failure_exceptions] = [@failure_exception]
+            @step_definitions.stubs(:execute).with('Go shopping').raises @failure_exception
+          end
 
-      # describe '#feature' do
-      #   it 'finds the feature given a feature name' do
-      #     subject.unstub(:feature_steps)
-      #     @feature = stub_everything
-      #     subject.stubs(feature_name: 'A cool feature')
-      #     Spinach.expects(:find_step_definitions).with('A cool feature').returns(@feature)
-      #     subject.feature_steps
-      #   end
-      # end
+          it 'sets the exception' do
+            subject.run_step(@step)
+            subject.instance_variable_get(:@exception).must_be_kind_of(@failure_exception)
+          end
 
-      # describe '#run' do
-      #   it 'calls the appropiate feature steps' do
-      #     feature_steps.expects(:execute_step).with('I herd you like steps')
-      #     feature_steps.expects(:execute_step).with('I test steps')
-      #     feature_steps.expects(:execute_step).with('I go step by step')
-      #     subject.run
-      #   end
+          it 'runs the failed hooks' do
+            Spinach.hooks.expects(:run_on_failed_step).with(@step, kind_of(@failure_exception), @location)
+            subject.run_step(@step)
+          end
+        end
 
-      #   describe 'when throwing exceptions' do
-      #     it 'rescues a MiniTest::Assertion' do
-      #       Spinach.config[:failure_exceptions] << MiniTest::Assertion
-      #       feature_steps.expects(:execute_step).raises(MiniTest::Assertion)
-      #       Spinach.hooks.expects("run_before_scenario").with(has_value("A cool scenario"))
-      #       Spinach.hooks.expects("run_after_scenario").with(has_value("A cool scenario"))
-      #       Spinach.hooks.expects('run_on_failed_step').with(anything, anything, anything)
-      #       Spinach.hooks.expects('run_on_skipped_step').with(anything, anything).twice
-      #       subject.run
-      #     end
+        describe 'when the step is undefined' do
+          before do
+            @step_definitions.stubs(:execute).with('Go shopping').raises Spinach::StepNotDefinedException, @step
+          end
 
-      #     it 'rescues a Spinach::StepNotDefinedException' do
-      #       feature_steps.expects(:execute_step).raises(
-      #         Spinach::StepNotDefinedException.new('bar'))
-      #       Spinach.hooks.expects("run_before_scenario").with(has_value("A cool scenario"))
-      #       Spinach.hooks.expects("run_after_scenario").with(has_value("A cool scenario"))
-      #       Spinach.hooks.expects("run_on_undefined_step").with(
-      #         anything, anything, anything)
-      #       Spinach.hooks.expects("run_on_skipped_step").with(
-      #         anything, anything).twice
-      #       subject.run
-      #     end
+          it 'sets the exception' do
+            subject.run_step(@step)
+            subject.instance_variable_get(:@exception).must_be_kind_of(Spinach::StepNotDefinedException)
+          end
 
-      #     it 'rescues any other error' do
-      #       feature_steps.expects(:execute_step).raises
-      #       Spinach.hooks.expects("run_after_scenario").with(has_value("A cool scenario"))
-      #       Spinach.hooks.expects("run_before_scenario").with(has_value("A cool scenario"))
-      #       Spinach.hooks.expects("run_on_error_step").with(anything, anything, anything)
-      #       Spinach.hooks.expects("run_on_skipped_step").with(anything, anything).twice
-      #       subject.run
-      #     end
+          it 'runs the undefined hooks' do
+            Spinach.hooks.expects(:run_on_undefined_step).with(@step, kind_of(Spinach::StepNotDefinedException))
+            subject.run_step(@step)
+          end
+        end
 
-      #     it 'returns an failure' do
-      #       feature_steps.expects(:execute_step).raises(MiniTest::Assertion)
-      #       subject.run.wont_equal nil
-      #     end
-      #   end
+        describe 'when the step raises an error' do
+          before do
+            @step_definitions.stubs(:execute).with('Go shopping').raises StandardError
+          end
 
-      #   it 'runs a step' do
-      #     feature_steps.expects(:execute_step).with(anything).times(3)
-      #     subject.run.must_equal true
-      #   end
+          it 'sets the exception' do
+            subject.run_step(@step)
+            subject.instance_variable_get(:@exception).must_be_kind_of(StandardError)
+          end
 
-      #   describe 'hooks' do
-      #     it 'fires up the scenario hooks' do
-      #       feature_steps.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('bar'))
-      #       Spinach.hooks.expects(:run_before_scenario).with(has_value("A cool scenario"))
-      #       Spinach.hooks.expects(:run_after_scenario).with(has_value("A cool scenario"))
-      #       subject.run
-      #     end
-
-      #     it 'fires up the step hooks' do
-      #       feature_steps.expects(:execute_step).raises(Spinach::StepNotDefinedException.new('bar'))
-      #       %w{before_step after_step}.each do |hook|
-      #         Spinach.hooks.expects("run_#{hook}").with(kind_of(Hash)).times(3)
-      #       end
-
-      #       subject.run
-      #     end
-      #   end
-      # end
+          it 'runs the error hooks' do
+            Spinach.hooks.expects(:run_on_error_step).with(@step, kind_of(StandardError), @location)
+            subject.run_step(@step)
+          end
+        end
+      end
     end
-
   end
 end
