@@ -35,7 +35,7 @@ module Spinach
     end
 
     # The "step definitions path" holds the place where your feature step
-    # classes will be searched for. Defaults to 'features/steps'
+    # classes will be searched for. Defaults to '#{features_path}/steps'
     #
     # @return [String]
     #   The step definitions path.
@@ -46,7 +46,7 @@ module Spinach
     end
 
     # The "support path" helds the place where you can put your configuration
-    # files.
+    # files. Defaults to '#{features_path}/support'
     #
     # @return [String]
     #   The support file path.
