@@ -40,6 +40,17 @@ describe Spinach::Cli do
         end
       end
     end
+
+    describe 'undefined option' do
+      %w{-lorem --ipsum}.each do |opt|
+        it 'exits and outputs error message with #{opt}' do
+          cli = Spinach::Cli.new([opt])
+          cli.expects(:exit)
+          cli.expects(:puts).with("Invalid option: #{opt}")
+          options = cli.options
+        end
+      end
+    end
   end
 
   describe '#init_reporter' do

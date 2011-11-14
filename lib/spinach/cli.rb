@@ -62,18 +62,23 @@ module Spinach
       reporter_options = {}
       reporter_options[:backtrace] = false
 
-      OptionParser.new do |opts|
-        opts.on('-b', '--backtrace', 'Show backtrace of errors') do |v|
-          reporter_options[:backtrace] = v
-        end
-        opts.on('-g', '--generate', 'Auto-generate the feeature steps files') do |v|
-          Spinach::Generators.bind
-        end
-        opts.on_tail('--version', 'Show version') do
-          puts Spinach::VERSION
-          exit
-        end
-      end.parse!(@args)
+      begin
+        OptionParser.new do |opts|
+          opts.on('-b', '--backtrace', 'Show backtrace of errors') do |v|
+            reporter_options[:backtrace] = v
+          end
+          opts.on('-g', '--generate', 'Auto-generate the feeature steps files') do |v|
+            Spinach::Generators.bind
+          end
+          opts.on_tail('--version', 'Show version') do
+            puts Spinach::VERSION
+            exit
+          end
+        end.parse!(@args)
+      rescue OptionParser::ParseError => e
+        puts e.message.capitalize
+        exit 1
+      end
 
       {reporter: reporter_options}
     end
