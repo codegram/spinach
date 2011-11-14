@@ -20,29 +20,40 @@ module Spinach
   # to run.
   #
   class Config
-    attr_writer :step_definitions_path, :default_reporter, :support_path,
+    attr_writer :features_path, :step_definitions_path, :default_reporter, :support_path,
       :failure_exceptions
 
+    # The "features path" holds the place where your features will be
+    # searched for. Defaults to 'features'
+    #
+    # @return [String]
+    #    The features path.
+    #
+    # @api public
+    def features_path
+      @features_path || 'features'
+    end
+
     # The "step definitions path" holds the place where your feature step
-    # classes will be searched for. Defaults to 'features/steps'
+    # classes will be searched for. Defaults to '#{features_path}/steps'
     #
     # @return [String]
     #   The step definitions path.
     #
     # @api public
     def step_definitions_path
-      @step_definitions_path || 'features/steps'
+      @step_definitions_path || "#{self.features_path}/steps"
     end
 
     # The "support path" helds the place where you can put your configuration
-    # files.
+    # files. Defaults to '#{features_path}/support'
     #
     # @return [String]
     #   The support file path.
     #
     # @api public
     def support_path
-      @support_path || 'features/support'
+      @support_path || "#{self.features_path}/support"
     end
 
     # Allows you to read the config object using a hash-like syntax.

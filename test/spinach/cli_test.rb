@@ -18,7 +18,7 @@ describe Spinach::Cli do
       end
     end
 
-    describe 'backtrace' do
+    describe 'generate' do
       %w{-g --generate}.each do |opt|
         it 'inits the generator if #{opt}' do
           Spinach::Generators.expects(:bind)
