@@ -18,6 +18,18 @@ describe Spinach::Cli do
       end
     end
 
+    describe 'features_path' do
+      %w{-f --features_path}.each do |opt|
+        it 'sets the given features_path' do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
+          cli = Spinach::Cli.new([opt,"custom_path"])
+          cli.options
+          config.features_path.must_equal 'custom_path'
+        end
+      end
+    end
+
     describe 'generate' do
       %w{-g --generate}.each do |opt|
         it 'inits the generator if #{opt}' do

@@ -74,6 +74,9 @@ module Spinach
             puts Spinach::VERSION
             exit
           end
+          opts.on('-f', '--features_path PATH', 'Path where your features will be searched for') do |path|
+            Spinach.config[:features_path] = path
+          end
         end.parse!(@args)
       rescue OptionParser::ParseError => e
         puts e.message.capitalize
