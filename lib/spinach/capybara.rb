@@ -30,8 +30,14 @@ module Spinach
             include ::Capybara::RSpecMatchers
           end
         end
-        Spinach.hooks.before_scenario do
+
+        Spinach.hooks.after_scenario do
           ::Capybara.current_session.reset! if ::Capybara.app
+          ::Capybara.use_default_driver
+        end
+
+        Spinach.hooks.on_tag('javascript') do
+          ::Capybara.current_driver = ::Capybara.javascript_driver
         end
       end
     end

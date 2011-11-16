@@ -27,6 +27,19 @@ describe Spinach::FeatureSteps::Capybara do
     end.new
   end
 
+  let(:parsed_feature) { Spinach::Parser.new("""
+Feature: A test feature
+  Scenario: A test scenario
+    Given Hello
+    Then Goodbye
+
+  @javascript
+  Scenario: Another test scenario
+    Given Hello
+    Then Goodbye
+""").parse
+  }
+
   it 'includes capybara into all features' do
     @feature.kind_of? Capybara
   end
@@ -37,19 +50,26 @@ describe Spinach::FeatureSteps::Capybara do
   end
 
   it 'resets the capybara session after each scenario' do
-    feature = Spinach::Parser.new("""
-Feature: A test feature
-  Scenario: A test scenario
-    Given Hello
-    Then Goodbye
-  Scenario: Another test scenario
-    Given Hello
-    Then Goodbye
-""").parse
-
-    @feature_runner = Spinach::Runner::FeatureRunner.new(feature)
+    @feature_runner = Spinach::Runner::FeatureRunner.new(parsed_feature)
 
     Capybara.current_session.expects(:reset!).at_least_once
+
+    @feature_runner.run
+  end
+
+  it 'resets the javascript driver after each scenario' do
+    @feature_runner = Spinach::Runner::FeatureRunner.new(parsed_feature)
+
+    Capybara.expects(:use_default_driver).at_least(2)
+
+    @feature_runner.run
+  end
+
+  it 'changes the javascript driver when an scenario has the @javascript tag' do
+    @feature_runner = Spinach::Runner::FeatureRunner.new(parsed_feature)
+
+    Capybara.expects(:javascript_driver).at_least(1)
+    Capybara.expects(:current_driver=).at_least(1)
 
     @feature_runner.run
   end
