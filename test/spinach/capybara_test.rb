@@ -68,8 +68,8 @@ Feature: A test feature
   it 'changes the javascript driver when an scenario has the @javascript tag' do
     @feature_runner = Spinach::Runner::FeatureRunner.new(parsed_feature)
 
-    Capybara.expects(:javascript_driver).once.returns('javascript')
-    Capybara.expects(:current_driver=).once
+    Capybara.expects(:javascript_driver).at_least(1)
+    Capybara.expects(:current_driver=).at_least(1)
 
     @feature_runner.run
   end
