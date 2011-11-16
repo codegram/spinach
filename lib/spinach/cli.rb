@@ -64,19 +64,28 @@ module Spinach
 
       begin
         OptionParser.new do |opts|
-          opts.on('-b', '--backtrace', 'Show backtrace of errors') do |v|
-            reporter_options[:backtrace] = v
+          opts.on('-b', '--backtrace',
+                  'Show backtrace of errors') do |show_backtrace|
+            reporter_options[:backtrace] = show_backtrace
           end
-          opts.on('-g', '--generate', 'Auto-generate the feeature steps files') do |v|
+
+          opts.on('-g', '--generate',
+                  'Auto-generate the feeature steps files') do
             Spinach::Generators.bind
           end
+
           opts.on_tail('--version', 'Show version') do
             puts Spinach::VERSION
             exit
           end
+
+          opts.on('-f', '--features_path PATH',
+                  'Path where your features will be searched for') do |path|
+            Spinach.config[:features_path] = path
+          end
         end.parse!(@args)
-      rescue OptionParser::ParseError => e
-        puts e.message.capitalize
+      rescue OptionParser::ParseError => exception
+        puts exception.message.capitalize
         exit 1
       end
 
