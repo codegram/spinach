@@ -21,7 +21,7 @@ module Spinach
   #
   class Config
     attr_writer :features_path, :step_definitions_path, :default_reporter, :support_path,
-      :failure_exceptions
+      :failure_exceptions, :config_path
 
     # The "features path" holds the place where your features will be
     # searched for. Defaults to 'features'
@@ -95,6 +95,15 @@ module Spinach
     # @api public
     def failure_exceptions
       @failure_exceptions ||= []
+    end
+
+    # It allows you to set a config file to parse for all the other options to be set
+    #
+    # @return [String]
+    #   The config file name
+    #
+    def config_path
+      @config_path ||= 'config/spinach.yml'
     end
   end
 end

@@ -53,4 +53,15 @@ describe Spinach::Config do
       subject[:failure_exceptions].must_include RuntimeError
     end
   end
+
+  describe '#config_path' do
+    it 'returns a default' do
+      subject[:config_path].must_equal 'config/spinach.yml'
+    end
+
+    it 'can be overwritten' do
+      subject[:config_path] = 'my_config_file.yml'
+      subject[:config_path].must_equal 'my_config_file.yml'
+    end
+  end
 end
