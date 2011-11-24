@@ -39,6 +39,7 @@ module Spinach
             subject.stubs(:step_definitions).returns step_definitions = stub
 
             Spinach.hooks.expects(:run_before_scenario).with(scenario).in_sequence(hooks)
+            Spinach.hooks.expects(:run_around_scenario).with(scenario).in_sequence(hooks).yields
 
             Spinach.hooks.expects(:run_before_step).with(steps.first).in_sequence(hooks)
             subject.expects(:run_step).with(steps.first)

@@ -44,17 +44,18 @@ module Spinach
       # @api public
       def run
         Spinach.hooks.run_before_scenario @scenario
+        Spinach.hooks.run_around_scenario @scenario do
+          steps.each do |step|
+            Spinach.hooks.run_before_step step
 
-        steps.each do |step|
-          Spinach.hooks.run_before_step step
+            if @exception
+              Spinach.hooks.run_on_skipped_step step
+            else
+              run_step(step)
+            end
 
-          if @exception
-            Spinach.hooks.run_on_skipped_step step
-          else
-            run_step(step)
+            Spinach.hooks.run_after_step step
           end
-
-          Spinach.hooks.run_after_step step
         end
         Spinach.hooks.run_after_scenario @scenario
         !@exception

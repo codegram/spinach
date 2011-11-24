@@ -56,6 +56,14 @@ module Spinach
     #   end
     hook :before_scenario
 
+    # Runs around every scenario
+    # @example
+    #   Spinach.hooks.around_scenario do |scenario_data, &block|
+    #     # feature_data is a hash of the parsed scenario data
+    #     block.call
+    #   end
+    hook :around_scenario
+
     # Runs after every scenario
     #
     # @example
