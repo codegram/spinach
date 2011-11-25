@@ -64,6 +64,12 @@ module Spinach
 
       begin
         OptionParser.new do |opts|
+          opts.on('-c', '--config_path PATH',
+                  'Parse options from file (will get overriden by flags)') do |file|
+            Spinach.config[:config_path] = file
+            Spinach.config.parse_from_file
+          end
+
           opts.on('-b', '--backtrace',
                   'Show backtrace of errors') do |show_backtrace|
             reporter_options[:backtrace] = show_backtrace

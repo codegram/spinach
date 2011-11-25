@@ -105,5 +105,14 @@ module Spinach
     def config_path
       @config_path ||= 'config/spinach.yml'
     end
+
+    # Parse options from the config file
+    #
+    # @return [Boolean]
+    #   If the config was parsed from the file
+    #
+    def parse_from_file
+      true
+    end
   end
 end
