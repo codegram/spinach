@@ -61,13 +61,13 @@ module Spinach
     def parse_options
       reporter_options = {}
       reporter_options[:backtrace] = false
+      config = {}
 
       begin
         OptionParser.new do |opts|
           opts.on('-c', '--config_path PATH',
                   'Parse options from file (will get overriden by flags)') do |file|
             Spinach.config[:config_path] = file
-            Spinach.config.parse_from_file
           end
 
           opts.on('-b', '--backtrace',
@@ -87,9 +87,12 @@ module Spinach
 
           opts.on('-f', '--features_path PATH',
                   'Path where your features will be searched for') do |path|
-            Spinach.config[:features_path] = path
+            config[:features_path] = path
           end
         end.parse!(@args)
+
+        Spinach.config.parse_from_file
+        config.each{|k,v| Spinach.config[k] = v}
       rescue OptionParser::ParseError => exception
         puts exception.message.capitalize
         exit 1
