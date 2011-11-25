@@ -112,7 +112,12 @@ module Spinach
     #   If the config was parsed from the file
     #
     def parse_from_file
+      parsed_opts = YAML.load_file(config_path)
+      parsed_opts.delete_if{|k| k.to_s == 'config_path'}
+      parsed_opts.each_pair{|k,v| self[k] = v}
       true
+    rescue Errno::ENOENT
+      false
     end
   end
 end

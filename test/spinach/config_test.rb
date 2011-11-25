@@ -64,4 +64,21 @@ describe Spinach::Config do
       subject[:config_path].must_equal 'my_config_file.yml'
     end
   end
+
+  describe '#parse_from_file' do
+    before do
+      subject[:config_path] = 'a_path'
+      YAML.stubs(:load_file).returns({support_path: 'my_path', config_path: 'another_path'})
+      subject.parse_from_file
+    end
+
+    it 'sets the options' do
+      subject[:support_path].must_equal 'my_path'
+    end
+
+    it "doesn't set the config_path option" do
+      subject[:config_path].must_equal 'a_path'
+    end
+  end
+
 end
