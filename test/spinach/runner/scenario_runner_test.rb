@@ -3,7 +3,7 @@ require_relative '../../test_helper'
 module Spinach
   class Runner
     describe ScenarioRunner do
-      let(:feature) { stub(name: 'Feature') }
+      let(:feature) { stub(name: 'Feature', background_steps: []) }
       let(:steps) { [stub(name: 'go shopping'), stub(name: 'do something')] }
       let(:scenario) do
         stub(

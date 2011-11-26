@@ -37,7 +37,25 @@ module Spinach
       # @api public
       def visit_Feature(node)
         @feature.name = node.name
+        node.background.accept(self)
         node.scenarios.each { |scenario| scenario.accept(self) }
+      end
+
+      # Iterates over the steps.
+      #
+      # @param [Gherkin::AST::Scenario] node
+      #   The scenario to visit.
+      #
+      # @api public
+      def visit_Background(node)
+        background = Background.new(@feature)
+        background.line = node.line
+
+        @current_step_set = background
+        node.steps.each { |step| step.accept(self) }
+        @current_step_set = nil
+
+        @feature.background = background
       end
 
       # Sets the scenario name and iterates over the steps.
@@ -47,14 +65,19 @@ module Spinach
       #
       # @api public
       def visit_Scenario(node)
-        @current_scenario      = Scenario.new(@feature)
-        @current_scenario.name = node.name
-        @current_scenario.line = node.line
+        scenario      = Scenario.new(@feature)
+        scenario.name = node.name
+        scenario.line = node.line
 
+        @current_scenario = scenario
         node.tags.each  { |tag|  tag.accept(self)  }
-        node.steps.each { |step| step.accept(self) }
+        @current_scenario = nil
 
-        @feature.scenarios << @current_scenario
+        @current_step_set = scenario
+        node.steps.each { |step| step.accept(self) }
+        @current_step_set = nil
+
+        @feature.scenarios << scenario
       end
 
       # Adds the tag to the current scenario.
@@ -79,7 +102,7 @@ module Spinach
         step.line    = node.line
         step.keyword = node.keyword
 
-        @current_scenario.steps << step
+        @current_step_set.steps << step
       end
     end
   end
