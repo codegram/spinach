@@ -81,6 +81,13 @@ module Spinach
           Spinach.hooks.run_before_scenario(anything)
         end
 
+        it "binds a callback around every scenario" do
+          @reporter.expects(:around_scenario_run)
+          Spinach.hooks.run_around_scenario(anything) do
+            yield
+          end
+        end
+
         it "binds a callback after every scenario" do
           @reporter.expects(:after_scenario_run)
           Spinach.hooks.run_after_scenario
