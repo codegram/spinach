@@ -54,12 +54,19 @@ module Spinach
       private
 
       def run_scenarios!
-        scenarios.each do |scenario|
-          if !@scenario_line || (scenario.line == @scenario_line)
+        scenarios.each_with_index do |scenario, current_scenario_index|
+          if match(current_scenario_index)
             success = ScenarioRunner.new(scenario).run
             @failed = true unless success
           end
         end
+      end
+
+      def match(current_scenario_index)
+        return true unless @line
+        return false if @line<scenarios[current_scenario_index].line
+        next_scenario = scenarios[current_scenario_index+1]
+        !next_scenario || @line<next_scenario.line
       end
 
       def undefined_steps!
