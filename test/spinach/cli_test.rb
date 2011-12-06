@@ -53,6 +53,28 @@ describe Spinach::Cli do
       end
     end
 
+    describe 'config_path' do
+      %w{-c --config_path}.each do |opt|
+        it "sets the config path" do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
+          cli = Spinach::Cli.new([opt, 'config_file'])
+          config.expects(:parse_from_file)
+          cli.options
+          config.config_path.must_equal 'config_file'
+        end
+
+        it "gets overriden by the other cli options" do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
+          YAML.stubs(:load_file).returns({features_path: 'my_path'})
+          cli = Spinach::Cli.new(['-f', 'another_path', opt, 'config_file'])
+          cli.options
+          config.features_path.must_equal 'another_path'
+        end
+      end
+    end
+
     describe 'undefined option' do
       %w{-lorem --ipsum}.each do |opt|
         it 'exits and outputs error message with #{opt}' do
