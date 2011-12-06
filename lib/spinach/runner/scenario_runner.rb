@@ -24,7 +24,7 @@ module Spinach
       #
       # @api public
       def steps
-        @scenario.steps
+        feature.background_steps + @scenario.steps
       end
 
       # @return [FeatureSteps]
@@ -80,6 +80,7 @@ module Spinach
         @exception = e
         Spinach.hooks.run_on_error_step step, @exception, step_location
       end
+
     end
   end
 end

@@ -4,6 +4,8 @@ module Spinach
     # given the parsed feture data
     class FeatureGenerator
 
+      attr_reader :feature
+
       # @param [Feature] feature
       #   The feature returned from the {Parser}
       def initialize(feature)
@@ -11,10 +13,13 @@ module Spinach
       end
 
       # @return [Array<Hash>]
-      #   an array of unique steps found in this scenario, avoiding name
+      #   an array of unique steps found in this feature, avoiding name
       #   repetition
       def steps
-        @feature.scenarios.map(&:steps).flatten.uniq(&:name)
+        scenario_steps   = @feature.scenarios.map(&:steps).flatten
+        background_steps = @feature.background_steps
+
+        (scenario_steps + background_steps).uniq(&:name)
       end
 
       # @return [String]

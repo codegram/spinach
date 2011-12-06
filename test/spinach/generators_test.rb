@@ -8,6 +8,8 @@ describe Spinach::Generators do
   let(:data) do
     Spinach::Parser.new("""
 Feature: Cheezburger can I has
+  Background:
+    Given I liek cheezburger
   Scenario: Some Lulz
     Given I haz a sad
     When I get some lulz
