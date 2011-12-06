@@ -53,4 +53,32 @@ describe Spinach::Config do
       subject[:failure_exceptions].must_include RuntimeError
     end
   end
+
+  describe '#config_path' do
+    it 'returns a default' do
+      subject[:config_path].must_equal 'config/spinach.yml'
+    end
+
+    it 'can be overwritten' do
+      subject[:config_path] = 'my_config_file.yml'
+      subject[:config_path].must_equal 'my_config_file.yml'
+    end
+  end
+
+  describe '#parse_from_file' do
+    before do
+      subject[:config_path] = 'a_path'
+      YAML.stubs(:load_file).returns({support_path: 'my_path', config_path: 'another_path'})
+      subject.parse_from_file
+    end
+
+    it 'sets the options' do
+      subject[:support_path].must_equal 'my_path'
+    end
+
+    it "doesn't set the config_path option" do
+      subject[:config_path].must_equal 'a_path'
+    end
+  end
+
 end
