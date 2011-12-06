@@ -24,8 +24,8 @@ module Spinach
         define_method hook do |&block|
           add_hook(hook, &block)
         end
-        define_method "run_#{hook}" do |*args|
-          run_hook(hook, *args)
+        define_method "run_#{hook}" do |*args, &block|
+          run_hook(hook, *args, &block)
         end
       end
     end
@@ -50,9 +50,9 @@ module Spinach
       # @param [String] name
       #   the hook's name
       #
-      def run_hook(name, *args)
+      def run_hook(name, *args, &block)
         if callbacks = hooks[name.to_sym]
-          callbacks.each{ |c| c.call(*args) }
+          callbacks.each{ |c| c.call(*args, &block) }
         end
       end
 

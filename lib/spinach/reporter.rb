@@ -31,6 +31,7 @@ module Spinach
         hooks.after_feature { |*args| after_feature_run(*args) }
         hooks.on_undefined_feature { |*args| on_feature_not_found(*args) }
         hooks.before_scenario { |*args| before_scenario_run(*args) }
+        hooks.around_scenario { |*args, &block| around_scenario_run(*args, &block) }
         hooks.after_scenario { |*args| after_scenario_run(*args) }
         hooks.on_successful_step { |*args| on_successful_step(*args) }
         hooks.on_undefined_step { |*args| on_undefined_step(*args) }

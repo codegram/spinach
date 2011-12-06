@@ -7,7 +7,7 @@ describe Spinach::Hooks do
 
   describe "hooks" do
     %w{before_run after_run before_feature after_feature on_undefined_feature
-    before_scenario after_scenario before_step after_step on_successful_step
+    before_scenario around_scenario after_scenario before_step after_step on_successful_step
     on_failed_step on_error_step on_undefined_step on_skipped_step}.each do |callback|
       describe "#{callback}" do
         it "responds to #{callback}" do
