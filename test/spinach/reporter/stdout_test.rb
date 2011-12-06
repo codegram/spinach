@@ -169,7 +169,7 @@ describe Spinach::Reporter::Stdout do
 
   describe "#on_feature_not_found" do
     before do
-      @feature = stub(name: 'This feature does not exist', scenarios: [])
+      @feature = stub(name: 'This feature does not exist', scenarios: [], background_steps: [])
       Spinach.config.stubs(:step_definitions_path).returns('my/path')
       @reporter.on_feature_not_found(@feature)
     end

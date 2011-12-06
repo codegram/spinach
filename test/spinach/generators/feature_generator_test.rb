@@ -10,6 +10,8 @@ module Spinach::Generators
     let(:feature) do
       Spinach::Parser.new("""
 Feature: Cheezburger can I has
+  Background:
+    Given I liek cheezburger
   Scenario: Some Lulz
     Given I haz a sad
     When I get some lulz
@@ -28,7 +30,7 @@ Feature: Cheezburger can I has
 
     describe "#steps" do
       it "returns a correct number different steps for this data" do
-        subject.steps.length.must_equal 4
+        subject.steps.length.must_equal 5
       end
     end
 

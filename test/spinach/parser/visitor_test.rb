@@ -23,8 +23,9 @@ module Spinach
 
       describe '#visit_Feature' do
         before do
+          @background = stub_everything
           @scenarios = [stub_everything, stub_everything, stub_everything]
-          @node  = stub(scenarios: @scenarios, name: 'Go shopping')
+          @node  = stub(scenarios: @scenarios, name: 'Go shopping', background: @background)
         end
 
         it 'sets the name' do
@@ -81,6 +82,38 @@ module Spinach
           end
           visitor.visit_Scenario(@node)
         end
+
+      end
+
+      describe '#visit_Background' do
+        before do
+          @steps = [stub_everything, stub_everything, stub_everything]
+          @node  = stub(
+            steps: @steps,
+            line: 3
+          )
+        end
+
+        it 'adds the background to the feature' do
+          visitor.visit_Background(@node)
+          visitor.feature.background.must_be_kind_of Background
+        end
+
+        it 'sets the line' do
+          visitor.visit_Background(@node)
+          visitor.feature.background.line.must_equal 3
+        end
+
+        it 'iterates over its children' do
+          @steps.each do |step|
+            step.expects(:accept).with visitor
+          end
+          visitor.visit_Background(@node)
+        end
+
+        it 'visits the background' do
+          visitor.visit_Background(@node)
+        end
       end
 
       describe '#visit_Tag' do
@@ -100,39 +133,39 @@ module Spinach
           @steps = [stub(name: 'Foo'), stub(name: 'Bar')]
         end
 
-        it 'adds the scenario to the feature' do
-          scenario = stub(steps: @steps)
-          visitor.instance_variable_set(:@current_scenario, scenario)
+        it 'adds the step to the step set' do
+          step_set = stub(steps: @steps)
+          visitor.instance_variable_set(:@current_step_set, step_set)
 
           visitor.visit_Step(@node)
-          scenario.steps.length.must_equal 3
+          step_set.steps.length.must_equal 3
         end
 
         it 'sets the name' do
-          scenario = stub(steps: [])
-          visitor.instance_variable_set(:@current_scenario, scenario)
+          step_set = stub(steps: [])
+          visitor.instance_variable_set(:@current_step_set, step_set)
 
           visitor.visit_Step(@node)
 
-          scenario.steps.first.name.must_equal 'Baz'
+          step_set.steps.first.name.must_equal 'Baz'
         end
 
         it 'sets the keyword' do
-          scenario = stub(steps: [])
-          visitor.instance_variable_set(:@current_scenario, scenario)
+          step_set = stub(steps: [])
+          visitor.instance_variable_set(:@current_step_set, step_set)
 
           visitor.visit_Step(@node)
 
-          scenario.steps.first.keyword.must_equal 'Given'
+          step_set.steps.first.keyword.must_equal 'Given'
         end
 
         it 'sets the line' do
-          scenario = stub(steps: [])
-          visitor.instance_variable_set(:@current_scenario, scenario)
+          step_set = stub(steps: [])
+          visitor.instance_variable_set(:@current_step_set, step_set)
 
           visitor.visit_Step(@node)
 
-          scenario.steps.first.line.must_equal 3
+          step_set.steps.first.line.must_equal 3
         end
       end
     end
