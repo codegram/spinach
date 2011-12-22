@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{Spinach is a BDD framework on top of gherkin}
   gem.homepage      = "http://github.com/codegram/spinach"
 
-  gem.add_runtime_dependency 'gherkin-ruby', '>= 0.0.2'
+  gem.add_runtime_dependency 'gherkin-ruby', '~> 0.0.2'
   gem.add_runtime_dependency 'colorize'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'mocha'
@@ -20,7 +20,7 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'fakefs'
-  gem.add_development_dependency 'minitest'
+  gem.add_development_dependency 'minitest', '~> 2.8.0'
   gem.add_development_dependency 'turn'
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
