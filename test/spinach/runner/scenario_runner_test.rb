@@ -53,6 +53,16 @@ module Spinach
 
             subject.run
           end
+
+          it 'raises if around hook does not yield' do
+            subject.stubs(:step_definitions).returns stub
+
+            Spinach.hooks.stubs(:run_around_scenario).with(scenario)
+
+            proc do
+              subject.run
+            end.must_raise RuntimeError
+          end
         end
       end
 

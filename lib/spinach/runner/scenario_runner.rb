@@ -44,7 +44,9 @@ module Spinach
       # @api public
       def run
         Spinach.hooks.run_before_scenario @scenario
+        scenario_run = false
         Spinach.hooks.run_around_scenario @scenario do
+          scenario_run = true
           steps.each do |step|
             Spinach.hooks.run_before_step step
 
@@ -57,6 +59,7 @@ module Spinach
             Spinach.hooks.run_after_step step
           end
         end
+        raise "around_scenario hooks *must* yield" if !scenario_run && !@exception
         Spinach.hooks.run_after_scenario @scenario
         !@exception
       end
