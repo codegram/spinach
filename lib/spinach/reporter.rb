@@ -51,6 +51,9 @@ module Spinach
     def after_feature_run(*args); end
     def on_feature_not_found(*args); end
     def before_scenario_run(*args); end
+    def around_scenario_run(*args)
+      yield
+    end
     def after_scenario_run(*args); end
     def on_successful_step(*args); end;
     def on_failed_step(*args); end;

@@ -88,6 +88,14 @@ module Spinach
           end
         end
 
+        it "yields to around scenario callback" do
+          called = false
+          @reporter.around_scenario_run do
+            called = true
+          end
+          called.must_equal true
+        end
+
         it "binds a callback after every scenario" do
           @reporter.expects(:after_scenario_run)
           Spinach.hooks.run_after_scenario

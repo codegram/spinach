@@ -53,6 +53,8 @@ module Spinach
       def run_hook(name, *args, &block)
         if callbacks = hooks[name.to_sym]
           callbacks.each{ |c| c.call(*args, &block) }
+        else
+          yield if block
         end
       end
 
