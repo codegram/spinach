@@ -48,6 +48,14 @@ describe Spinach::Hookable do
         subject.run_hook(:before_save, 1, 2)
         array.must_equal [1, 2]
       end
+
+      it "yields to hook block even if nothing is hooked" do
+        called = false
+        subject.run_hook(:before_save) do
+          called = true
+        end
+        called.must_equal true
+      end
     end
 
     describe "#reset_hooks" do
