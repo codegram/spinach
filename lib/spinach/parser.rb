@@ -36,7 +36,7 @@ module Spinach
     #
     # @api public
     def parse
-      ast = Gherkin.parse(@content.strip)
+      ast = Gherkin.parse(@content + "\n")
       Visitor.new.visit(ast)
     end
   end
