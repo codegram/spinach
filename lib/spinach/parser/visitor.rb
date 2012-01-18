@@ -37,7 +37,7 @@ module Spinach
       # @api public
       def visit_Feature(node)
         @feature.name = node.name
-        node.background.accept(self)
+        node.background.accept(self) if node.background
         node.scenarios.each { |scenario| scenario.accept(self) }
       end
 
