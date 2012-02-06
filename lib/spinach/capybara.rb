@@ -29,6 +29,16 @@ module Spinach
             require 'capybara/rspec'
             include ::Capybara::RSpecMatchers
           end
+
+          def visit(*args)
+            stream = STDOUT
+            old_stream = stream.dup
+            stream.reopen('/dev/null')
+            stream.sync = true
+            super
+          ensure
+            stream.reopen(old_stream)
+          end
         end
 
         Spinach.hooks.after_scenario do
