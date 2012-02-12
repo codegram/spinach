@@ -32,7 +32,11 @@ module Spinach
       #
       # @api public
       def step_definitions
-        @step_definitions ||= Spinach.find_step_definitions(feature.name).new
+        @step_definitions ||= step_definitions_klass.new
+      end
+
+      def step_definitions_klass
+        Spinach.find_step_definitions(feature.name)
       end
 
       # Runs the scenario, capturing any exception, and running the
@@ -43,15 +47,19 @@ module Spinach
       #
       # @api public
       def run
-        Spinach.hooks.run_before_scenario @scenario
+        hooks.run_before_scenario @scenario
         scenario_mutex.deactivate
-        Spinach.hooks.run_around_scenario @scenario do
+        hooks.run_around_scenario @scenario do
           scenario_mutex.activate
           run_scenario_steps
         end
         raise "around_scenario hooks *must* yield" if !scenario_mutex.active? && !@exception
-        Spinach.hooks.run_after_scenario @scenario
+        hooks.run_after_scenario @scenario
         !@exception
+      end
+
+      def hooks
+        Spinach.hooks
       end
 
       def scenario_mutex
@@ -65,14 +73,14 @@ module Spinach
       end
 
       def run_step_with_hooks(step)
-        Spinach.hooks.run_before_step step
+        hooks.run_before_step step
         run_step(step) unless skip_step?(step)
-        Spinach.hooks.run_after_step step
+        hooks.run_after_step step
       end
 
       def skip_step?(step)
         if @exception
-          Spinach.hooks.run_on_skipped_step step
+          hooks.run_on_skipped_step step
           return true
         end
         return false
@@ -87,16 +95,16 @@ module Spinach
       def run_step(step)
         step_location = step_definitions.step_location_for(step.name)
         step_definitions.execute(step)
-        Spinach.hooks.run_on_successful_step step, step_location
+        hooks.run_on_successful_step step, step_location
       rescue *Spinach.config[:failure_exceptions] => e
         @exception = e
-        Spinach.hooks.run_on_failed_step step, @exception, step_location
+        hooks.run_on_failed_step step, @exception, step_location
       rescue Spinach::StepNotDefinedException => e
         @exception = e
-        Spinach.hooks.run_on_undefined_step step, @exception
+        hooks.run_on_undefined_step step, @exception
       rescue Exception => e
         @exception = e
-        Spinach.hooks.run_on_error_step step, @exception, step_location
+        hooks.run_on_error_step step, @exception, step_location
       end
 
       class ScenarioMutex
