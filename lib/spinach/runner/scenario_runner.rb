@@ -44,14 +44,18 @@ module Spinach
       # @api public
       def run
         Spinach.hooks.run_before_scenario @scenario
-        scenario_run = false
+        scenario_mutex.deactivate
         Spinach.hooks.run_around_scenario @scenario do
-          scenario_run = true
+          scenario_mutex.activate
           run_scenario_steps
         end
-        raise "around_scenario hooks *must* yield" if !scenario_run && !@exception
+        raise "around_scenario hooks *must* yield" if !scenario_mutex.active? && !@exception
         Spinach.hooks.run_after_scenario @scenario
         !@exception
+      end
+
+      def scenario_mutex
+        @scenario_mutex ||= ScenarioMutex.new
       end
 
       def run_scenario_steps
@@ -93,6 +97,24 @@ module Spinach
       rescue Exception => e
         @exception = e
         Spinach.hooks.run_on_error_step step, @exception, step_location
+      end
+
+      class ScenarioMutex
+        def initialize
+          @running = false
+        end
+
+        def deactivate
+          @running = false
+        end
+
+        def activate
+          @running = true
+        end
+
+        def active?
+          !!@running
+        end
       end
     end
   end
