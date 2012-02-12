@@ -27,17 +27,10 @@ module Spinach
       #
       # @api public
       def steps
+        step_definitions = step_definitions_klass.new
         @steps ||=(feature.background_steps + @scenario.steps).map do |step|
           StepRunner.new(step, step_definitions)
         end
-      end
-
-      # @return [FeatureSteps]
-      #   The step definitions for the current feature.
-      #
-      # @api public
-      def step_definitions
-        @step_definitions ||= step_definitions_klass.new
       end
 
       def step_definitions_klass
@@ -52,23 +45,24 @@ module Spinach
       #
       # @api public
       def run
+        scenario_runner_mutex = ScenarioRunnerMutex.new
+
         hooks.run_before_scenario @scenario
         scenario_runner_mutex.deactivate
+
         hooks.run_around_scenario @scenario do
           scenario_runner_mutex.activate
           run_scenario_steps
         end
+
         raise "around_scenario hooks *must* yield" if !scenario_runner_mutex.active? && success?
         hooks.run_after_scenario @scenario
+
         !!success?
       end
 
       def hooks
         Spinach.hooks
-      end
-
-      def scenario_runner_mutex
-        @scenario_runner_mutex ||= ScenarioRunnerMutex.new
       end
 
       def run_scenario_steps

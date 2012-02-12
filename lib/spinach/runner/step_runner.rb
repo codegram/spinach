@@ -3,7 +3,7 @@ module Spinach
     class StepRunner
       def initialize(step, context)
         @step = step
-        @exception = false
+        @success = true
         @context = context
       end
 
@@ -30,14 +30,14 @@ module Spinach
         @context.execute(@step)
         hooks.run_on_successful_step @step, location
       rescue *Spinach.config[:failure_exceptions] => exception
-        @exception = exception
-        hooks.run_on_failed_step @step, @exception, location
+        @success = false
+        hooks.run_on_failed_step @step, exception, location
       rescue Spinach::StepNotDefinedException => exception
-        @exception = exception
-        hooks.run_on_undefined_step @step, @exception
+        @success = false
+        hooks.run_on_undefined_step @step, exception
       rescue Exception => exception
-        @exception = exception
-        hooks.run_on_error_step @step, @exception, location
+        @success = false
+        hooks.run_on_error_step @step, exception, location
       end
 
       def hooks
@@ -45,7 +45,7 @@ module Spinach
       end
 
       def success?
-        !@exception
+        @success
       end
 
       def location
