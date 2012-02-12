@@ -56,18 +56,22 @@ module Spinach
 
       def run_scenario_steps
         steps.each do |step|
-          Spinach.hooks.run_before_step step
-          skip_or_run_step(step)
-          Spinach.hooks.run_after_step step
+          run_step_with_hooks(step)
         end
       end
 
-      def skip_or_run_step(step)
+      def run_step_with_hooks(step)
+        Spinach.hooks.run_before_step step
+        run_step(step) unless skip_step?(step)
+        Spinach.hooks.run_after_step step
+      end
+
+      def skip_step?(step)
         if @exception
           Spinach.hooks.run_on_skipped_step step
-        else
-          run_step(step)
+          return true
         end
+        return false
       end
 
       # Runs a particular step.
