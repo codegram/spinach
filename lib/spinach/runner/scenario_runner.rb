@@ -1,5 +1,6 @@
 require_relative 'scenario_runner_mutex'
 require_relative 'step_runner'
+require_relative 'step_collection'
 
 module Spinach
   class Runner
@@ -27,10 +28,9 @@ module Spinach
       #
       # @api public
       def steps
-        step_definitions = step_definitions_klass.new
-        @steps ||=(feature.background_steps + @scenario.steps).map do |step|
-          StepRunner.new(step, step_definitions)
-        end
+        all_steps = (feature.background_steps + @scenario.steps)
+        context = step_definitions_klass.new
+        @steps ||= StepCollection.new(all_steps, context)
       end
 
       def step_definitions_klass
@@ -66,17 +66,11 @@ module Spinach
       end
 
       def run_scenario_steps
-        previous_step_success = true
-        steps.each do |step|
-          step.run(previous_step_success)
-          previous_step_success = step.success?
-        end
+        steps.run
       end
 
       def success?
-        steps.all? do |step|
-          step.success?
-        end
+        steps.success?
       end
     end
   end
