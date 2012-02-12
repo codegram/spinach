@@ -1,3 +1,6 @@
+require_relative 'scenario_runner_mutex'
+require_relative 'step_runner'
+
 module Spinach
   class Runner
     # A Scenario Runner handles a particular scenario run.
@@ -24,7 +27,9 @@ module Spinach
       #
       # @api public
       def steps
-        feature.background_steps + @scenario.steps
+        @steps ||=(feature.background_steps + @scenario.steps).map do |step|
+          StepRunner.new(step, step_definitions)
+        end
       end
 
       # @return [FeatureSteps]
@@ -48,80 +53,35 @@ module Spinach
       # @api public
       def run
         hooks.run_before_scenario @scenario
-        scenario_mutex.deactivate
+        scenario_runner_mutex.deactivate
         hooks.run_around_scenario @scenario do
-          scenario_mutex.activate
+          scenario_runner_mutex.activate
           run_scenario_steps
         end
-        raise "around_scenario hooks *must* yield" if !scenario_mutex.active? && !@exception
+        raise "around_scenario hooks *must* yield" if !scenario_runner_mutex.active? && success?
         hooks.run_after_scenario @scenario
-        !@exception
+        !!success?
       end
 
       def hooks
         Spinach.hooks
       end
 
-      def scenario_mutex
-        @scenario_mutex ||= ScenarioMutex.new
+      def scenario_runner_mutex
+        @scenario_runner_mutex ||= ScenarioRunnerMutex.new
       end
 
       def run_scenario_steps
+        previous_step_success = true
         steps.each do |step|
-          run_step_with_hooks(step)
+          step.run(previous_step_success)
+          previous_step_success = step.success?
         end
       end
 
-      def run_step_with_hooks(step)
-        hooks.run_before_step step
-        run_step(step) unless skip_step?(step)
-        hooks.run_after_step step
-      end
-
-      def skip_step?(step)
-        if @exception
-          hooks.run_on_skipped_step step
-          return true
-        end
-        return false
-      end
-
-      # Runs a particular step.
-      #
-      # @param [Gherkin::AST::Step] step
-      #   The step to be run.
-      #
-      # @api semipublic
-      def run_step(step)
-        step_location = step_definitions.step_location_for(step.name)
-        step_definitions.execute(step)
-        hooks.run_on_successful_step step, step_location
-      rescue *Spinach.config[:failure_exceptions] => exception
-        @exception = exception
-        hooks.run_on_failed_step step, @exception, step_location
-      rescue Spinach::StepNotDefinedException => exception
-        @exception = exception
-        hooks.run_on_undefined_step step, @exception
-      rescue Exception => exception
-        @exception = exception
-        hooks.run_on_error_step step, @exception, step_location
-      end
-
-      class ScenarioMutex
-        def initialize
-          @running = false
-        end
-
-        def deactivate
-          @running = false
-        end
-
-        def activate
-          @running = true
-        end
-
-        def active?
-          !!@running
+      def success?
+        steps.all? do |step|
+          step.success?
         end
       end
     end
