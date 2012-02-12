@@ -96,14 +96,14 @@ module Spinach
         step_location = step_definitions.step_location_for(step.name)
         step_definitions.execute(step)
         hooks.run_on_successful_step step, step_location
-      rescue *Spinach.config[:failure_exceptions] => e
-        @exception = e
+      rescue *Spinach.config[:failure_exceptions] => exception
+        @exception = exception
         hooks.run_on_failed_step step, @exception, step_location
-      rescue Spinach::StepNotDefinedException => e
-        @exception = e
+      rescue Spinach::StepNotDefinedException => exception
+        @exception = exception
         hooks.run_on_undefined_step step, @exception
-      rescue Exception => e
-        @exception = e
+      rescue Exception => exception
+        @exception = exception
         hooks.run_on_error_step step, @exception, step_location
       end
 
