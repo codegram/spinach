@@ -2,7 +2,7 @@ module Spinach
   class Runner
     class StepCollection
       def initialize(steps, context)
-        @steps ||= steps.map do |step|
+        @steps = steps.map do |step|
           StepRunner.new(step, context)
         end
       end
