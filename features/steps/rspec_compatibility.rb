@@ -23,10 +23,6 @@ Feature: Feature without failures
     @feature = 'feature_without_failures'
   end
 
-  Then 'the feature should pass' do
-    @last_exit_status.must_equal 0
-  end
-
   Given "I have a feature with some failed expectations" do
     write_file('features/feature_with_failures.feature', """
 Feature: Feature with failures

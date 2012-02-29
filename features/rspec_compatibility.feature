@@ -6,7 +6,7 @@ Feature: RSpec compatibility
   Scenario: Everything works as expected
     Given I have a feature that should completely pass
     When I run "spinach" with rspec
-    Then the feature should pass
+    Then there should be no error
 
   Scenario: An expectation fails
     Given I have a feature with some failed expectations
