@@ -5,6 +5,24 @@ class RSpecCompatibility < Spinach::FeatureSteps
   include Integration::SpinachRunner
   include Integration::ErrorReporting
 
+  Given 'I have a feature that should completely pass' do
+    write_file('features/feature_without_failures.feature', """
+Feature: Feature without failures
+
+  Scenario: This scenario will pass
+    Then RSpec expectations and matchers are available
+""")
+
+    write_file('features/steps/rspec_feature.rb',
+               'class FeatureWithoutFailures < Spinach::FeatureSteps
+                  feature "Feature without failures"
+                  Then "RSpec expectations and matchers are available" do
+                    42.0.should be_within(0.2).of(42.1)
+                  end
+                end')
+    @feature = 'feature_without_failures'
+  end
+
   Given "I have a feature with some failed expectations" do
     write_file('features/feature_with_failures.feature', """
 Feature: Feature with failures

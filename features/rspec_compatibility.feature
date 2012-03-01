@@ -3,6 +3,11 @@ Feature: RSpec compatibility
   As a RSpec developer
   I want spinach to detect my rspec failures as failures instead of errors
 
+  Scenario: Everything works as expected
+    Given I have a feature that should completely pass
+    When I run "spinach" with rspec
+    Then there should be no error
+
   Scenario: An expectation fails
     Given I have a feature with some failed expectations
     When I run "spinach" with rspec
