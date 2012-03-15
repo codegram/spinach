@@ -1,10 +1,13 @@
 require 'test_helper'
+require 'capybara'
+require 'rack/test'
 require 'spinach'
 require 'spinach/capybara'
 require 'sinatra'
 
 describe Spinach::FeatureSteps::Capybara do
   before do
+    Capybara.default_driver = :rack_test
     @sinatra_app = Sinatra::Application.new do
       get '/' do
         'Hello world!'
