@@ -7,7 +7,8 @@ require 'sinatra'
 
 describe Spinach::FeatureSteps::Capybara do
   before do
-    Capybara.default_driver = :rack_test
+    Capybara.current_driver = :rack_test
+
     @sinatra_app = Sinatra::Application.new do
       get '/' do
         'Hello world!'
