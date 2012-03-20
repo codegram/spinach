@@ -1,2 +1,2 @@
 Spinach.config[:failure_exceptions] << RSpec::Expectations::ExpectationNotMetError
-Spinach::FeatureSteps.send(:include, RSpec::Matchers)
+Spinach::FeatureSteps.include RSpec::Matchers
