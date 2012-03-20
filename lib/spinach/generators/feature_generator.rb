@@ -33,7 +33,6 @@ module Spinach
       def generate
         result = StringIO.new
         result.puts "class #{Spinach::Support.camelize name} < Spinach::FeatureSteps"
-        result.puts "  feature \'#{Spinach::Support.escape_single_commas name}\'\n"
         generated_steps = steps.map do |step|
           step_generator = Generators::StepGenerator.new(step)
           step_generator.generate.split("\n").map do |line|
