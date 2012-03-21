@@ -9,6 +9,7 @@ group :test do
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-spinach'
+  gem 'capybara'
 end
 
 group :darwin do

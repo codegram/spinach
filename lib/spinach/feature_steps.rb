@@ -4,14 +4,27 @@ module Spinach
   class FeatureSteps
     include DSL
 
-    # Registers the feature class for later use.
-    #
-    # @param [Class] base
-    #   The host class.
-    #
-    # @api public
-    def self.inherited(base)
-      Spinach.feature_steps << base
+    class << self
+      # Registers the feature class for later use.
+      #
+      # @param [Class] base
+      #   The host class.
+      #
+      # @api public
+      def inherited(base)
+        Spinach.feature_steps << base
+      end
+
+      alias_method :include_private, :include
+
+      # Exposes the include method publicly so you can add more modules to it
+      # due its plastic nature.
+      #
+      # @example
+      #   Spinach::FeatureSteps.include Capybara::DSL
+      def include(*args)
+        include_private(*args)
+      end
     end
   end
 end

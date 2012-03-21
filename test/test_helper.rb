@@ -19,7 +19,6 @@ require 'fakefs/safe'
 require 'turn'
 
 require 'spinach'
-require 'spinach/capybara'
 
 module Kernel
   def capture_stdout
