@@ -41,8 +41,8 @@ module Spinach
 
         hooks.before_feature { |*args| set_current_feature(*args) }
         hooks.after_feature { |*args| clear_current_feature(*args) }
-        hooks.before_scenario { |*args| set_current_scenario(*args) }
-        hooks.after_scenario { |*args| clear_current_scenario(*args) }
+        hooks.before_scenario { |*args| set_current_scenario(args.first) }
+        hooks.after_scenario { |*args| clear_current_scenario(args.first) }
       end
     end
 

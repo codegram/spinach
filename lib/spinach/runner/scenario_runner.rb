@@ -43,24 +43,24 @@ module Spinach
       #
       # @api public
       def run
-        Spinach.hooks.run_before_scenario @scenario
+        Spinach.hooks.run_before_scenario @scenario, step_definitions
         scenario_run = false
-        Spinach.hooks.run_around_scenario @scenario do
+        Spinach.hooks.run_around_scenario @scenario, step_definitions do
           scenario_run = true
           steps.each do |step|
-            Spinach.hooks.run_before_step step
+            Spinach.hooks.run_before_step step, step_definitions
 
             if @exception
-              Spinach.hooks.run_on_skipped_step step
+              Spinach.hooks.run_on_skipped_step step, step_definitions
             else
               run_step(step)
             end
 
-            Spinach.hooks.run_after_step step
+            Spinach.hooks.run_after_step step, step_definitions
           end
         end
         raise "around_scenario hooks *must* yield" if !scenario_run && !@exception
-        Spinach.hooks.run_after_scenario @scenario
+        Spinach.hooks.run_after_scenario @scenario, step_definitions
         !@exception
       end
 
@@ -73,16 +73,16 @@ module Spinach
       def run_step(step)
         step_location = step_definitions.step_location_for(step.name)
         step_definitions.execute(step)
-        Spinach.hooks.run_on_successful_step step, step_location
+        Spinach.hooks.run_on_successful_step step, step_location, step_definitions
       rescue *Spinach.config[:failure_exceptions] => e
         @exception = e
-        Spinach.hooks.run_on_failed_step step, @exception, step_location
+        Spinach.hooks.run_on_failed_step step, @exception, step_location, step_definitions
       rescue Spinach::StepNotDefinedException => e
         @exception = e
-        Spinach.hooks.run_on_undefined_step step, @exception
+        Spinach.hooks.run_on_undefined_step step, @exception, step_definitions
       rescue Exception => e
         @exception = e
-        Spinach.hooks.run_on_error_step step, @exception, step_location
+        Spinach.hooks.run_on_error_step step, @exception, step_location, step_definitions
       end
 
     end
