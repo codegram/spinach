@@ -101,7 +101,7 @@ module Spinach
     # Runs after every failed step execution
     #
     # @example
-    #   Spinach.hooks.on_failed_step do |step_data, location, step_definitions|
+    #   Spinach.hooks.on_failed_step do |step_data, exception, location, step_definitions|
     #     # step_data contains a hash with this step's data
     #     # step_location contains a string indication this step definition's
     #     # location
@@ -111,7 +111,7 @@ module Spinach
     # Runs after every step execution that raises an exception
     #
     # @example
-    #   Spinach.hooks.on_error_step do |step_data, location, step_definitions|
+    #   Spinach.hooks.on_error_step do |step_data, exception, location, step_definitions|
     #     # step_data contains a hash with this step's data
     #     # step_location contains a string indication this step definition's
     #     # location
@@ -121,7 +121,7 @@ module Spinach
     # Runs every time a step which is not defined is called
     #
     # @example
-    #   Spinach.hooks.on_undefined_step do |step_data, location, step_definitions|
+    #   Spinach.hooks.on_undefined_step do |step_data, exception, location, step_definitions|
     #     # step_data contains a hash with this step's data
     #     # step_location contains a string indication this step definition's
     #     # location

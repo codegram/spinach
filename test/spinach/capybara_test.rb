@@ -17,18 +17,24 @@ describe Spinach::FeatureSteps::Capybara do
 
     Capybara.app = @sinatra_app
 
-    @feature = Class.new(Spinach::FeatureSteps) do
+    class TestFeature < Spinach::FeatureSteps
       include Spinach::FeatureSteps::Capybara
       feature 'A test feature'
       Given 'Hello' do
       end
       Then 'Goodbye' do
       end
+      Given 'Fail' do
+        1.must_equal 2
+      end
       def go_home
         visit '/'
         page
       end
-    end.new
+    end
+
+    @feature_class = TestFeature
+    @feature = @feature_class.new
   end
 
   let(:parsed_feature) { Spinach::Parser.new("""
@@ -44,8 +50,15 @@ Feature: A test feature
 """).parse
   }
 
+  let(:failing_feature) { Spinach::Parser.new("""
+Feature: A test feature
+  Scenario: A test scenario
+    Given Fail
+""").parse
+  }
+
   it 'includes capybara into all features' do
-    @feature.kind_of? Capybara
+    @feature.kind_of?(Capybara::DSL).must_equal true
   end
 
   it 'goes to a capybara page and returns its result' do
@@ -76,5 +89,21 @@ Feature: A test feature
     Capybara.expects(:current_driver=).at_least(1)
 
     @feature_runner.run
+  end
+
+  describe "when there's a failure" do
+    it 'saves and open the page if the option is activated' do
+      @feature_runner = Spinach::Runner::FeatureRunner.new(failing_feature)
+      Spinach.config.save_and_open_page_on_failure = true
+      @feature_class.any_instance.expects(:save_and_open_page).once
+      @feature_runner.run
+    end
+    
+    it "doesn't saves and open the page if the option is deactivated" do
+      @feature_runner = Spinach::Runner::FeatureRunner.new(failing_feature)
+      Spinach.config.save_and_open_page_on_failure = false
+      Capybara.expects(:save_and_open_page).never
+      @feature_runner.run
+    end
   end
 end
