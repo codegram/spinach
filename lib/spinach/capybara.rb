@@ -40,16 +40,26 @@ module Spinach
             stream.reopen(old_stream)
           end
         end
-
-        Spinach.hooks.after_scenario do
-          ::Capybara.current_session.reset! if ::Capybara.app
-          ::Capybara.use_default_driver
-        end
-
-        Spinach.hooks.on_tag('javascript') do
-          ::Capybara.current_driver = ::Capybara.javascript_driver
-        end
       end
     end
   end
 end
+
+Spinach.hooks.after_scenario do
+  ::Capybara.current_session.reset! if ::Capybara.app
+  ::Capybara.use_default_driver
+end
+
+Spinach.hooks.on_tag('javascript') do
+  ::Capybara.current_driver = ::Capybara.javascript_driver
+end
+
+open_page = Proc.new do |*args|
+  if Spinach.config.save_and_open_page_on_failure
+    step_definitions = args.last
+    step_definitions.send(:save_and_open_page)
+  end
+end
+
+Spinach.hooks.on_error_step(&open_page)
+Spinach.hooks.on_failed_step(&open_page)

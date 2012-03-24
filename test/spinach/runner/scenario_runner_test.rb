@@ -13,6 +13,7 @@ module Spinach
       end
 
       subject { ScenarioRunner.new(scenario) }
+      let(:step_definitions){ subject.step_definitions }
 
       describe 'delegations' do
         it 'delegates #feature to the scenario' do
@@ -38,18 +39,18 @@ module Spinach
             hooks = sequence('hooks')
             subject.stubs(:step_definitions).returns step_definitions = stub
 
-            Spinach.hooks.expects(:run_before_scenario).with(scenario).in_sequence(hooks)
-            Spinach.hooks.expects(:run_around_scenario).with(scenario).in_sequence(hooks).yields
+            Spinach.hooks.expects(:run_before_scenario).with(scenario, step_definitions).in_sequence(hooks)
+            Spinach.hooks.expects(:run_around_scenario).with(scenario, step_definitions).in_sequence(hooks).yields
 
-            Spinach.hooks.expects(:run_before_step).with(steps.first).in_sequence(hooks)
+            Spinach.hooks.expects(:run_before_step).with(steps.first, step_definitions).in_sequence(hooks)
             subject.expects(:run_step).with(steps.first)
-            Spinach.hooks.expects(:run_after_step).with(steps.first).in_sequence(hooks)
+            Spinach.hooks.expects(:run_after_step).with(steps.first, step_definitions).in_sequence(hooks)
 
-            Spinach.hooks.expects(:run_before_step).with(steps.last).in_sequence(hooks)
+            Spinach.hooks.expects(:run_before_step).with(steps.last, step_definitions).in_sequence(hooks)
             subject.expects(:run_step).with(steps.last)
-            Spinach.hooks.expects(:run_after_step).with(steps.last).in_sequence(hooks)
+            Spinach.hooks.expects(:run_after_step).with(steps.last, step_definitions).in_sequence(hooks)
 
-            Spinach.hooks.expects(:run_after_scenario).with(scenario).in_sequence(hooks)
+            Spinach.hooks.expects(:run_after_scenario).with(scenario, step_definitions).in_sequence(hooks)
 
             subject.run
           end
@@ -57,7 +58,7 @@ module Spinach
           it 'raises if around hook does not yield' do
             subject.stubs(:step_definitions).returns stub
 
-            Spinach.hooks.stubs(:run_around_scenario).with(scenario)
+            Spinach.hooks.stubs(:run_around_scenario).with(scenario, step_definitions)
 
             proc do
               subject.run
@@ -77,7 +78,7 @@ module Spinach
         describe 'when the step is successful' do
           it 'runs the successful hooks' do
             @step_definitions.stubs(:execute).with(@step).returns true
-            Spinach.hooks.expects(:run_on_successful_step).with(@step, @location)
+            Spinach.hooks.expects(:run_on_successful_step).with(@step, @location, @step_definitions)
 
             subject.run_step(@step)
           end
@@ -96,7 +97,7 @@ module Spinach
           end
 
           it 'runs the failed hooks' do
-            Spinach.hooks.expects(:run_on_failed_step).with(@step, kind_of(@failure_exception), @location)
+            Spinach.hooks.expects(:run_on_failed_step).with(@step, kind_of(@failure_exception), @location, @step_definitions)
             subject.run_step(@step)
           end
         end
@@ -112,7 +113,7 @@ module Spinach
           end
 
           it 'runs the undefined hooks' do
-            Spinach.hooks.expects(:run_on_undefined_step).with(@step, kind_of(Spinach::StepNotDefinedException))
+            Spinach.hooks.expects(:run_on_undefined_step).with(@step, kind_of(Spinach::StepNotDefinedException), @step_definitions)
             subject.run_step(@step)
           end
         end
@@ -128,7 +129,7 @@ module Spinach
           end
 
           it 'runs the error hooks' do
-            Spinach.hooks.expects(:run_on_error_step).with(@step, kind_of(StandardError), @location)
+            Spinach.hooks.expects(:run_on_error_step).with(@step, kind_of(StandardError), @location, @step_definitions)
             subject.run_step(@step)
           end
         end

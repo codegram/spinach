@@ -21,7 +21,7 @@ module Spinach
   #
   class Config
     attr_writer :features_path, :step_definitions_path, :default_reporter, :support_path,
-      :failure_exceptions, :config_path
+      :failure_exceptions, :config_path, :save_and_open_page_on_failure
 
     # The "features path" holds the place where your features will be
     # searched for. Defaults to 'features'
@@ -104,6 +104,13 @@ module Spinach
     #
     def config_path
       @config_path ||= 'config/spinach.yml'
+    end
+
+    # When using capybara, it automatically shows the current page when there's 
+    # a failure
+    #
+    def save_and_open_page_on_failure
+      @save_and_open_page_on_failure ||= false
     end
 
     # Parse options from the config file

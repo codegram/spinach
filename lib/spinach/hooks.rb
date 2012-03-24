@@ -51,14 +51,14 @@ module Spinach
     # Runs before every scenario
     #
     # @example
-    #   Spinach.hooks.before_scenario do |scenario_data|
+    #   Spinach.hooks.before_scenario do |scenario_data, step_definitions|
     #     # feature_data is a hash of the parsed scenario data
     #   end
     hook :before_scenario
 
     # Runs around every scenario
     # @example
-    #   Spinach.hooks.around_scenario do |scenario_data, &block|
+    #   Spinach.hooks.around_scenario do |scenario_data, step_definitions, &block|
     #     # feature_data is a hash of the parsed scenario data
     #     block.call
     #   end
@@ -67,7 +67,7 @@ module Spinach
     # Runs after every scenario
     #
     # @example
-    #   Spinach.hooks.after_scenario do |scenario_data|
+    #   Spinach.hooks.after_scenario do |scenario_data, step_definitions|
     #     # feature_data is a hash of the parsed scenario data
     #   end
     hook :after_scenario
@@ -75,7 +75,7 @@ module Spinach
     # Runs before every step execution
     #
     # @example
-    #   Spinach.hooks.before_step do |step_data|
+    #   Spinach.hooks.before_step do |step_data, step_definitions|
     #     # step_data contains a hash with this step's data
     #   end
     hook :before_step
@@ -83,7 +83,7 @@ module Spinach
     # Runs after every step execution
     #
     # @example
-    #   Spinach.hooks.before_step do |step_data|
+    #   Spinach.hooks.before_step do |step_data, step_definitions|
     #     # step_data contains a hash with this step's data
     #   end
     hook :after_step
@@ -91,7 +91,7 @@ module Spinach
     # Runs after every successful step execution
     #
     # @example
-    #   Spinach.hooks.on_successful_step do |step_data, location|
+    #   Spinach.hooks.on_successful_step do |step_data, location, step_definitions|
     #     # step_data contains a hash with this step's data
     #     # step_location contains a string indication this step definition's
     #     # location
@@ -101,7 +101,7 @@ module Spinach
     # Runs after every failed step execution
     #
     # @example
-    #   Spinach.hooks.on_failed_step do |step_data, location|
+    #   Spinach.hooks.on_failed_step do |step_data, exception, location, step_definitions|
     #     # step_data contains a hash with this step's data
     #     # step_location contains a string indication this step definition's
     #     # location
@@ -111,7 +111,7 @@ module Spinach
     # Runs after every step execution that raises an exception
     #
     # @example
-    #   Spinach.hooks.on_error_step do |step_data, location|
+    #   Spinach.hooks.on_error_step do |step_data, exception, location, step_definitions|
     #     # step_data contains a hash with this step's data
     #     # step_location contains a string indication this step definition's
     #     # location
@@ -121,7 +121,7 @@ module Spinach
     # Runs every time a step which is not defined is called
     #
     # @example
-    #   Spinach.hooks.on_undefined_step do |step_data, location|
+    #   Spinach.hooks.on_undefined_step do |step_data, exception, location, step_definitions|
     #     # step_data contains a hash with this step's data
     #     # step_location contains a string indication this step definition's
     #     # location
@@ -132,7 +132,7 @@ module Spinach
     # one just before.
     #
     # @example
-    #   Spinach.hooks.on_undefined_step do |step_data|
+    #   Spinach.hooks.on_undefined_step do |step_data, step_definitions|
     #     # step_data contains a hash with this step's data
     #   end
     hook :on_skipped_step

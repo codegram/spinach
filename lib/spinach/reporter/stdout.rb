@@ -46,7 +46,7 @@ module Spinach
       # @param [Hash] data
       #   The feature in a JSON Gherkin format
       #
-      def before_scenario_run(scenario)
+      def before_scenario_run(scenario, step_definitions = nil)
         @max_step_name_length = scenario.steps.map(&:name).map(&:length).max if scenario.steps.any?
         name = scenario.name
         out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
@@ -57,7 +57,7 @@ module Spinach
       # @param [Hash] data
       #   The feature in a JSON Gherkin format
       #
-      def after_scenario_run(scenario)
+      def after_scenario_run(scenario, step_definitions = nil)
         if scenario_error
           report_error(scenario_error, :full)
           self.scenario_error = nil
@@ -72,7 +72,7 @@ module Spinach
       # @param [Array] step_location
       #   The step source location
       #
-      def on_successful_step(step, step_location)
+      def on_successful_step(step, step_location, step_definitions = nil)
         output_step('✔', step, :green, step_location)
         self.scenario = [current_feature, current_scenario, step]
         successful_steps << scenario
@@ -86,7 +86,7 @@ module Spinach
       # @param [Exception] failure
       #   The exception that caused the failure
       #
-      def on_failed_step(step, failure, step_location)
+      def on_failed_step(step, failure, step_location, step_definitions = nil)
         output_step('✘', step, :red, step_location)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         failed_steps << scenario_error
@@ -100,7 +100,7 @@ module Spinach
       # @param [Exception] failure
       #   The exception that caused the failure
       #
-      def on_error_step(step, failure, step_location)
+      def on_error_step(step, failure, step_location, step_definitions = nil)
         output_step('!', step, :red, step_location)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         error_steps << scenario_error
@@ -111,7 +111,7 @@ module Spinach
       # @param [Hash] step
       #   The step in a JSON Gherkin format
       #
-      def on_undefined_step(step, failure)
+      def on_undefined_step(step, failure, step_definitions = nil)
         output_step('?', step, :yellow)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         undefined_steps << scenario_error
@@ -145,7 +145,7 @@ module Spinach
       # @param [Hash] step
       #   The step that Gherkin extracts
       #
-      def on_skipped_step(step)
+      def on_skipped_step(step, step_definitions = nil)
         output_step('~', step, :cyan)
       end
 

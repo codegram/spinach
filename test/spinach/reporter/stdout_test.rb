@@ -72,6 +72,7 @@ describe Spinach::Reporter::Stdout do
   describe '#on_successful_step' do
     let(:step) { stub(keyword: 'Given', name: 'I am too cool') }
     let(:step_location){['error_step_location', 1]}
+    let(:step_definitions){ stub }
     it 'adds the step to the output buffer' do
       @reporter.on_successful_step(step, step_location)
 
