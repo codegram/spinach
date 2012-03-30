@@ -1,3 +1,5 @@
+require_relative 'tags_matcher'
+
 module Spinach
   class Runner
     # A feature runner handles a particular feature run.
@@ -55,19 +57,24 @@ module Spinach
 
       def run_scenarios!
         scenarios.each_with_index do |scenario, current_scenario_index|
-          if match(current_scenario_index)
+          if run_scenario?(scenario, current_scenario_index)
             success = ScenarioRunner.new(scenario).run
             @failed = true unless success
           end
         end
       end
 
-      def match(current_scenario_index)
-        return true unless @line
-        return false if @line<scenarios[current_scenario_index].line
-        next_scenario = scenarios[current_scenario_index+1]
-        !next_scenario || @line<next_scenario.line
+      def run_scenario?(scenario, current_scenario_index)
+        match_line(current_scenario_index) && TagsMatcher.new(scenario).match
       end
+
+      def match_line(current_scenario_index)
+        return true unless @line
+        return false if @line < scenarios[current_scenario_index].line
+        next_scenario = scenarios[current_scenario_index+1]
+        !next_scenario || @line < next_scenario.line
+      end
+
 
       def undefined_steps!
         Spinach.hooks.run_on_undefined_feature @feature
