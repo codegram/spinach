@@ -37,8 +37,8 @@ describe Spinach::Runner::FeatureRunner do
         @feature = stub('feature', name: 'Feature')
         Spinach.stubs(:find_step_definitions).returns(true)
         @scenarios = [
-          scenario         = stub,
-          another_scenario = stub
+          scenario         = stub(tags: []),
+          another_scenario = stub(tags: [])
         ]
         @feature.stubs(:scenarios).returns @scenarios
         @runner = Spinach::Runner::FeatureRunner.new(@feature)
@@ -80,29 +80,59 @@ describe Spinach::Runner::FeatureRunner do
         @feature = stub('feature', name: 'Feature')
         Spinach.stubs(:find_step_definitions).returns(true)
         @scenarios = [
-          scenario         = stub(line: 4),
-          another_scenario = stub(line: 12)
+          scenario         = stub(line: 4, tags: []),
+          another_scenario = stub(line: 12, tags: [])
         ]
         @feature.stubs(:scenarios).returns @scenarios
       end
+
       it "runs exactly matching scenario" do
         Spinach::Runner::ScenarioRunner.expects(:new).with(@scenarios[1]).returns stub(run: true)
         @runner = Spinach::Runner::FeatureRunner.new(@feature, "12")
         @runner.run
       end
+
       it "runs no scenario and returns false" do
         Spinach::Runner::ScenarioRunner.expects(:new).never
         @runner = Spinach::Runner::FeatureRunner.new(@feature, "3")
         @runner.run
       end
+
       it "runs matching scenario" do
         Spinach::Runner::ScenarioRunner.expects(:new).with(@scenarios[0]).returns stub(run: true)
         @runner = Spinach::Runner::FeatureRunner.new(@feature, "8")
         @runner.run
       end
+
       it "runs last scenario" do
         Spinach::Runner::ScenarioRunner.expects(:new).with(@scenarios[1]).returns stub(run: true)
         @runner = Spinach::Runner::FeatureRunner.new(@feature, "15")
+        @runner.run
+      end
+    end
+
+    describe "when running for specific tags configured" do
+
+      before do
+        @feature = stub('feature', name: 'Feature')
+        Spinach.stubs(:find_step_definitions).returns(true)
+        @scenario = stub(line: 4, tags: [])
+        @feature.stubs(:scenarios).returns [@scenario]
+      end
+
+      it "runs matching scenario" do
+        Spinach::TagsMatcher.stubs(:match).returns true
+        Spinach::Runner::ScenarioRunner.expects(:new).with(@scenario).returns stub(run: true)
+
+        @runner = Spinach::Runner::FeatureRunner.new(@feature)
+        @runner.run
+      end
+
+      it "skips scenarios that do not match" do
+        Spinach::TagsMatcher.stubs(:match).returns false
+        Spinach::Runner::ScenarioRunner.expects(:new).never
+
+        @runner = Spinach::Runner::FeatureRunner.new(@feature)
         @runner.run
       end
     end

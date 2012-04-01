@@ -75,8 +75,14 @@ module Spinach
             reporter_options[:backtrace] = show_backtrace
           end
 
+          opts.on('-t', '--tags TAG',
+                  'Run all scenarios for given tags.') do |tag|
+            config[:tags] ||= []
+            config[:tags] << tag.delete('@').split(',')
+          end
+
           opts.on('-g', '--generate',
-                  'Auto-generate the feeature steps files') do
+                  'Auto-generate the feature steps files') do
             Spinach::Generators.bind
           end
 

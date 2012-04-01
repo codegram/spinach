@@ -20,8 +20,14 @@ module Spinach
   # to run.
   #
   class Config
-    attr_writer :features_path, :step_definitions_path, :default_reporter, :support_path,
-      :failure_exceptions, :config_path, :save_and_open_page_on_failure
+    attr_writer :features_path,
+                :step_definitions_path,
+                :default_reporter,
+                :support_path,
+                :failure_exceptions,
+                :config_path,
+                :tags,
+                :save_and_open_page_on_failure
 
     # The "features path" holds the place where your features will be
     # searched for. Defaults to 'features'
@@ -106,11 +112,21 @@ module Spinach
       @config_path ||= 'config/spinach.yml'
     end
 
-    # When using capybara, it automatically shows the current page when there's 
+    # When using capybara, it automatically shows the current page when there's
     # a failure
     #
     def save_and_open_page_on_failure
       @save_and_open_page_on_failure ||= false
+    end
+
+    # Tags to tell Spinach that you only want to run scenarios that have (or
+    # don't have) certain tags.
+    #
+    # @return [Array]
+    #   The tags.
+    #
+    def tags
+      @tags ||= []
     end
 
     # Parse options from the config file
