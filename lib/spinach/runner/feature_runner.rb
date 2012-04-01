@@ -1,4 +1,4 @@
-require_relative 'tags_matcher'
+require_relative '../tags_matcher'
 
 module Spinach
   class Runner

@@ -1,4 +1,4 @@
-require_relative '../../test_helper'
+require_relative '../test_helper'
 
 describe Spinach::TagsMatcher do
 
@@ -13,7 +13,7 @@ describe Spinach::TagsMatcher do
 
     describe "when matching against a single tag" do
 
-      before { @config.tag = [['wip']] }
+      before { @config.tags = [['wip']] }
 
       it "matches the same tag" do
         subject.match(['wip']).must_equal true
@@ -30,7 +30,7 @@ describe Spinach::TagsMatcher do
 
     describe 'when matching against a single negated tag' do
 
-      before { @config.tag = [['~wip']] }
+      before { @config.tags = [['~wip']] }
 
       it "returns false for the same tag" do
         subject.match(['wip']).must_equal false
@@ -47,7 +47,7 @@ describe Spinach::TagsMatcher do
 
     describe "when matching against ANDed tags" do
 
-      before { @config.tag = [['wip'], ['important']] }
+      before { @config.tags = [['wip'], ['important']] }
 
       it "returns true when all tags match" do
         subject.match(['wip', 'important']).must_equal true
@@ -68,7 +68,7 @@ describe Spinach::TagsMatcher do
 
     describe "when matching against ORed tags" do
 
-      before { @config.tag = [['wip', 'important']] }
+      before { @config.tags = [['wip', 'important']] }
 
       it "returns true when all tags match" do
         subject.match(['wip', 'important']).must_equal true
@@ -89,7 +89,7 @@ describe Spinach::TagsMatcher do
 
     describe 'when matching against combined ORed and ANDed tags' do
 
-      before { @config.tag = [['billing', 'wip'], ['important']] }
+      before { @config.tags = [['billing', 'wip'], ['important']] }
 
       it "returns true when all tags match" do
         subject.match(['billing', 'wip', 'important']).must_equal true
