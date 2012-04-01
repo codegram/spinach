@@ -110,5 +110,31 @@ describe Spinach::Runner::FeatureRunner do
         @runner.run
       end
     end
+
+    describe "when running for specific tags configured" do
+
+      before do
+        @feature = stub('feature', name: 'Feature')
+        Spinach.stubs(:find_step_definitions).returns(true)
+        @scenario = stub(line: 4, tags: [])
+        @feature.stubs(:scenarios).returns [@scenario]
+      end
+
+      it "runs matching scenario" do
+        Spinach::TagsMatcher.stubs(:match).returns true
+        Spinach::Runner::ScenarioRunner.expects(:new).with(@scenario).returns stub(run: true)
+
+        @runner = Spinach::Runner::FeatureRunner.new(@feature)
+        @runner.run
+      end
+
+      it "skips scenarios that do not match" do
+        Spinach::TagsMatcher.stubs(:match).returns false
+        Spinach::Runner::ScenarioRunner.expects(:new).never
+
+        @runner = Spinach::Runner::FeatureRunner.new(@feature)
+        @runner.run
+      end
+    end
   end
 end

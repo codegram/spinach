@@ -65,7 +65,7 @@ module Spinach
       end
 
       def run_scenario?(scenario, current_scenario_index)
-        match_line(current_scenario_index) && TagsMatcher.new(scenario).match
+        match_line(current_scenario_index) && TagsMatcher.match(scenario.tags)
       end
 
       def match_line(current_scenario_index)

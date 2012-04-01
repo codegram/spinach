@@ -1,7 +1,6 @@
-
 require_relative '../../test_helper'
 
-describe Spinach::Runner::FeatureRunner do
+describe Spinach::TagsMatcher do
 
   describe '#match' do
 
@@ -10,155 +9,110 @@ describe Spinach::Runner::FeatureRunner do
       Spinach.stubs(:config).returns(@config)
     end
 
-    describe "when a single tag is passed" do
+    subject { Spinach::TagsMatcher }
 
-      before do
-        @config.tag = [['wip']]
+    describe "when matching against a single tag" do
+
+      before { @config.tag = [['wip']] }
+
+      it "matches the same tag" do
+        subject.match(['wip']).must_equal true
       end
 
-      it "runs a scenario with matching tag" do
-        @scenario = stub(tags: ['wip'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal true
+      it "does not match a different tag" do
+        subject.match(['important']).must_equal false
       end
 
-      it "skips a scenario without matching tag" do
-        @scenario = stub(tags: ['javascript'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false
-      end
-
-      it "skips a scenario without tags" do
-        @scenario = stub(tags: [])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false
+      it "does not match when no tags are present" do
+        subject.match([]).must_equal false
       end
     end
 
-    describe 'when a single negated tag is passed' do
+    describe 'when matching against a single negated tag' do
 
-      before do
-        @config.tag = [['~wip']]
+      before { @config.tag = [['~wip']] }
+
+      it "returns false for the same tag" do
+        subject.match(['wip']).must_equal false
       end
 
-      it "skips a scenario with matching tags" do
-        @scenario = stub(tags: ['wip'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false
+      it "returns true for a different tag" do
+        subject.match(['important']).must_equal true
       end
 
-      it "runs a scenario without matching tags" do
-        @scenario = stub(tags: ['javascript'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal true
-      end
-
-      it "runs a scenario without tags" do
-        @scenario = stub(tags: [])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal true
+      it "returns true when no tags are present" do
+        subject.match([]).must_equal true
       end
     end
 
-    describe 'when combining ORed and ANDend tags' do
-      # Running scenarios which match: (@billing OR @WIP) AND @important
-      # cucumber --tags @billing,@wip --tags @important
+    describe "when matching against ANDed tags" do
 
-      before do
-        @config.tag = [['billing', 'wip'], ['important']]
+      before { @config.tag = [['wip'], ['important']] }
+
+      it "returns true when all tags match" do
+        subject.match(['wip', 'important']).must_equal true
       end
 
-      it "runs a scenario with matching tags" do
-        @scenario = stub(tags: ['wip', 'important'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal true
+      it "returns false when one tag matches" do
+        subject.match(['important']).must_equal false
       end
 
-      it "runs a scenario with matching tags" do
-        @scenario = stub(tags: ['billing', 'important'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal true
+      it "returns false when no tags match" do
+        subject.match(['foo']).must_equal false
       end
 
-      it "skips a scenario with one matching tags" do
-        @scenario = stub(tags: ['important'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false 
-      end
-
-      it "skips a scenario with one matching tags" do
-        @scenario = stub(tags: ['billing'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false 
-      end
-
-      it "skips a scenario without matching tags" do
-        @scenario = stub(tags: ['javascript'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false 
+      it "returns false when no tags are present" do
+        subject.match([]).must_equal false
       end
     end
 
-    describe "when multiple tags are passed as separate params" do
+    describe "when matching against ORed tags" do
 
-      before do
-        @config.tag = [['wip'], ['javascript']]
+      before { @config.tag = [['wip', 'important']] }
+
+      it "returns true when all tags match" do
+        subject.match(['wip', 'important']).must_equal true
       end
 
-      it "runs a scenario with matching tags" do
-        @scenario = stub(line: 4, tags: ['wip', 'javascript'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal true 
+      it "returns true when one tag matches" do
+        subject.match(['important']).must_equal true
       end
 
-      it "skips a scenario without all matching tags" do
-        @scenario = stub(line: 4, tags: ['javascript'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false 
+      it "returns false when no tags match" do
+        subject.match(['foo']).must_equal false
       end
 
-      it "skips a scenario without matching tags" do
-        @scenario = stub(line: 4, tags: ['foo'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false 
-      end
-
-      it "skips a scenario without tags" do
-        @scenario = stub(line: 4, tags: [])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false 
+      it "returns false when no tags are present" do
+        subject.match([]).must_equal false
       end
     end
 
-    describe "when multiple tags are passed as a comma-separated list" do
+    describe 'when matching against combined ORed and ANDed tags' do
 
-      before do
-        @config.tag = [['wip', 'javascript']]
+      before { @config.tag = [['billing', 'wip'], ['important']] }
+
+      it "returns true when all tags match" do
+        subject.match(['billing', 'wip', 'important']).must_equal true
       end
 
-      it "runs a scenario with all matching tags" do
-        @scenario = stub(tags: ['wip', 'javascript'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal true
+      it "returns true when tags from both AND-groups match" do
+        subject.match(['wip', 'important']).must_equal true
+        subject.match(['billing', 'important']).must_equal true
       end
 
-      it "runs a scenario with at least one matching tag" do
-        @scenario = stub(tags: ['javascript'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal true
+      it "returns false when tags from one AND-group match" do
+        subject.match(['important']).must_equal false
+        subject.match(['billing']).must_equal false
       end
 
-      it "skips a scenario without matching tags" do
-        @scenario = stub(tags: ['foo'])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false
+      it "returns false when no tags match" do
+        subject.match(['foo']).must_equal false
       end
 
-      it "skips a scenario without tags" do
-        @scenario = stub(tags: [])
-        matcher = Spinach::TagsMatcher.new(@scenario)
-        matcher.match.must_equal false
+      it "returns false when no tags are present" do
+        subject.match([]).must_equal false
       end
     end
+
   end
 end
