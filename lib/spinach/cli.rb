@@ -76,9 +76,9 @@ module Spinach
           end
 
           opts.on('-t', '--tags TAG',
-                  'Run all scenarios for given tag.') do |tag|
-            config[:tag] ||= []
-            config[:tag] << tag.delete('@').split(',')
+                  'Run all scenarios for given tags.') do |tag|
+            config[:tags] ||= []
+            config[:tags] << tag.delete('@').split(',')
           end
 
           opts.on('-g', '--generate',

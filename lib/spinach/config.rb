@@ -26,7 +26,7 @@ module Spinach
                 :support_path,
                 :failure_exceptions,
                 :config_path,
-                :tag,
+                :tags,
                 :save_and_open_page_on_failure
 
     # The "features path" holds the place where your features will be
@@ -112,15 +112,21 @@ module Spinach
       @config_path ||= 'config/spinach.yml'
     end
 
-    # When using capybara, it automatically shows the current page when there's 
+    # When using capybara, it automatically shows the current page when there's
     # a failure
     #
     def save_and_open_page_on_failure
       @save_and_open_page_on_failure ||= false
     end
 
-    def tag
-      @tag ||= []
+    # Tags to tell Spinach that you only want to run scenarios that have (or
+    # don't have) certain tags.
+    #
+    # @return [Array]
+    #   The tags.
+    #
+    def tags
+      @tags ||= []
     end
 
     # Parse options from the config file

@@ -30,31 +30,31 @@ describe Spinach::Cli do
       end
     end
 
-    describe 'tag' do
-      %w{-t --tag}.each do |opt|
+    describe 'tags' do
+      %w{-t --tags}.each do |opt|
         it 'sets the given tag' do
           config = Spinach::Config.new
           Spinach.stubs(:config).returns(config)
           cli = Spinach::Cli.new([opt,'wip'])
           cli.options
-          config.tag.must_equal [['wip']]
+          config.tags.must_equal [['wip']]
         end
 
-        it 'sets multiple tags' do
+        it 'sets OR-ed tags' do
           config = Spinach::Config.new
           Spinach.stubs(:config).returns(config)
           cli = Spinach::Cli.new([opt,'wip,javascript'])
           cli.options
-          config.tag.must_equal [['wip', 'javascript']]
+          config.tags.must_equal [['wip', 'javascript']]
         end
       end
 
-      it 'sets multiple tags' do
+      it 'sets AND-ed tags' do
         config = Spinach::Config.new
         Spinach.stubs(:config).returns(config)
         cli = Spinach::Cli.new(['-t','javascript', '-t', 'wip'])
         cli.options
-        config.tag.must_equal [['javascript'],['wip']]
+        config.tags.must_equal [['javascript'],['wip']]
       end
     end
 
