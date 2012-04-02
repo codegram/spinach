@@ -136,6 +136,12 @@ use private methods, mix in modules or whatever!
 
 Then run your feature again running `spinach` and watch it all turn green! :)
 
+By default Spinach will ignore Scenarios marked with the tag `@wip`. Those are
+meant to be work in progress, scenarios that are pending while you work on
+them. To explicitly run those, use the `--tags` option:
+
+    spinach --tags @wip
+
 ## Hook architecture
 
 Spinach provides several hooks to allow you performing certain steps before or
