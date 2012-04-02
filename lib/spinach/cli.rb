@@ -78,7 +78,19 @@ module Spinach
           opts.on('-t', '--tags TAG',
                   'Run all scenarios for given tags.') do |tag|
             config[:tags] ||= []
-            config[:tags] << tag.delete('@').split(',')
+            tags = tag.delete('@').split(',')
+
+            references_wip = lambda { |tag_groups|
+              tag_groups.any? { |tag_group|
+                tag_group.any? { |tag| tag =~ /wip$/ }
+              }
+            }
+
+            unless references_wip.(config[:tags]) || references_wip.([tags])
+              tags.unshift '~wip'
+            end
+
+            config[:tags] << tags
           end
 
           opts.on('-g', '--generate',
