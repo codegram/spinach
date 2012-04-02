@@ -9,7 +9,7 @@ describe Spinach::Config do
    it 'returns a default' do
      subject[:features_path].must_be_kind_of String
    end
-   
+
    it 'can be overwritten' do
      subject[:features_path] = 'test'
      subject[:features_path].must_equal 'test'
@@ -81,4 +81,14 @@ describe Spinach::Config do
     end
   end
 
+  describe '#tags' do
+    it 'returns a default' do
+      subject[:tags].must_be_kind_of Array
+    end
+
+    it 'can be overwritten' do
+      subject[:tags] = ['wip']
+      subject[:tags].must_equal ['wip']
+    end
+  end
 end

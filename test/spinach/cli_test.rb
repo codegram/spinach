@@ -30,6 +30,34 @@ describe Spinach::Cli do
       end
     end
 
+    describe 'tags' do
+      %w{-t --tags}.each do |opt|
+        it 'sets the given tag' do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
+          cli = Spinach::Cli.new([opt,'wip'])
+          cli.options
+          config.tags.must_equal [['wip']]
+        end
+
+        it 'sets OR-ed tags' do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
+          cli = Spinach::Cli.new([opt,'wip,javascript'])
+          cli.options
+          config.tags.must_equal [['wip', 'javascript']]
+        end
+      end
+
+      it 'sets AND-ed tags' do
+        config = Spinach::Config.new
+        Spinach.stubs(:config).returns(config)
+        cli = Spinach::Cli.new(['-t','javascript', '-t', 'wip'])
+        cli.options
+        config.tags.must_equal [['javascript'],['wip']]
+      end
+    end
+
     describe 'generate' do
       %w{-g --generate}.each do |opt|
         it 'inits the generator if #{opt}' do
