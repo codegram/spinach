@@ -54,6 +54,10 @@ describe Spinach::Support do
     it 'accepts non string values' do
       Spinach::Support.underscore(:FeatureName).must_equal 'feature_name'
     end
+
+    it 'changes spaces to underscores' do
+      Spinach::Support.underscore('feature name').must_equal 'feature_name'
+    end
   end
 
   describe "#escape" do
