@@ -28,21 +28,36 @@ module Spinach
       #   Action to perform in that step.
       #
       # @example
+      #   These 3 examples are equivalent:
+      #
       #   class MyFeature < Spinach::FeatureSteps
       #     When "I go to the toilet" do
       #       @sittin_on_the_toilet.must_equal true
       #     end
       #   end
       #
+      #   class MyFeature < Spinach::FeatureSteps
+      #     step "I go to the toilet" do
+      #       @sittin_on_the_toilet.must_equal true
+      #     end
+      #   end
+      #
+      #   class MyFeature < Spinach::FeatureSteps
+      #     def i_go_to_the_toilet
+      #       @sittin_on_the_toilet.must_equal true
+      #     end
+      #   end
+      #
       # @api public
-      def Given(step, &block)
+      def step(step, &block)
         define_method(Spinach::Support.underscore(step), &block)
       end
 
-      alias_method :When, :Given
-      alias_method :Then, :Given
-      alias_method :And, :Given
-      alias_method :But, :Given
+      alias_method :Given, :step
+      alias_method :When, :step
+      alias_method :Then, :step
+      alias_method :And, :step
+      alias_method :But, :step
 
       # Sets the feature name.
       #

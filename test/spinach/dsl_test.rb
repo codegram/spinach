@@ -8,10 +8,10 @@ describe Spinach::DSL do
   end
 
   describe 'class methods' do
-    describe '#When' do
+    describe '#step' do
       it 'defines a method with the step name' do
         step_executed = false
-        @feature.When('I say goodbye') do
+        @feature.step('I say goodbye') do
           step_executed = true
         end
 
@@ -20,9 +20,9 @@ describe Spinach::DSL do
       end
     end
 
-    describe '#When, #Then, #And, #But' do
-      it 'are #Given aliases' do
-        %w{When Then And But}.each do |method|
+    describe '#Give, #When, #Then, #And, #But' do
+      it 'are #step aliases' do
+        %w{Given When Then And But}.each do |method|
           @feature.must_respond_to method
         end
       end
