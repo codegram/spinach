@@ -123,13 +123,13 @@ module Spinach
     def feature_files
       path = @args.first.to_s
 
-      files = if File.file?(path)
-                @args
-              elsif File.directory?(path)
-                Dir.glob(File.join(path, '**', '*.feature'))
-              else
-                Dir.glob(File.join(Spinach.config[:features_path], '**', '*.feature'))
-              end
+      if File.file?(path)
+        @args
+      elsif File.directory?(path)
+        Dir.glob(File.join(path, '**', '*.feature'))
+      else
+        Dir.glob(File.join(Spinach.config[:features_path], '**', '*.feature'))
+      end
     end
   end
 end
