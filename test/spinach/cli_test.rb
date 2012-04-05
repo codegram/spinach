@@ -137,6 +137,8 @@ describe Spinach::Cli do
     describe 'when a particular feature list is passed' do
       it 'runs the feature' do
         cli = Spinach::Cli.new(['features/some_feature.feature'])
+        File.expects(:file?).with('features/some_feature.feature').returns(true)
+
         Spinach::Runner.expects(:new).with(['features/some_feature.feature']).
           returns(stub(:run))
         cli.run
@@ -150,6 +152,28 @@ describe Spinach::Cli do
           returns(['features/some_feature.feature'])
         Spinach::Runner.expects(:new).with(['features/some_feature.feature']).
           returns(stub(:run))
+        cli.run
+      end
+    end
+
+    describe 'when a folder is given' do
+      it 'runs all feature files in the folder and subfolders' do
+        cli = Spinach::Cli.new(['path/to/features'])
+
+        File.expects(:directory?).with('path/to/features').returns(true)
+        Dir.expects(:glob).with('path/to/features/**/*.feature').
+          returns(['path/to/features/feature1.feature', 
+                  'path/to/features/feature2.feature',
+                  'path/to/features/feature3.feature',
+                  'path/to/features/domain/feature4.feature'])
+
+        Spinach::Runner.expects(:new).with([
+                   'path/to/features/feature1.feature', 
+                   'path/to/features/feature2.feature',
+                   'path/to/features/feature3.feature',
+                   'path/to/features/domain/feature4.feature']).
+          returns(stub(:run))
+
         cli.run
       end
     end
