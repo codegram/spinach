@@ -190,6 +190,7 @@ Check out our [spinach-sinatra demo](https://github.com/codegram/spinach-sinatra
 
 * [spinach rails demo](https://github.com/codegram/spinach-rails-demo)
 * [spinach sinatra demo](https://github.com/codegram/spinach-sinatra-demo)
+* [simple todo Rails app](https://github.com/codegram/tasca-spinach-demo)
 
 ## Contributing
 
