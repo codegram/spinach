@@ -20,21 +20,14 @@ module Spinach
     #
     # @api public
     def run
-      parse_options
-      features = if @args.any?
-        @args
-      else
-        Dir.glob(File.join Spinach.config[:features_path], '**', '*.feature')
-      end
-      Spinach::Runner.new(features).run
+      Spinach::Runner.new(feature_files).run
     end
 
     # Inits the reporter with a default one.
     #
     # @api public
     def init_reporter
-      reporter =
-        Spinach::Reporter::Stdout.new(options[:reporter])
+      reporter = Spinach::Reporter::Stdout.new(options[:reporter])
       reporter.bind
     end
 
@@ -117,6 +110,26 @@ module Spinach
       end
 
       {reporter: reporter_options}
+    end
+
+    # Uses given args to list the feature files to run. It will find a single
+    # feature, features in a folder and subfolders or every feature file in the
+    # feature path.
+    #
+    # @return [Array]
+    #   An array with the feature file names.
+    #
+    # @api private
+    def feature_files
+      path = @args.first.to_s
+
+      if File.file?(path)
+        @args
+      elsif File.directory?(path)
+        Dir.glob(File.join(path, '**', '*.feature'))
+      else
+        Dir.glob(File.join(Spinach.config[:features_path], '**', '*.feature'))
+      end
     end
   end
 end
