@@ -1,3 +1,4 @@
+require "rbconfig"
 require_relative 'filesystem'
 
 module Integration
@@ -18,7 +19,15 @@ module Integration
       options[:framework] ||= :minitest
       use_minitest if options[:framework] == :minitest
       use_rspec if options[:framework] == :rspec
-      run "../../bin/spinach #{command} #{options[:append]}"
+      run "#{ruby} ../../bin/spinach #{command} #{options[:append]}"
+    end
+
+    def ruby
+      return @ruby if defined?(@ruby)
+
+      config = RbConfig::CONFIG
+      @ruby = File.join(config["bindir"],
+                  "#{config["ruby_install_name"]}#{config["EXEEXT"]}")
     end
 
     def use_minitest
