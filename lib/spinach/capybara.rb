@@ -1,5 +1,6 @@
 require 'capybara'
 require 'capybara/dsl'
+require 'rbconfig'
 require_relative 'feature_steps'
 
 module Spinach
@@ -33,11 +34,23 @@ module Spinach
           def visit(*args)
             stream = STDOUT
             old_stream = stream.dup
-            stream.reopen('/dev/null')
+            stream.reopen(null_device)
             stream.sync = true
             super
           ensure
             stream.reopen(old_stream)
+          end
+
+          def null_device
+            return @null_device if defined?(@null_device)
+
+            if RbConfig::CONFIG["host_os"] =~ /mingw|mswin/
+              @null_device = "NUL"
+            else
+              @null_device = "/dev/null"
+            end
+
+            @null_device
           end
         end
       end

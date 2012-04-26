@@ -63,28 +63,28 @@ Feature: Cheezburger can I has
 
     describe "#store" do
       it "stores the generated feature into a file" do
-        FakeFS.activate!
-        subject.store
-        File.directory?("features/steps/").must_equal true
-        File.exists?("features/steps/cheezburger_can_i_has.rb").must_equal true
-        File.read("features/steps/cheezburger_can_i_has.rb").strip.must_equal(
-          subject.generate.strip
-        )
-        FileUtils.rm_rf("features/steps")
-        FakeFS.deactivate!
+        in_current_dir do
+          subject.store
+          File.directory?("features/steps/").must_equal true
+          File.exists?("features/steps/cheezburger_can_i_has.rb").must_equal true
+          File.read("features/steps/cheezburger_can_i_has.rb").strip.must_equal(
+            subject.generate.strip
+          )
+          FileUtils.rm_rf("features/steps")
+        end
       end
 
       it "raises an error if the file already exists and does nothing" do
         file = "features/steps/cheezburger_can_i_has.rb"
-        FakeFS.activate!
-        FileUtils.mkdir_p "features/steps"
-        File.open(file, 'w') do |f|
-          f.write("Fake content")
+        in_current_dir do
+          FileUtils.mkdir_p "features/steps"
+          File.open(file, 'w') do |f|
+            f.write("Fake content")
+          end
+          Proc.new{subject.store}.must_raise(
+            Spinach::Generators::FeatureGeneratorException)
+          FileUtils.rm_rf("features/steps")
         end
-        Proc.new{subject.store}.must_raise(
-          Spinach::Generators::FeatureGeneratorException)
-        FileUtils.rm_rf("features/steps")
-        FakeFS.deactivate!
       end
     end
   end

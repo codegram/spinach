@@ -32,19 +32,22 @@ Feature: Cheezburger can I has
   describe "#generate_feature" do
     it "generates a file" do
       feature_data = data
-      FakeFS.activate!
-      subject.generate_feature(feature_data)
-      File.exists?("features/steps/cheezburger_can_i_has.rb").must_equal true
-      FileUtils.rm_rf("features/steps")
-      FakeFS.deactivate!
+      in_current_dir do
+        subject.generate_feature(feature_data)
+        File.exists?("features/steps/cheezburger_can_i_has.rb").must_equal true
+        FileUtils.rm_rf("features/steps")
+      end
     end
+
     it "outputs a message if feature cannot be generated" do
-      subject::FeatureGenerator.expects(:new).raises(
-        Spinach::Generators::FeatureGeneratorException.new("File already exists"))
-      capture_stdout do
-        subject.generate_feature(data)
-      end.must_include "File already exists"
-      File.exists?("features/steps/cheezburger_can_i_has.rb").must_equal false
+      in_current_dir do
+        subject::FeatureGenerator.expects(:new).raises(
+          Spinach::Generators::FeatureGeneratorException.new("File already exists"))
+        capture_stdout do
+          subject.generate_feature(data)
+        end.must_include "File already exists"
+        File.exists?("features/steps/cheezburger_can_i_has.rb").must_equal false
+      end
     end
   end
 end

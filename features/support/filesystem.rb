@@ -1,5 +1,4 @@
 require 'fileutils'
-require 'open4'
 
 # The Filesystem module runs commands, captures their output and exit status
 # and lets the host know about it.
@@ -46,11 +45,25 @@ module Filesystem
   # @api public
   def run(command)
     in_current_dir do
-      pid = Open4.popen4(command) do |pid, stdin, stdout, stderr|
-        @stdout = stdout.readlines.join("\n")
-        @stderr = stderr.readlines.join("\n")
-      end
-      @last_exit_status = pid.exitstatus
+      # stdout, stderr pipes
+      rout, wout = IO.pipe
+      rerr, werr = IO.pipe
+
+      pid = Process.spawn(command, :out => wout, :err => werr)
+      _, status = Process.wait2(pid)
+
+      # close write ends so we could read them
+      wout.close
+      werr.close
+
+      @stdout = rout.readlines.join("\n")
+      @stderr = rerr.readlines.join("\n")
+
+      # dispose the read ends of the pipes
+      rout.close
+      rerr.close
+
+      @last_exit_status = status.exitstatus
     end
   end
 
@@ -58,6 +71,10 @@ module Filesystem
 
   def mkdir(dirname)
     FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
+  end
+
+  def rmdir(dirname)
+    FileUtils.rm_rf(dirname) unless File.directory?(dirname)
   end
 
   def current_dir
