@@ -15,10 +15,11 @@ require 'mocha'
 require 'ostruct'
 require 'stringio'
 require 'pry'
-require 'fakefs/safe'
 require 'turn'
 
 require 'spinach'
+
+require_relative "support/filesystem"
 
 module Kernel
   def capture_stdout

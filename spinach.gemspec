@@ -15,11 +15,9 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'mocha'
   gem.add_development_dependency 'sinatra'
   gem.add_development_dependency 'capybara'
-  gem.add_development_dependency 'open4'
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'fakefs'
   gem.add_development_dependency 'minitest', '~> 2.0'
   gem.add_development_dependency 'turn'
 
