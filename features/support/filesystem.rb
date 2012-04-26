@@ -73,6 +73,10 @@ module Filesystem
     FileUtils.mkdir_p(dirname) unless File.directory?(dirname)
   end
 
+  def rmdir(dirname)
+    FileUtils.rm_rf(dirname) unless File.directory?(dirname)
+  end
+
   def current_dir
     File.join(*dirs)
   end

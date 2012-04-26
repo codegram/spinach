@@ -8,7 +8,7 @@ module Integration
       Spinach.hooks.before_scenario do
         if respond_to?(:in_current_dir)
           in_current_dir do
-            run "rm -fR rails_app"
+            rmdir "rails_app"
           end
         end
       end
