@@ -44,7 +44,7 @@ describe Spinach::Hooks do
         assertion.must_equal true
       end
 
-      it "passes in both scenario and step_definitions" do
+      it "passes in the step_definitions" do
         assertion = false
         subject.on_tag('javascript') do |scenario, step_definitions|
           assertion = step_definitions.something
