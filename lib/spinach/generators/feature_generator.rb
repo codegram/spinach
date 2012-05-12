@@ -1,3 +1,5 @@
+require "fileutils"
+
 module Spinach
   module Generators
     # A feature generator generates and/or writes an example feature steps class
