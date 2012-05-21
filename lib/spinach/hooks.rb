@@ -147,10 +147,10 @@ module Spinach
     #     # change capybara driver
     #   end
     def on_tag(tag)
-      before_scenario do |scenario|
+      before_scenario do |scenario, step_definitions|
         tags = scenario.tags
         next unless tags.any?
-        yield(scenario) if tags.include? tag.to_s
+        yield(scenario, step_definitions) if tags.include? tag.to_s
       end
     end
   end
