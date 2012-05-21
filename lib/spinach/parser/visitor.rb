@@ -38,6 +38,7 @@ module Spinach
       def visit_Feature(node)
         @feature.name = node.name
         node.background.accept(self) if node.background
+        node.tags.each  { |tag|  tag.accept(self)  }
         node.scenarios.each { |scenario| scenario.accept(self) }
       end
 
