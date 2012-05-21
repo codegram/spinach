@@ -145,6 +145,17 @@ describe Spinach::Cli do
       end
     end
 
+    describe 'when a particular feature list is passed with line' do
+      it 'runs the feature' do
+        cli = Spinach::Cli.new(['features/some_feature.feature:10'])
+        File.expects(:file?).with('features/some_feature.feature').returns(true)
+
+        Spinach::Runner.expects(:new).with(['features/some_feature.feature:10']).
+          returns(stub(:run))
+        cli.run
+      end
+    end
+
     describe 'when no feature is passed' do
       it 'runs the feature' do
         cli = Spinach::Cli.new([])

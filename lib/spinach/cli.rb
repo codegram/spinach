@@ -123,7 +123,7 @@ module Spinach
     def feature_files
       path = @args.first.to_s
 
-      if File.file?(path)
+      if File.file?(path.split(":").first.to_s)
         @args
       elsif File.directory?(path)
         Dir.glob(File.join(path, '**', '*.feature'))
