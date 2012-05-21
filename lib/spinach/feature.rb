@@ -6,6 +6,7 @@ module Spinach
 
     def initialize
       @scenarios = []
+      @tags = []
     end
 
     def background_steps

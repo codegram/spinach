@@ -38,7 +38,11 @@ module Spinach
       def visit_Feature(node)
         @feature.name = node.name
         node.background.accept(self) if node.background
+
+        @current_tag_set = @feature
         node.tags.each  { |tag|  tag.accept(self)  }
+        @current_tag_set = nil
+
         node.scenarios.each { |scenario| scenario.accept(self) }
       end
 
@@ -70,9 +74,9 @@ module Spinach
         scenario.name = node.name
         scenario.line = node.line
 
-        @current_scenario = scenario
+        @current_tag_set = scenario
         node.tags.each  { |tag|  tag.accept(self)  }
-        @current_scenario = nil
+        @current_tag_set = nil
 
         @current_step_set = scenario
         node.steps.each { |step| step.accept(self) }
@@ -88,7 +92,7 @@ module Spinach
       #
       # @api public
       def visit_Tag(node)
-        @current_scenario.tags << node.name
+        @current_tag_set.tags << node.name
       end
 
       # Adds the step to the current scenario.
