@@ -76,7 +76,7 @@ module Spinach
       def run_hook(name, *args, &block)
         if callbacks = hooks[name.to_sym]
           if name.to_sym==:around_scenario
-            run_around_hooks callbacks, *args, &block
+            run_around_hooks callbacks.dup, *args, &block
           else
             callbacks.each{ |c| c.call(*args, &block) }
           end

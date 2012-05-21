@@ -51,11 +51,14 @@ describe Spinach::Hookable do
           steps.must_equal steps_arg
           block.call
         end
+        subject.hooks[:around_scenario].size.must_equal 2
+
         subject.run_hook(:around_scenario, scenario_data_arg, steps_arg, &scenario_run)
 
         scenario_block_called_times.must_equal 1
         first_around_ran.must_equal true
         second_around_ran.must_equal true
+        subject.hooks[:around_scenario].size.must_equal 2
       end
     end
 
