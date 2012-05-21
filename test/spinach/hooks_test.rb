@@ -31,14 +31,26 @@ describe Spinach::Hooks do
       let(:scenario) do
         stub(tags: ['javascript', 'capture'])
       end
+      let(:step_definitions) do
+        stub(something: "step_definitions")
+      end
 
       it "calls the block if the scenario includes the tag" do
         assertion = false
         subject.on_tag('javascript') do
           assertion = true
         end
-        subject.run_before_scenario(scenario)
+        subject.run_before_scenario(scenario, step_definitions)
         assertion.must_equal true
+      end
+
+      it "passes in the step_definitions" do
+        assertion = false
+        subject.on_tag('javascript') do |scenario, step_definitions|
+          assertion = step_definitions.something
+        end
+        subject.run_before_scenario(scenario, step_definitions)
+        assertion.must_equal "step_definitions"
       end
 
       it "doesn't call the block if the scenario doesn't include the tag" do
