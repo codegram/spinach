@@ -9,7 +9,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{Spinach is a BDD framework on top of gherkin}
   gem.homepage      = "http://github.com/codegram/spinach"
 
-  gem.add_runtime_dependency 'gherkin-ruby', '~> 0.1.0'
+  gem.add_runtime_dependency 'gherkin-ruby', '~> 0.2.0'
   gem.add_runtime_dependency 'colorize'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'mocha'
