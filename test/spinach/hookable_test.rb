@@ -30,6 +30,33 @@ describe Spinach::Hookable do
         subject.run_hook(:before_save)
         arbitrary_variable.must_equal true
       end
+
+      it "runs multiple around_scenario executing the scenario block only once" do
+        scenario_block_called_times = 0
+        scenario_run = Proc.new{ scenario_block_called_times += 1 }
+        first_around_ran = false
+        second_around_ran = false
+        scenario_data_arg = mock
+        steps_arg = mock
+
+        subject.add_hook(:around_scenario) do |scenario_data, steps, &block|
+          first_around_ran = true
+          scenario_data.must_equal scenario_data_arg
+          steps.must_equal steps_arg
+          block.call
+        end
+        subject.add_hook(:around_scenario) do |scenario_data, steps, &block|
+          second_around_ran = true
+          scenario_data.must_equal scenario_data_arg
+          steps.must_equal steps_arg
+          block.call
+        end
+        subject.run_hook(:around_scenario, scenario_data_arg, steps_arg, &scenario_run)
+
+        scenario_block_called_times.must_equal 1
+        first_around_ran.must_equal true
+        second_around_ran.must_equal true
+      end
     end
 
     describe "with params" do

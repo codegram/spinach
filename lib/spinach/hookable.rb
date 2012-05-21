@@ -45,6 +45,29 @@ module Spinach
         self.hooks = {}
       end
 
+      # Runs around hooks in a way that ensure the scenario block is executed 
+      # only once
+      #
+      # @param [Array] callbacks
+      #   the list of around callbacks
+      #
+      # @param [] args
+      #   the list of arguments to pass to other around filters
+      #
+      # @param [Proc] block
+      #   the block containing the scenario action to be executed
+      #
+      def run_around_hooks(callbacks, *args, &block)
+        if callbacks.empty?
+          block.call
+        else
+          callback = callbacks.shift
+          callback.call *args do
+            run_around_hooks callbacks, *args, &block
+          end
+        end
+      end
+
       # Runs a particular hook given a set of arguments
       #
       # @param [String] name
@@ -52,7 +75,11 @@ module Spinach
       #
       def run_hook(name, *args, &block)
         if callbacks = hooks[name.to_sym]
-          callbacks.each{ |c| c.call(*args, &block) }
+          if name.to_sym==:around_scenario
+            run_around_hooks callbacks, *args, &block
+          else
+            callbacks.each{ |c| c.call(*args, &block) }
+          end
         else
           yield if block
         end
