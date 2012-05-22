@@ -55,6 +55,14 @@ module Spinach
 
       private
 
+      def feature_tags
+        if @feature.respond_to?(:tags)
+          @feature.tags
+        else
+          []
+        end
+      end
+
       def run_scenarios!
         scenarios.each_with_index do |scenario, current_scenario_index|
           if run_scenario?(scenario, current_scenario_index)
@@ -65,7 +73,8 @@ module Spinach
       end
 
       def run_scenario?(scenario, current_scenario_index)
-        match_line(current_scenario_index) && TagsMatcher.match(scenario.tags)
+        match_line(current_scenario_index) && 
+          TagsMatcher.match(feature_tags | scenario.tags)
       end
 
       def match_line(current_scenario_index)
