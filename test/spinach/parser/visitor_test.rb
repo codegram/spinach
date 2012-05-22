@@ -1,4 +1,4 @@
-require 'test_helper'
+require_relative '../../test_helper'
 
 module Spinach
   class Parser
@@ -24,13 +24,26 @@ module Spinach
       describe '#visit_Feature' do
         before do
           @background = stub_everything
+          @tags  = [stub_everything, stub_everything, stub_everything]
           @scenarios = [stub_everything, stub_everything, stub_everything]
-          @node  = stub(scenarios: @scenarios, name: 'Go shopping', background: @background)
+          @node  = stub(
+            scenarios: @scenarios,
+            name: 'Go shopping',
+            background: @background,
+            tags: @tags
+          )
         end
 
         it 'sets the name' do
           visitor.visit_Feature(@node)
           visitor.feature.name.must_equal 'Go shopping'
+        end
+
+        it 'sets the tags' do
+          @tags.each do |step|
+            step.expects(:accept).with visitor
+          end
+          visitor.visit_Feature(@node)
         end
 
         it 'iterates over its children' do
