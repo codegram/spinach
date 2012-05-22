@@ -136,9 +136,52 @@ use private methods, mix in modules or whatever!
 
 Then run your feature again running `spinach` and watch it all turn green! :)
 
-By default Spinach will ignore Scenarios marked with the tag `@wip`. Those are
-meant to be work in progress, scenarios that are pending while you work on
-them. To explicitly run those, use the `--tags` option:
+## Tags
+
+Feature and Scenarios can be marked with tags in the form: `@tag`. Tags can be
+used for different purpose:
+
+- applying some action using hooks (eg: @javascript, @transaction, @vcr)
+
+        # When using Capybara, you can switch the driver to use another one with
+        # javascript capabilities (Selenium, Poltergeist, capybara-webkit, ...)
+        #
+        # Spinach already integrates with Capybara if you `require spinach/capybara`
+        # in your `feature/support/env.rb`.
+        #
+        # This example is extracted from this intrgration.
+        Spinach.hooks.on_tag("javascript") do
+          ::Capybara.current_driver = ::Capybara.javascript_driver
+        end
+
+- filtering (eg: @module-a, @customer, @admin, @bug-12, @feat-1)
+
+    Given the following feature:
+
+        @feat-1
+        Feature: So something great
+
+          Scenario: Make it possible
+
+          @bug-12
+          Scenario: Ensure no regression on this
+
+  Then you can run all Scenarios in your suite related to `@feat-1` using:
+
+        spinach --tags @feat-1
+
+  Or only Scenarios related to `@feat-1` and `@bug-12` using:
+
+        spinach --tags @feat-1,@bug-12
+
+  Or only Scenarios related to `@feat-1` excluding `@bug-12` using:
+
+        spinach --tags @feat-1,~@bug-12
+
+By default Spinach will ignore Scenarios marked with the tag `@wip` or whose
+Feature is marked with the tag `@wip`. Those are meant to be work in progress,
+scenarios that are pending while you work on them. To explicitly run those, use
+the `--tags` option:
 
     spinach --tags @wip
 
