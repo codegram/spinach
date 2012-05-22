@@ -134,6 +134,7 @@ module Spinach
           tags     = ['tag1', 'tag2', 'tag3']
           scenario = stub(tags: tags)
           visitor.instance_variable_set(:@current_scenario, scenario)
+          visitor.instance_variable_set(:@current_tag_set, scenario)
 
           visitor.visit_Tag(stub(name: 'tag4'))
           scenario.tags.must_equal ['tag1', 'tag2', 'tag3', 'tag4']
