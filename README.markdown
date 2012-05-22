@@ -139,24 +139,24 @@ Then run your feature again running `spinach` and watch it all turn green! :)
 ## Tags
 
 Feature and Scenarios can be marked with tags in the form: `@tag`. Tags can be
-used for different purpose:
+used for different purposes:
 
-- applying some action using hooks (eg: @javascript, @transaction, @vcr)
+- applying some actions using hooks (eg: `@javascript`, `@transaction`, `@vcr`)
 
         # When using Capybara, you can switch the driver to use another one with
         # javascript capabilities (Selenium, Poltergeist, capybara-webkit, ...)
         #
-        # Spinach already integrates with Capybara if you `require spinach/capybara`
-        # in your `feature/support/env.rb`.
+        # Spinach already integrates with Capybara if you add
+        # `require spinach/capybara` in `features/support/env.rb`.
         #
-        # This example is extracted from this intrgration.
+        # This example is extracted from this integration.
         Spinach.hooks.on_tag("javascript") do
           ::Capybara.current_driver = ::Capybara.javascript_driver
         end
 
-- filtering (eg: @module-a, @customer, @admin, @bug-12, @feat-1)
+- filtering (eg: `@module-a`, `@customer`, `@admin`, `@bug-12`, `@feat-1`)
 
-    Given the following feature:
+        # Given a feature file with this content
 
         @feat-1
         Feature: So something great
