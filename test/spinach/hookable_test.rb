@@ -12,6 +12,11 @@ describe Spinach::Hookable do
       subject.class.hook :before_save
       subject.must_respond_to :before_save
     end
+
+    it "defines a new around hook" do
+      subject.class.around_hook :around_save
+      subject.must_respond_to :around_save
+    end
   end
 
   describe "hooking mechanism" do
@@ -53,7 +58,7 @@ describe Spinach::Hookable do
         end
         subject.hooks[:around_scenario].size.must_equal 2
 
-        subject.run_hook(:around_scenario, scenario_data_arg, steps_arg, &scenario_run)
+        subject.run_around_hook(:around_scenario, scenario_data_arg, steps_arg, &scenario_run)
 
         scenario_block_called_times.must_equal 1
         first_around_ran.must_equal true

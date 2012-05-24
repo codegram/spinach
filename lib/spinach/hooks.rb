@@ -62,7 +62,7 @@ module Spinach
     #     # feature_data is a hash of the parsed scenario data
     #     block.call
     #   end
-    hook :around_scenario
+    around_hook :around_scenario
 
     # Runs after every scenario
     #

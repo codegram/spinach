@@ -28,6 +28,22 @@ module Spinach
           run_hook(hook, *args, &block)
         end
       end
+
+      # Adds a new around_hook to this class. Every hook defines two methods 
+      # used to add new callbacks and to run them around a given block of code
+      # passing a bunch of parameters and invoking them in the order they were
+      # defined.
+      #
+      # @example
+      #   class
+      def around_hook(hook)
+        define_method hook do |&block|
+          add_hook(hook, &block)
+        end
+        define_method "run_#{hook}" do |*args, &block|
+          run_around_hook(hook, *args, &block)
+        end
+      end
     end
 
     module InstanceMethods
@@ -45,26 +61,28 @@ module Spinach
         self.hooks = {}
       end
 
-      # Runs around hooks in a way that ensure the scenario block is executed 
+      # Runs around hooks in a way that ensure the scenario block is executed
       # only once
       #
-      # @param [Array] callbacks
-      #   the list of around callbacks
+      # @param [String] name
+      #   the around hook's name
       #
       # @param [] args
       #   the list of arguments to pass to other around filters
       #
       # @param [Proc] block
       #   the block containing the scenario action to be executed
-      #
-      def run_around_hooks(callbacks, *args, &block)
-        if callbacks.empty?
-          block.call
+      def run_around_hook(name, *args, &block)
+        if callbacks = hooks[name.to_sym]
+          callbacks.reverse.inject(block) do |blk, callback|
+            proc do
+              callback.call *args do
+                blk.call
+              end
+            end
+          end.call
         else
-          callback = callbacks.shift
-          callback.call *args do
-            run_around_hooks callbacks, *args, &block
-          end
+          yield if block
         end
       end
 
@@ -75,11 +93,7 @@ module Spinach
       #
       def run_hook(name, *args, &block)
         if callbacks = hooks[name.to_sym]
-          if name.to_sym==:around_scenario
-            run_around_hooks callbacks.dup, *args, &block
-          else
-            callbacks.each{ |c| c.call(*args, &block) }
-          end
+          callbacks.each{ |c| c.call(*args, &block) }
         else
           yield if block
         end
