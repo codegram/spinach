@@ -36,34 +36,15 @@ describe Spinach::Hookable do
         arbitrary_variable.must_equal true
       end
 
-      it "runs multiple around_scenario executing the scenario block only once" do
-        scenario_block_called_times = 0
-        scenario_run = Proc.new{ scenario_block_called_times += 1 }
-        first_around_ran = false
-        second_around_ran = false
-        scenario_data_arg = mock
-        steps_arg = mock
-
-        subject.add_hook(:around_scenario) do |scenario_data, steps, &block|
-          first_around_ran = true
-          scenario_data.must_equal scenario_data_arg
-          steps.must_equal steps_arg
+      it "allows to run around hook" do
+        arbitrary_variable = false
+        subject.add_hook(:around_save) do |&block|
+          arbitrary_variable = true
           block.call
         end
-        subject.add_hook(:around_scenario) do |scenario_data, steps, &block|
-          second_around_ran = true
-          scenario_data.must_equal scenario_data_arg
-          steps.must_equal steps_arg
-          block.call
+        subject.run_around_hook(:around_save) do
         end
-        subject.hooks[:around_scenario].size.must_equal 2
-
-        subject.run_around_hook(:around_scenario, scenario_data_arg, steps_arg, &scenario_run)
-
-        scenario_block_called_times.must_equal 1
-        first_around_ran.must_equal true
-        second_around_ran.must_equal true
-        subject.hooks[:around_scenario].size.must_equal 2
+        arbitrary_variable.must_equal true
       end
     end
 
@@ -84,6 +65,18 @@ describe Spinach::Hookable do
         array.must_equal [1, 2]
       end
 
+      it "allows to run an around hook" do
+        array = []
+        subject.add_hook(:around_save) do |var1, var2, &block|
+          array << var1
+          array << var2
+          block.call
+        end
+        subject.run_around_hook(:around_save, 1, 2) do
+        end
+        array.must_equal [1, 2]
+      end
+
       it "yields to hook block even if nothing is hooked" do
         called = false
         subject.run_hook(:before_save) do
@@ -91,11 +84,77 @@ describe Spinach::Hookable do
         end
         called.must_equal true
       end
+
+      it "yields to around hook block even if nothing is hooked" do
+        called = false
+        subject.run_hook(:around_save) do
+          called = true
+        end
+        called.must_equal true
+      end
+    end
+
+    describe "order" do
+      it "runs hooks in registration order" do
+        save = sequence("save")
+        object = mock("object")
+        object.expects(:before_first).in_sequence(save)
+        object.expects(:before_second).in_sequence(save)
+
+        subject.add_hook(:before_save) do
+          object.before_first
+        end
+        subject.add_hook(:before_save) do
+          object.before_second
+        end
+        subject.run_hook(:before_save)
+      end
+
+      it "runs around hooks in registration order" do
+        save = sequence("save")
+        object = mock("object")
+        object.expects(:before_first).in_sequence(save)
+        object.expects(:before_second).in_sequence(save)
+        object.expects(:after_second).in_sequence(save)
+        object.expects(:after_first).in_sequence(save)
+
+        subject.add_hook(:around_save) do |&block|
+          object.before_first
+          block.call
+          object.after_first
+        end
+        subject.add_hook(:around_save) do |&block|
+          object.before_second
+          block.call
+          object.after_second
+        end
+
+        subject.run_around_hook(:around_save) {}
+      end
+    end
+
+    it "requires a block when running around hook" do
+      subject.add_hook(:around_save) do
+      end
+      lambda {
+        subject.run_around_hook(:around_save)
+      }.must_raise ArgumentError
+    end
+
+    it "runs around hook block only once" do
+      object = mock("object")
+      object.expects(:save).once
+      subject.add_hook(:around_save){|&block| block.call}
+      subject.add_hook(:around_save){|&block| block.call}
+      subject.run_around_hook(:around_save){ object.save }
     end
 
     describe "#reset_hooks" do
       it "resets the hooks to a pristine state" do
         subject.add_hook(:before_save)
+        (subject.hooks.empty?).must_equal false
+        subject.reset
+        (subject.hooks.empty?).must_equal true
       end
     end
   end

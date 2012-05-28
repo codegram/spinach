@@ -73,6 +73,7 @@ module Spinach
       # @param [Proc] block
       #   the block containing the scenario action to be executed
       def run_around_hook(name, *args, &block)
+        raise ArgumentError.new("block is mandatory") unless block
         if callbacks = hooks[name.to_sym]
           callbacks.reverse.inject(block) do |blk, callback|
             proc do
@@ -82,7 +83,7 @@ module Spinach
             end
           end.call
         else
-          yield if block
+          yield
         end
       end
 
