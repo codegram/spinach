@@ -12,24 +12,23 @@ module Spinach
           report_failed_steps
           report_undefined_features
           report_undefined_steps
+          report_pending_steps
         end
 
-        # Prints the steps that raised an error.
-        #
         def report_error_steps
           report_errors('Errors', error_steps, :light_red) if error_steps.any?
         end
 
-        # Prints failing steps.
-        #
         def report_failed_steps
           report_errors('Failures', failed_steps, :light_red) if failed_steps.any?
         end
 
-        # Prints undefined steps.
-        #
         def report_undefined_steps
           report_errors('Undefined steps', undefined_steps, :yellow) if undefined_steps.any?
+        end
+
+        def report_pending_steps
+          report_errors('Pending steps', pending_steps, :yellow) if pending_steps.any?
         end
 
         def report_undefined_features
@@ -96,6 +95,9 @@ module Spinach
           summary = "    #{feature.name} :: #{scenario.name} :: #{full_step step}"
           if exception.kind_of?(Spinach::StepNotDefinedException)
             summary.yellow
+          elsif exception.kind_of?(Spinach::StepPendingException)
+            summary += "\n      Reason: '#{exception.reason}'\n"
+            summary.yellow
           else
             summary.red
           end
@@ -122,6 +124,9 @@ module Spinach
             suggestion.split("\n").each do |line|
               output << "          #{line}\n".yellow
             end
+            output << "\n"
+          elsif exception.kind_of?(Spinach::StepPendingException)
+            output << "        Reason: '#{exception.reason}'".yellow
             output << "\n"
           else
             if options[:backtrace]
@@ -151,6 +156,8 @@ module Spinach
           }.join("\n")
 
           if exception.kind_of?(Spinach::StepNotDefinedException)
+            output.yellow
+          elsif exception.kind_of?(Spinach::StepPendingException)
             output.yellow
           else
             output.red

@@ -133,13 +133,11 @@ describe Spinach::Reporter::Stdout do
 
     it 'sets the current scenario error' do
       @reporter.on_error_step(step, anything, step_location)
-
       @reporter.scenario_error.must_include step
     end
 
     it 'adds the step to the error steps' do
       @reporter.on_error_step(step, anything, step_location)
-
       @reporter.error_steps.last.must_include step
     end
   end
@@ -165,6 +163,28 @@ describe Spinach::Reporter::Stdout do
       @reporter.on_undefined_step(step, anything)
 
       @reporter.undefined_steps.last.must_include step
+    end
+  end
+
+  describe '#on_pending_step' do
+    let(:step) { stub(keyword: 'Given', name: 'I wrote a pending step') }
+
+    it 'adds the step to the output buffer' do
+     @reporter.on_pending_step(step, anything)
+
+     @out.string.must_include 'P'
+     @out.string.must_include 'Given'
+     @out.string.must_include 'I wrote a pending step'
+    end
+
+    it 'sets the current scenario error' do
+      @reporter.on_pending_step(step, anything)
+      @reporter.scenario_error.must_include step
+    end
+
+    it 'adds the step to the pending steps' do
+      @reporter.on_pending_step(step, anything)
+      @reporter.pending_steps.last.must_include step
     end
   end
 

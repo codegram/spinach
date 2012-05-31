@@ -128,6 +128,15 @@ module Spinach
     #   end
     hook :on_undefined_step
 
+    # Runs every time a pending step is called
+    #
+    # @example
+    #   Spinach.hooks.on_pending_step do |step_data, exception|
+    #     # step_data contains a hash with this step's data
+    #     # exception contains the raised exception containing the pending message
+    #   end
+    hook :on_pending_step
+
     # Runs every time a step is skipped because there has been an unsuccessful
     # one just before.
     #
