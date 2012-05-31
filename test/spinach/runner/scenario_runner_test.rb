@@ -118,6 +118,25 @@ module Spinach
           end
         end
 
+        describe 'when the step is pending' do
+          before do
+            @step_definitions.
+              stubs(:execute).
+              with(@step).
+              raises Spinach::StepPendingException, @step
+          end
+
+          it 'sets the exception' do
+            subject.run_step(@step)
+            subject.instance_variable_get(:@exception).must_be_kind_of(Spinach::StepPendingException)
+          end
+
+          it 'runs the pending hooks' do
+            Spinach.hooks.expects(:run_on_pending_step).with(@step, kind_of(Spinach::StepPendingException))
+            subject.run_step(@step)
+          end
+        end
+
         describe 'when the step raises an error' do
           before do
             @step_definitions.stubs(:execute).with(@step).raises StandardError

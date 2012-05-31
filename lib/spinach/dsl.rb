@@ -73,6 +73,7 @@ module Spinach
       def feature(name)
         @feature_name = name
       end
+
     end
 
     # Instance methods to include in the host class.
@@ -107,6 +108,21 @@ module Spinach
       def name
         self.class.feature_name
       end
+
+      # Raises an exception that defines the current step as a pending one.
+      #
+      # @api public
+      #
+      # @param [String] reason
+      #   The reason why the step is set to pending
+      #
+      # @raise [Spinach::StepPendingException]
+      #   Raising the exception tells the scenario runner the current step is
+      #   pending.
+      def pending(reason)
+        raise Spinach::StepPendingException.new(reason)
+      end
+
     end
   end
 end
