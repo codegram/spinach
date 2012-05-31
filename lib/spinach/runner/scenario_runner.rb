@@ -80,6 +80,10 @@ module Spinach
       rescue Spinach::StepNotDefinedException => e
         @exception = e
         Spinach.hooks.run_on_undefined_step step, @exception, step_definitions
+      rescue Spinach::StepPendingException => e
+        e.step = step
+        @exception = e
+        Spinach.hooks.run_on_pending_step step, @exception
       rescue Exception => e
         @exception = e
         Spinach.hooks.run_on_error_step step, @exception, step_location, step_definitions

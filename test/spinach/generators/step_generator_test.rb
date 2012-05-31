@@ -15,6 +15,10 @@ module Spinach::Generators
       it "generates a step" do
         subject.generate.must_match /Given.*I has a sad/
       end
+
+      it "generates a pending step" do
+        subject.generate.must_include "pending 'step not implemented'"
+      end
     end
 
   end

@@ -117,6 +117,17 @@ module Spinach
         undefined_steps << scenario_error
       end
 
+      # Adds an undefined step to the output buffer.
+      #
+      # @param [Hash] step
+      #   The step in a JSON Gherkin format
+      #
+      def on_pending_step(step, failure)
+        output_step('P', step, :yellow)
+        self.scenario_error = [current_feature, current_scenario, step, failure]
+        pending_steps << scenario_error
+      end
+
       # Adds a feature not found message to the output buffer.
       #
       # @param [Hash] feature
@@ -198,10 +209,11 @@ module Spinach
       def run_summary
         successful_summary = format_summary(:green,  successful_steps, 'Successful')
         undefined_summary  = format_summary(:yellow, undefined_steps,  'Undefined')
+        pending_summary    = format_summary(:yellow, pending_steps,    'Pending')
         failed_summary     = format_summary(:red,    failed_steps,     'Failed')
         error_summary      = format_summary(:red,    error_steps,      'Error')
 
-        out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{failed_summary}, #{error_summary}\n\n"
+        out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{pending_summary}, #{failed_summary}, #{error_summary}\n\n"
       end
 
       # Constructs the full step definition
