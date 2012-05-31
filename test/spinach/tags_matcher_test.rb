@@ -45,6 +45,27 @@ describe Spinach::TagsMatcher do
       end
     end
 
+    describe 'when matching against a single negated tag and an added tag' do
+
+      before { @config.tags = [['~wip', 'added']] }
+
+      it "returns false for the same tag" do
+        subject.match(['wip']).must_equal false
+      end
+
+      it "returns true for the added tag" do
+        subject.match(['added']).must_equal true
+      end
+      
+      it "returns false for a different tag" do
+        subject.match(['important']).must_equal false
+      end
+
+      it "returns false when no tags are present" do
+        subject.match([]).must_equal false
+      end
+    end
+
     describe "when matching against ANDed tags" do
 
       before { @config.tags = [['wip'], ['important']] }
