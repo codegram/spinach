@@ -38,7 +38,7 @@ Feature: Cheezburger can I has
       it "generates an entire feature_steps class definition" do
         result = subject.generate
         result.must_match /Given 'I haz a sad' do/
-        result.must_match /raise 'step not implemented'/
+        result.must_match /pending 'step not implemented'/
       end
     end
 
