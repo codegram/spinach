@@ -28,6 +28,22 @@ module Spinach
           run_hook(hook, *args, &block)
         end
       end
+
+      # Adds a new around_hook to this class. Every hook defines two methods 
+      # used to add new callbacks and to run them around a given block of code
+      # passing a bunch of parameters and invoking them in the order they were
+      # defined.
+      #
+      # @example
+      #   class
+      def around_hook(hook)
+        define_method hook do |&block|
+          add_hook(hook, &block)
+        end
+        define_method "run_#{hook}" do |*args, &block|
+          run_around_hook(hook, *args, &block)
+        end
+      end
     end
 
     module InstanceMethods
@@ -43,6 +59,32 @@ module Spinach
       # Resets all this class' hooks to a pristine state
       def reset
         self.hooks = {}
+      end
+
+      # Runs around hooks in a way that ensure the scenario block is executed
+      # only once
+      #
+      # @param [String] name
+      #   the around hook's name
+      #
+      # @param [] args
+      #   the list of arguments to pass to other around filters
+      #
+      # @param [Proc] block
+      #   the block containing the scenario action to be executed
+      def run_around_hook(name, *args, &block)
+        raise ArgumentError.new("block is mandatory") unless block
+        if callbacks = hooks[name.to_sym]
+          callbacks.reverse.inject(block) do |blk, callback|
+            proc do
+              callback.call *args do
+                blk.call
+              end
+            end
+          end.call
+        else
+          yield
+        end
       end
 
       # Runs a particular hook given a set of arguments
