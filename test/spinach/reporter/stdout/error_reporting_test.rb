@@ -32,6 +32,7 @@ describe Spinach::Reporter::Stdout do
       @reporter.expects(:report_failed_steps).once
       @reporter.expects(:report_undefined_steps).once
       @reporter.expects(:report_undefined_features).once
+      @reporter.expects(:report_pending_steps).once
 
       @reporter.error_summary
 
@@ -103,6 +104,25 @@ describe Spinach::Reporter::Stdout do
         @reporter.expects(:report_errors).never
 
         @reporter.report_undefined_steps
+      end
+    end
+  end
+
+  describe '#report_pending_steps' do
+    describe 'when some steps have pending' do
+      it 'outputs the pending steps' do
+        steps = [anything]
+        @reporter.stubs(:pending_steps).returns(steps)
+        @reporter.expects(:report_errors).with('Pending steps', steps, :yellow)
+
+        @reporter.report_pending_steps
+      end
+    end
+
+    describe 'when there are no pending steps' do
+      it 'does nothing' do
+        @reporter.expects(:report_errors).never
+        @reporter.report_pending_steps
       end
     end
   end

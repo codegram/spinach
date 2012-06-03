@@ -62,7 +62,7 @@ module Spinach
     #     # feature_data is a hash of the parsed scenario data
     #     block.call
     #   end
-    hook :around_scenario
+    around_hook :around_scenario
 
     # Runs after every scenario
     #
@@ -127,6 +127,15 @@ module Spinach
     #     # location
     #   end
     hook :on_undefined_step
+
+    # Runs every time a pending step is called
+    #
+    # @example
+    #   Spinach.hooks.on_pending_step do |step_data, exception|
+    #     # step_data contains a hash with this step's data
+    #     # exception contains the raised exception containing the pending message
+    #   end
+    hook :on_pending_step
 
     # Runs every time a step is skipped because there has been an unsuccessful
     # one just before.

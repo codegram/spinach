@@ -15,13 +15,14 @@ module Spinach
       @undefined_steps = []
       @failed_steps = []
       @error_steps = []
+      @pending_steps = []
     end
 
     # A Hash with options for the reporter
     #
     attr_reader :options, :current_feature, :current_scenario
 
-    attr_reader :undefined_steps, :failed_steps, :error_steps, :undefined_features, :successful_steps
+    attr_reader :pending_steps, :undefined_steps, :failed_steps, :error_steps, :undefined_features, :successful_steps
 
     # Hooks the reporter to the runner endpoints
     def bind
@@ -35,6 +36,7 @@ module Spinach
         hooks.after_scenario { |*args| after_scenario_run(*args) }
         hooks.on_successful_step { |*args| on_successful_step(*args) }
         hooks.on_undefined_step { |*args| on_undefined_step(*args) }
+        hooks.on_pending_step { |*args| on_pending_step(*args) }
         hooks.on_failed_step { |*args| on_failed_step(*args) }
         hooks.on_error_step { |*args| on_error_step(*args) }
         hooks.on_skipped_step { |*args| on_skipped_step(*args) }
@@ -59,6 +61,7 @@ module Spinach
     def on_failed_step(*args); end;
     def on_error_step(*args); end;
     def on_undefined_step(*args); end;
+    def on_pending_step(*args); end;
     def on_skipped_step(*args); end;
 
     # Stores the current feature
