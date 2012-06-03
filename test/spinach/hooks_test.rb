@@ -6,9 +6,23 @@ describe Spinach::Hooks do
   end
 
   describe "hooks" do
-    %w{before_run after_run before_feature after_feature on_undefined_feature
-    before_scenario around_scenario after_scenario before_step after_step on_successful_step
-    on_failed_step on_error_step on_undefined_step on_skipped_step}.each do |callback|
+    %w{
+      before_run
+      after_run
+      before_feature
+      after_feature
+      on_undefined_feature
+      before_scenario
+      after_scenario
+      before_step
+      after_step
+      on_successful_step
+      on_failed_step
+      on_error_step
+      on_undefined_step
+      on_skipped_step
+      on_pending_step
+    }.each do |callback|
       describe "#{callback}" do
         it "responds to #{callback}" do
           subject.must_respond_to callback
@@ -24,6 +38,24 @@ describe Spinach::Hooks do
           subject.send("run_#{callback}", 1, 2)
           array.must_equal [1, 2]
         end
+      end
+    end
+
+    describe "around_scenario" do
+      it "responds to around_scenario" do
+        subject.must_respond_to :around_scenario
+      end
+
+      it "executes the hook with params" do
+        array = []
+        block = Proc.new do |arg1, arg2|
+          array << arg1
+          array << arg2
+        end
+        subject.send(:around_scenario, &block)
+        subject.send("run_around_scenario", 1, 2) do
+        end
+        array.must_equal [1, 2]
       end
     end
 
