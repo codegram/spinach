@@ -27,15 +27,17 @@ module Spinach
       end
 
       def match_tag_group(tag_group, tags)
-        tag_group.any? do |tag|
-          tag_matched = tags.include?(tag.delete(NEGATION_SIGN))
+        matched_tags = tag_group.select { |tag| !tag_negated?(tag) }
+        
+        matched = matched_tags.any? { |tag| tags.include?(tag) }
 
-          if tag_negated?(tag)
-            !tag_matched
-          else
-            tag_matched
-          end
-        end
+        return true if matched
+
+        negated_tags = tag_group.select { |tag| tag_negated? tag }
+        negated = negated_tags.any? {|tag| !tags.include?(tag.delete(NEGATION_SIGN))}
+
+        return true if negated && tag_group.count == 1
+        false
       end
 
       def tag_negated?(tag)
