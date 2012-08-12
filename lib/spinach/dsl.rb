@@ -89,7 +89,9 @@ module Spinach
       # @api public
       def before(&block)
         hash_value = hash
-        private_method_name = "before_each_block_#{hash.abs}"
+        class_name = self.name || ""
+        class_name = class_name.gsub("::", "__").downcase
+        private_method_name = "_before_each_block_#{hash.abs}_#{class_name}" #uniqueness
         define_method private_method_name, &block
         private private_method_name
         define_method :before_each do
