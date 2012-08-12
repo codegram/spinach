@@ -52,6 +52,41 @@ module Spinach
       def step(step, &block)
         define_method(Spinach::Support.underscore(step), &block)
       end
+      #
+      # Defines a before hook for each scenario. The scope is limited only to the current
+      # step class (thus the current feature). 
+      #
+      # When a scenario is executed, the before each block will be run first before any steps
+      #
+      # User can define multiple before blocks throughout the class hierarchy and they are chained
+      # through the inheritance chain when executing
+      #
+      # @example
+      #
+      #   class MySpinach::Base< Spinach::FeatureSteps
+      #     before do
+      #       @var1 = 30
+      #       @var2 = 40
+      #     end
+      #   end
+      #
+      #   class MyFeature < MySpinach::Base
+      #     before do
+      #       self.original_session_timeout = 1000
+      #       change_session_timeout_to(1)
+      #       @var2 = 50
+      #     end
+      #   end
+      #
+      #   When running a scenario in MyFeature, @var1 is 30 and @var2 is 50
+      #
+      # @api public
+      def before
+        define_methdo :before_each do
+          super
+          yield
+        end
+      end
 
       alias_method :Given, :step
       alias_method :When, :step
