@@ -52,7 +52,13 @@ module Spinach
       def step(step, &block)
         define_method(Spinach::Support.underscore(step), &block)
       end
-      #
+
+      alias_method :Given, :step
+      alias_method :When, :step
+      alias_method :Then, :step
+      alias_method :And, :step
+      alias_method :But, :step
+      
       # Defines a before hook for each scenario. The scope is limited only to the current
       # step class (thus the current feature). 
       #
@@ -81,18 +87,16 @@ module Spinach
       #   When running a scenario in MyFeature, @var1 is 30 and @var2 is 50
       #
       # @api public
-      def before
-        define_methdo :before_each do
-          super
-          yield
+      def before(&block)
+        hash_value = hash
+        private_method_name = "before_each_block_#{hash.abs}"
+        define_method private_method_name, &block
+        private private_method_name
+        define_method :before_each do
+          super()
+          send(private_method_name)
         end
       end
-
-      alias_method :Given, :step
-      alias_method :When, :step
-      alias_method :Then, :step
-      alias_method :And, :step
-      alias_method :But, :step
 
       # Sets the feature name.
       #

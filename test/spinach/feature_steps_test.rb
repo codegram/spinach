@@ -32,11 +32,11 @@ describe Spinach::FeatureSteps do
     end
 
     it "responds to before_each" do
-      feature.respond_to?(:before_each).must_equal(true)
+      feature.must_respond_to(:before_each)
     end
 
     it "responds to after_each" do
-      feature.respond_to?(:after_each).must_equal(true)
+      feature.must_respond_to(:after_each)
     end
 
     describe 'execute' do
