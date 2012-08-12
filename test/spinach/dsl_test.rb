@@ -28,6 +28,60 @@ describe Spinach::DSL do
       end
     end
 
+    describe "#after" do
+      let(:super_class) {
+        Class.new do
+          attr_reader :var1
+          def after_each
+            @var1 = 30
+            @var2 = 60
+          end
+        end
+      }
+
+      let(:feature) {
+        Class.new(super_class) do
+          attr_accessor :var2
+          include Spinach::DSL
+          after do
+            self.var2 = 40
+          end
+        end
+      }
+
+      let(:object) { feature.new }
+      
+      it "defines after_each method and calls the super first" do
+        object.after_each
+        object.var1.must_equal 30
+      end
+      
+      it "defines after_each method and runs the block second" do
+        object.after_each
+        object.var2.must_equal 40
+      end
+
+      describe "deep inheritance" do
+        let(:sub_feature) {
+          Class.new(feature) do
+            include Spinach::DSL
+            attr_reader :var3
+
+            after do
+              @var3 = 15
+            end
+          end
+        }
+
+        let(:sub_object) { sub_feature.new }
+
+        it "works with the 3rd layer of inheritance" do
+          sub_object.after_each
+          sub_object.var2.must_equal 40
+        end
+      end
+    end
+
     describe "#before" do
       let(:super_class) {
         Class.new do
