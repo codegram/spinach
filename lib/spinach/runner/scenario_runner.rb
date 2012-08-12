@@ -59,6 +59,7 @@ module Spinach
 
             Spinach.hooks.run_after_step step, step_definitions
           end
+          step_definitions.after_each
         end
         raise "around_scenario hooks *must* yield" if !scenario_run && !@exception
         Spinach.hooks.run_after_scenario @scenario, step_definitions

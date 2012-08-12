@@ -35,10 +35,14 @@ module Spinach
 
       describe '#run' do
         describe 'hooks' do
-          it 'runs hooks in order' do
-            hooks = sequence('hooks')
+          before(:each) do
             subject.stubs(:step_definitions).returns step_definitions = stub
             step_definitions.stubs(:before_each)
+            step_definitions.stubs(:after_each)
+          end
+          
+          it 'runs hooks in order' do
+            hooks = sequence('hooks')
 
             Spinach.hooks.expects(:run_before_scenario).with(scenario, step_definitions).in_sequence(hooks)
             Spinach.hooks.expects(:run_around_scenario).with(scenario, step_definitions).in_sequence(hooks).yields
@@ -57,11 +61,17 @@ module Spinach
           end
 
           it "runs before_each before run steps" do
-            before_each = sequence('step_definitions')
-            subject.stubs(:step_definitions).returns step_definitions = stub
+            before_each = sequence('before_each')
             subject.stubs(:steps).returns steps = stub
             step_definitions.expects(:before_each).in_sequence(before_each)
             steps.expects(:each).in_sequence(before_each)
+            subject.run
+          end
+
+          it "runs after_each after run steps" do
+            after_each = sequence('after_each')
+            Spinach.hooks.expects(:run_after_step).in_sequence(after_each).twice
+            step_definitions.expects(:after_each).in_sequence(after_each)
             subject.run
           end
 
