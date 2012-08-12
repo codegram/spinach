@@ -15,7 +15,7 @@ class BeforeAndAfterHooks < Spinach::FeatureSteps
     self.class.var1 = nil
   end
 
-  Then 'the variable is setup in the before hook' do
+  Then 'I can verify the variable setup in the before hook' do
     self.class.var1.must_equal :clean
   end
 end

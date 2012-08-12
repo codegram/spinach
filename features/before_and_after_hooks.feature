@@ -4,7 +4,7 @@ Feature: Before and after hooks
   I want to be able to use before and after hooks within the step class
 
   Scenario: Happy path
-    Then the variable is setup in the before hook
+    Then I can verify the variable setup in the before hook
 
   Scenario: Inter-dependency - after hook cleans up (after happy path)
-    Then the variable is setup in the before hook
+    Then I can verify the variable setup in the before hook
