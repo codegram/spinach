@@ -208,6 +208,26 @@ Full hook documentation is here:
 
 [Spinach's hook documentation on rubydoc](http://rubydoc.info/github/codegram/spinach/master/Spinach/Hooks)
 
+## Local Before and After Hooks
+
+Sometimes it feels awkward to add steps into feature file just because you need to do some test setup and cleanup. And it is equally awkward to add a global hooks for this purpose. For example, if you want to add a session timeout feature, to do so, you want to set the session timeout time to 1 second just for this feature, and out the normal timeout back after this feature. It doesn't make sense to add two steps in the feature file just to change the session timeout value. In this scenario, a ```before``` and ```after``` blocks are perfect for this kind of tasks. Below is an example implementation:
+
+```ruby
+class SessionTimeout < Spinach::FeatureSteps
+  attr_accessor :original_timeout_value
+  before do
+    self.original_timeout_value = session_timeout_value
+    change_session_timeout_to 1.second
+  end
+
+  after do
+    change_session_timeout_to original_timeout_value
+  end
+  
+  # remaining steps
+end
+```
+
 ## Wanna use it with Rails 3?
 
 Use [spinach-rails](http://github.com/codegram/spinach-rails)
