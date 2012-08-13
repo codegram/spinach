@@ -26,5 +26,8 @@ module Spinach
         include_private(*args)
       end
     end
+
+    def before_each; end
+    def after_each; end
   end
 end

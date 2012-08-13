@@ -58,6 +58,69 @@ module Spinach
       alias_method :Then, :step
       alias_method :And, :step
       alias_method :But, :step
+      
+      # Defines a before hook for each scenario. The scope is limited only to the current
+      # step class (thus the current feature). 
+      #
+      # When a scenario is executed, the before each block will be run first before any steps
+      #
+      # User can define multiple before blocks throughout the class hierarchy and they are chained
+      # through the inheritance chain when executing
+      #
+      # @example
+      #
+      #   class MySpinach::Base< Spinach::FeatureSteps
+      #     before do
+      #       @var1 = 30
+      #       @var2 = 40
+      #     end
+      #   end
+      #
+      #   class MyFeature < MySpinach::Base
+      #     before do
+      #       self.original_session_timeout = 1000
+      #       change_session_timeout_to(1)
+      #       @var2 = 50
+      #     end
+      #   end
+      #
+      #   When running a scenario in MyFeature, @var1 is 30 and @var2 is 50
+      #
+      # @api public
+      def before(&block)
+        define_before_or_after_method_with_block(:before, &block)
+      end
+
+      # Defines a after hook for each scenario. The scope is limited only to the current
+      # step class (thus the current feature). 
+      #
+      # When a scenario is executed, the after each block will be run after any steps
+      #
+      # User can define multiple after blocks throughout the class hierarchy and they are chained
+      # through the inheritance chain when executing.
+      #
+      # @example
+      #
+      #   class MySpinach::Base < Spinach::FeatureSteps
+      #     after do
+      #       @var1 = 30
+      #       @var2 = 40
+      #     end
+      #   end
+      #
+      #   class MyFeature < MySpinach::Base
+      #     after do
+      #       change_session_timeout_to(original_session_timeout)
+      #       @var2 = 50
+      #     end
+      #   end
+      #
+      #   When running a scenario in MyFeature, @var1 is 30 and @var2 is 50
+      #
+      # @api public
+      def after(&block)
+        define_before_or_after_method_with_block(:after, &block)
+      end
 
       # Sets the feature name.
       #
@@ -72,6 +135,25 @@ module Spinach
       # @api public
       def feature(name)
         @feature_name = name
+      end
+
+      private
+
+      def before_or_after_private_method_name(location)
+        hash_value = hash
+        class_name = self.name || ""
+        class_name = class_name.gsub("::", "__").downcase
+        private_method_name = "_#{location}_each_block_#{hash.abs}_#{class_name}" #uniqueness
+      end
+
+      def define_before_or_after_method_with_block(location, &block)
+        define_method(before_or_after_private_method_name(location), &block)
+        private before_or_after_private_method_name(location)
+        private_method_name = before_or_after_private_method_name location
+        define_method "#{location}_each" do
+          super()
+          send(private_method_name)
+        end
       end
 
     end

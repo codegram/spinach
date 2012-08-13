@@ -31,6 +31,14 @@ describe Spinach::FeatureSteps do
       end.new
     end
 
+    it "responds to before_each" do
+      feature.must_respond_to(:before_each)
+    end
+
+    it "responds to after_each" do
+      feature.must_respond_to(:after_each)
+    end
+
     describe 'execute' do
       it 'runs defined step correctly' do
         feature.execute(stub(name: 'I go to the toilet'))
