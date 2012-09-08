@@ -29,6 +29,11 @@ module Spinach
         @out = options[:output] || $stdout
         @error = options[:error] || $stderr
         @max_step_name_length = 0
+        @duration = @start = nil
+      end
+
+      def before_run
+        @start = Time.now
       end
 
       # Prints the feature name to the standard output
@@ -199,6 +204,7 @@ module Spinach
       #   whether the run has succeed or not
       #
       def after_run(success)
+        @duration = Time.now - @start
         error_summary unless success
         out.puts ""
         run_summary
@@ -213,6 +219,7 @@ module Spinach
         failed_summary     = format_summary(:red,    failed_steps,     'Failed')
         error_summary      = format_summary(:red,    error_steps,      'Error')
 
+        out.puts "Finished in #{format_duration(@duration)}.\n"
         out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{pending_summary}, #{failed_summary}, #{error_summary}\n\n"
       end
 
@@ -238,6 +245,32 @@ module Spinach
         buffer << ") ".colorize(color)
         buffer << message.colorize(color)
         buffer.join
+      end
+
+      def format_duration(duration)
+        if duration > 60
+          minutes = duration.to_i / 60
+          seconds = duration - minutes * 60
+
+          "#{pluralize(minutes, 'minute')} #{format_seconds(seconds)} seconds"
+        else
+          "#{format_seconds(duration)} seconds"
+        end
+      end
+
+      def format_seconds(float)
+        precision ||= (float < 1) ? 5 : 2
+        formatted = sprintf("%.#{precision}f", float)
+        strip_trailing_zeroes(formatted)
+      end
+
+      def strip_trailing_zeroes(string)
+        stripped = string.sub(/[^1-9]+$/, '')
+        stripped.empty? ? "0" : stripped
+      end
+
+      def pluralize(count, string)
+        "#{count} #{string}#{'s' unless count == 1}"
       end
     end
   end

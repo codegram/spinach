@@ -28,6 +28,7 @@ module Spinach
     def bind
       Spinach.hooks.tap do |hooks|
         hooks.after_run { |*args| after_run(*args) }
+        hooks.before_run { |*args| before_run(*args) }
         hooks.before_feature { |*args| before_feature_run(*args) }
         hooks.after_feature { |*args| after_feature_run(*args) }
         hooks.on_undefined_feature { |*args| on_feature_not_found(*args) }
@@ -49,6 +50,7 @@ module Spinach
     end
 
     def after_run(*args); end;
+    def before_run(*args); end;
     def before_feature_run(*args); end
     def after_feature_run(*args); end
     def on_feature_not_found(*args); end

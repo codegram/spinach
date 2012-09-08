@@ -24,6 +24,7 @@ describe Spinach::Reporter::Stdout do
       output: @out,
       error: @error
     )
+    @reporter.before_run
   end
 
   describe '#before_feature_run' do

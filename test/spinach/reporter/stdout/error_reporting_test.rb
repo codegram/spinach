@@ -24,6 +24,7 @@ describe Spinach::Reporter::Stdout do
       output: @out,
       error: @error
     )
+    @reporter.before_run
   end
 
   describe '#error_summary' do
@@ -41,9 +42,19 @@ describe Spinach::Reporter::Stdout do
   end
 
   describe '#run_summary' do
-    it 'prints a run summary' do
+    it 'prints a run summary if run was successful' do
+      @reporter.after_run(true)
       @reporter.run_summary
 
+      @out.string.must_include 'Finished in'
+      @out.string.must_include 'Steps Summary:'
+    end
+
+    it 'prints a run summary if run was not successful' do
+      @reporter.after_run(false)
+      @reporter.run_summary
+
+      @out.string.must_include 'Finished in'
       @out.string.must_include 'Steps Summary:'
     end
   end
