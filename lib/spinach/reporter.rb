@@ -35,6 +35,8 @@ module Spinach
         hooks.before_scenario { |*args| before_scenario_run(*args) }
         hooks.around_scenario { |*args, &block| around_scenario_run(*args, &block) }
         hooks.after_scenario { |*args| after_scenario_run(*args) }
+        hooks.before_step { |*args| before_step(*args) }
+        hooks.after_step { |*args| after_step(*args) }
         hooks.on_successful_step { |*args| on_successful_step(*args) }
         hooks.on_undefined_step { |*args| on_undefined_step(*args) }
         hooks.on_pending_step { |*args| on_pending_step(*args) }
@@ -59,6 +61,8 @@ module Spinach
       yield
     end
     def after_scenario_run(*args); end
+    def before_step(*args); end;
+    def after_step(*args); end;
     def on_successful_step(*args); end;
     def on_failed_step(*args); end;
     def on_error_step(*args); end;
