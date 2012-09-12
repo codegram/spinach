@@ -9,8 +9,31 @@ module Spinach
 
       include ErrorReporting
 
+      class ScenarioProfiling
+        attr_reader :feature, :scenario, :total_duration, :steps
+
+        def initialize(feature, scenario)
+          @feature = feature
+          @scenario = scenario
+          @steps = []
+          @total_duration = 0
+        end
+
+        def start_step
+          @step_start = Time.now
+        end
+
+        def finish(step)
+          duration = Time.now - @step_start
+          @steps << [step, duration]
+          @total_duration += duration
+        end
+      end
+
       # The output buffers to store the reports.
       attr_reader :out, :error
+
+      attr_reader :profiled_scenarios
 
       # The last scenario error
       attr_accessor :scenario_error
@@ -30,6 +53,7 @@ module Spinach
         @error = options[:error] || $stderr
         @max_step_name_length = 0
         @duration = @start = nil
+        @profiled_scenarios = []
       end
 
       def before_run
@@ -52,6 +76,7 @@ module Spinach
       #   The feature in a JSON Gherkin format
       #
       def before_scenario_run(scenario, step_definitions = nil)
+        @scenario_profiling = ScenarioProfiling.new(current_feature, current_scenario)
         @max_step_name_length = scenario.steps.map(&:name).map(&:length).max if scenario.steps.any?
         name = scenario.name
         out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
@@ -63,10 +88,19 @@ module Spinach
       #   The feature in a JSON Gherkin format
       #
       def after_scenario_run(scenario, step_definitions = nil)
+        @profiled_scenarios << @scenario_profiling
         if scenario_error
           report_error(scenario_error, :full)
           self.scenario_error = nil
         end
+      end
+
+      def before_step(step, step_definitions = nil)
+        @scenario_profiling.start_step
+      end
+
+      def after_step(step, step_definitions = nil)
+        @scenario_profiling.finish(step)
       end
 
       # Adds a passed step to the output buffer.
