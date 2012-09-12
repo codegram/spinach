@@ -76,7 +76,7 @@ module Spinach
       #   The feature in a JSON Gherkin format
       #
       def before_scenario_run(scenario, step_definitions = nil)
-        @scenario_profiling = ScenarioProfiling.new(current_feature, current_scenario)
+        @scenario_profiling = ScenarioProfiling.new(current_feature, scenario)
         @max_step_name_length = scenario.steps.map(&:name).map(&:length).max if scenario.steps.any?
         name = scenario.name
         out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
@@ -242,6 +242,8 @@ module Spinach
         error_summary unless success
         out.puts ""
         run_summary
+
+        print_slowest_scenarios if options[:profiling]
       end
 
       # Prints the feature success summary for this run.
@@ -255,6 +257,19 @@ module Spinach
 
         out.puts "Finished in #{format_duration(@duration)}.\n"
         out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{pending_summary}, #{failed_summary}, #{error_summary}\n\n"
+      end
+
+      def print_slowest_scenarios
+        out.puts "\nTop slowest scenarios\n"
+
+        profiled_scenarios.sort_by {|prof| prof.total_duration }.reverse.take(10).each do |prof|
+          out.puts "#{prof.total_duration} - Scenario #{prof.scenario.name}\n"
+          prof.steps.each do |info|
+            step, duration = info
+            out.puts "\t#{duration} #{step.keyword} #{step.name}\n"
+          end
+          out.puts "\n"
+        end
       end
 
       # Constructs the full step definition
