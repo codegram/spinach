@@ -68,6 +68,10 @@ module Spinach
             reporter_options[:backtrace] = show_backtrace
           end
 
+          opts.on('--profiling', 'Show the slowest scenarios') do |profiling|
+            reporter_options[:profiling] = profiling
+          end
+
           opts.on('-t', '--tags TAG',
                   'Run all scenarios for given tags.') do |tag|
             config[:tags] ||= []
