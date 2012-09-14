@@ -20,9 +20,15 @@ describe Spinach::Cli do
 
     describe 'scenario profiling' do
       it 'sets the reporter option to show slowest scenarios' do
-        cli = Spinach::Cli.new(['--profiling'])
+        cli = Spinach::Cli.new(%w{--profiling 5})
         options = cli.options
-        options[:reporter][:profiling].must_equal true
+        options[:reporter][:profiling].must_equal 5
+      end
+
+      it 'sets the default number of slowest scenarios to 10 if none provided' do
+        cli = Spinach::Cli.new(%w{--profiling})
+        options = cli.options
+        options[:reporter][:profiling].must_equal 10
       end
     end
 

@@ -243,7 +243,7 @@ module Spinach
         out.puts ""
         run_summary
 
-        print_slowest_scenarios if options[:profiling]
+        print_slowest_scenarios(options[:profiling]) if options[:profiling]
       end
 
       # Prints the feature success summary for this run.
@@ -259,10 +259,11 @@ module Spinach
         out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{pending_summary}, #{failed_summary}, #{error_summary}\n\n"
       end
 
-      def print_slowest_scenarios
-        out.puts "Top slowest scenarios\n"
+      def print_slowest_scenarios(num_slowest_scenarios)
+        slowest_scenarios = profiled_scenarios.sort_by {|prof| prof.total_duration }.reverse.first(num_slowest_scenarios)
 
-        slowest_scenarios = profiled_scenarios.sort_by {|prof| prof.total_duration }.reverse.take(10)
+        out.puts "Top #{slowest_scenarios.size} slowest scenarios\n"
+
         slowest_scenarios.each do |prof|
           scenario_duration = format_seconds(prof.total_duration).light_red + " seconds".red
           out.puts "#{indent(2)}#{scenario_duration} Scenario: #{prof.scenario.name}\n"
