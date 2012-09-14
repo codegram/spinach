@@ -30,6 +30,12 @@ Feature: Cheezburger can I has
   end
 
   describe "#generate_feature" do
+    before do
+      in_current_dir do
+        FileUtils.rm_rf("features/steps")
+      end
+    end
+
     it "generates a file" do
       feature_data = data
       in_current_dir do

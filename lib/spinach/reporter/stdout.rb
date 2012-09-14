@@ -9,8 +9,31 @@ module Spinach
 
       include ErrorReporting
 
+      class ScenarioProfiling
+        attr_reader :feature, :scenario, :total_duration, :steps
+
+        def initialize(feature, scenario)
+          @feature = feature
+          @scenario = scenario
+          @steps = []
+          @total_duration = 0
+        end
+
+        def start_step
+          @step_start = Time.now
+        end
+
+        def finish(step)
+          duration = Time.now - @step_start
+          @steps << [step, duration]
+          @total_duration += duration
+        end
+      end
+
       # The output buffers to store the reports.
       attr_reader :out, :error
+
+      attr_reader :profiled_scenarios
 
       # The last scenario error
       attr_accessor :scenario_error
@@ -29,6 +52,12 @@ module Spinach
         @out = options[:output] || $stdout
         @error = options[:error] || $stderr
         @max_step_name_length = 0
+        @duration = @start = nil
+        @profiled_scenarios = []
+      end
+
+      def before_run
+        @start = Time.now
       end
 
       # Prints the feature name to the standard output
@@ -47,6 +76,7 @@ module Spinach
       #   The feature in a JSON Gherkin format
       #
       def before_scenario_run(scenario, step_definitions = nil)
+        @scenario_profiling = ScenarioProfiling.new(current_feature, scenario)
         @max_step_name_length = scenario.steps.map(&:name).map(&:length).max if scenario.steps.any?
         name = scenario.name
         out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
@@ -58,10 +88,19 @@ module Spinach
       #   The feature in a JSON Gherkin format
       #
       def after_scenario_run(scenario, step_definitions = nil)
+        @profiled_scenarios << @scenario_profiling
         if scenario_error
           report_error(scenario_error, :full)
           self.scenario_error = nil
         end
+      end
+
+      def before_step(step, step_definitions = nil)
+        @scenario_profiling.start_step
+      end
+
+      def after_step(step, step_definitions = nil)
+        @scenario_profiling.finish(step)
       end
 
       # Adds a passed step to the output buffer.
@@ -199,9 +238,12 @@ module Spinach
       #   whether the run has succeed or not
       #
       def after_run(success)
+        @duration = Time.now - @start
         error_summary unless success
         out.puts ""
         run_summary
+
+        print_slowest_scenarios(options[:profiling]) if options[:profiling]
       end
 
       # Prints the feature success summary for this run.
@@ -213,7 +255,30 @@ module Spinach
         failed_summary     = format_summary(:red,    failed_steps,     'Failed')
         error_summary      = format_summary(:red,    error_steps,      'Error')
 
+        out.puts "Finished in #{format_duration(@duration)}.\n"
         out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{pending_summary}, #{failed_summary}, #{error_summary}\n\n"
+      end
+
+      def print_slowest_scenarios(num_slowest_scenarios)
+        slowest_scenarios = profiled_scenarios.sort_by {|prof| prof.total_duration }.reverse.first(num_slowest_scenarios)
+
+        slows = slowest_scenarios.inject(0.0) {|sum, prof| sum + prof.total_duration }
+        time_taken = slows / @duration
+        percentage = '%.1f' % ((time_taken.nan? ? 0.0 : time_taken) * 100)
+
+        out.puts "Top #{slowest_scenarios.size} slowest scenarios (#{format_seconds(slows)} seconds, #{percentage}% of total time)\n"
+
+        slowest_scenarios.each do |prof|
+          scenario_duration = format_seconds(prof.total_duration).light_red + " seconds".red
+          out.puts "#{indent(2)}#{scenario_duration} Scenario: #{prof.scenario.name}\n"
+
+          prof.steps.each do |info|
+            step, duration = info
+            step_duration = format_seconds(duration).light_red + " seconds".red
+            out.puts "#{indent(4)}#{step_duration} #{full_step(step)}\n"
+          end
+          out.puts "\n"
+        end
       end
 
       # Constructs the full step definition
@@ -238,6 +303,26 @@ module Spinach
         buffer << ") ".colorize(color)
         buffer << message.colorize(color)
         buffer.join
+      end
+
+      def format_duration(duration)
+        if duration > 60
+          minutes = duration.to_i / 60
+          seconds = duration - minutes * 60
+
+          "#{pluralize(minutes, 'minute')} #{format_seconds(seconds)} seconds"
+        else
+          "#{format_seconds(duration)} seconds"
+        end
+      end
+
+      def format_seconds(float)
+        precision ||= (float < 1) ? 5 : 2
+        sprintf("%.#{precision}f", float)
+      end
+
+      def pluralize(count, string)
+        "#{count} #{string}#{'s' unless count == 1}"
       end
     end
   end

@@ -18,6 +18,20 @@ describe Spinach::Cli do
       end
     end
 
+    describe 'scenario profiling' do
+      it 'sets the reporter option to show slowest scenarios' do
+        cli = Spinach::Cli.new(%w{--profiling 5})
+        options = cli.options
+        options[:reporter][:profiling].must_equal 5
+      end
+
+      it 'sets the default number of slowest scenarios to 10 if none provided' do
+        cli = Spinach::Cli.new(%w{--profiling})
+        options = cli.options
+        options[:reporter][:profiling].must_equal 10
+      end
+    end
+
     describe 'features_path' do
       %w{-f --features_path}.each do |opt|
         it 'sets the given features_path' do
@@ -173,13 +187,13 @@ describe Spinach::Cli do
 
         File.expects(:directory?).with('path/to/features').returns(true)
         Dir.expects(:glob).with('path/to/features/**/*.feature').
-          returns(['path/to/features/feature1.feature', 
+          returns(['path/to/features/feature1.feature',
                   'path/to/features/feature2.feature',
                   'path/to/features/feature3.feature',
                   'path/to/features/domain/feature4.feature'])
 
         Spinach::Runner.expects(:new).with([
-                   'path/to/features/feature1.feature', 
+                   'path/to/features/feature1.feature',
                    'path/to/features/feature2.feature',
                    'path/to/features/feature3.feature',
                    'path/to/features/domain/feature4.feature']).

@@ -24,6 +24,7 @@ describe Spinach::Reporter::Stdout do
       output: @out,
       error: @error
     )
+    @reporter.before_run
   end
 
   describe '#before_feature_run' do
@@ -258,6 +259,34 @@ describe Spinach::Reporter::Stdout do
   describe '#full_step' do
     it 'returns the step with keyword and name' do
       @reporter.full_step(stub(keyword: 'Keyword', name: 'step name')).must_equal 'Keyword step name'
+    end
+  end
+
+  describe 'scenario profiling' do
+    it 'should keep track of the scenarios executed' do
+      scenario = stub_everything(name: 'Arbitrary scenario', steps: [])
+      @reporter.before_scenario_run(scenario)
+      @reporter.after_scenario_run(scenario)
+
+      @reporter.profiled_scenarios.count.must_equal 1
+    end
+
+    it 'should keep track of the duration of the steps executed within a scenario' do
+      scenario = stub_everything(name: 'Arbitrary scenario', steps: [])
+      step = stub(:step)
+      start, duration = Time.now, 4
+      Time.stubs(:now).returns(start, start + duration, start + duration, start + duration * 2)
+
+      @reporter.before_scenario_run(scenario)
+      2.times do
+        @reporter.before_step(step)
+        @reporter.after_step(step)
+      end
+      @reporter.after_scenario_run(scenario)
+
+      scenario_profiling = @reporter.profiled_scenarios.first
+      scenario_profiling.steps.first.must_equal [step, duration]
+      scenario_profiling.total_duration.must_equal duration * 2
     end
   end
 end
