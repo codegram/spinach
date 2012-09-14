@@ -260,13 +260,17 @@ module Spinach
       end
 
       def print_slowest_scenarios
-        out.puts "\nTop slowest scenarios\n"
+        out.puts "Top slowest scenarios\n"
 
-        profiled_scenarios.sort_by {|prof| prof.total_duration }.reverse.take(10).each do |prof|
-          out.puts "#{prof.total_duration} - Scenario #{prof.scenario.name}\n"
+        slowest_scenarios = profiled_scenarios.sort_by {|prof| prof.total_duration }.reverse.take(10)
+        slowest_scenarios.each do |prof|
+          scenario_duration = format_seconds(prof.total_duration).light_red + " seconds".red
+          out.puts "#{indent(2)}#{scenario_duration} Scenario: #{prof.scenario.name}\n"
+
           prof.steps.each do |info|
             step, duration = info
-            out.puts "\t#{duration} #{step.keyword} #{step.name}\n"
+            step_duration = format_seconds(duration).light_red + " seconds".red
+            out.puts "#{indent(4)}#{step_duration} #{full_step(step)}\n"
           end
           out.puts "\n"
         end
@@ -309,13 +313,7 @@ module Spinach
 
       def format_seconds(float)
         precision ||= (float < 1) ? 5 : 2
-        formatted = sprintf("%.#{precision}f", float)
-        strip_trailing_zeroes(formatted)
-      end
-
-      def strip_trailing_zeroes(string)
-        stripped = string.sub(/[^1-9]+$/, '')
-        stripped.empty? ? "0" : stripped
+        sprintf("%.#{precision}f", float)
       end
 
       def pluralize(count, string)
