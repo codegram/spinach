@@ -262,7 +262,11 @@ module Spinach
       def print_slowest_scenarios(num_slowest_scenarios)
         slowest_scenarios = profiled_scenarios.sort_by {|prof| prof.total_duration }.reverse.first(num_slowest_scenarios)
 
-        out.puts "Top #{slowest_scenarios.size} slowest scenarios\n"
+        slows = slowest_scenarios.inject(0.0) {|sum, prof| sum + prof.total_duration }
+        time_taken = slows / @duration
+        percentage = '%.1f' % ((time_taken.nan? ? 0.0 : time_taken) * 100)
+
+        out.puts "Top #{slowest_scenarios.size} slowest scenarios (#{format_seconds(slows)} seconds, #{percentage}% of total time)\n"
 
         slowest_scenarios.each do |prof|
           scenario_duration = format_seconds(prof.total_duration).light_red + " seconds".red
