@@ -6,6 +6,14 @@ describe Spinach::Cli do
       cli = Spinach::Cli.new([])
       options = cli.options
       options[:reporter][:backtrace].must_equal false
+     end
+
+    it 'sets default tags' do
+      config = Spinach::Config.new
+      Spinach.stubs(:config).returns(config)
+      cli = Spinach::Cli.new([])
+      cli.options
+      config[:tags].must_equal [['~wip']]
     end
 
     describe 'backtrace' do
