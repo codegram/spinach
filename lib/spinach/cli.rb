@@ -73,13 +73,7 @@ module Spinach
                   'Run all scenarios for given tags.') do |tag|
             tags = tag.delete('@').split(',')
 
-            references_wip = lambda { |tag_groups|
-              tag_groups.any? { |tag_group|
-                tag_group.any? { |tag| tag =~ /wip$/ }
-              }
-            }
-
-            unless references_wip.(config[:tags]) || references_wip.([tags])
+            if (config[:tags] + tags).flatten.none? { |t| t =~ /wip$/ }
               tags.unshift '~wip'
             end
 
