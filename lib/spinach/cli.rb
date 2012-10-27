@@ -55,6 +55,7 @@ module Spinach
       reporter_options = {}
       reporter_options[:backtrace] = false
       config = {}
+      config[:tags] = []
 
       begin
         OptionParser.new do |opts|
@@ -70,16 +71,9 @@ module Spinach
 
           opts.on('-t', '--tags TAG',
                   'Run all scenarios for given tags.') do |tag|
-            config[:tags] ||= []
             tags = tag.delete('@').split(',')
 
-            references_wip = lambda { |tag_groups|
-              tag_groups.any? { |tag_group|
-                tag_group.any? { |tag| tag =~ /wip$/ }
-              }
-            }
-
-            unless references_wip.(config[:tags]) || references_wip.([tags])
+            if (config[:tags] + tags).flatten.none? { |t| t =~ /wip$/ }
               tags.unshift '~wip'
             end
 
@@ -101,6 +95,8 @@ module Spinach
             config[:features_path] = path
           end
         end.parse!(@args)
+
+        config[:tags] << ['~wip'] if config[:tags].empty?
 
         Spinach.config.parse_from_file
         config.each{|k,v| Spinach.config[k] = v}
