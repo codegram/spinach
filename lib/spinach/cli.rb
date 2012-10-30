@@ -20,7 +20,6 @@ module Spinach
     #
     # @api public
     def run
-      options #sets config
       Spinach::Runner.new(feature_files).run
     end
 

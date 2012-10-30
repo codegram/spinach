@@ -18,12 +18,12 @@ describe Spinach::Config do
 
  describe '#reporter_class' do
    it 'returns a default' do
-     subject[:reporter_class].must_equal Spinach::Reporter::Stdout
+     subject[:reporter_class].must_equal "Spinach::Reporter::Stdout"
    end
 
    it 'can be overwritten' do
-     subject[:reporter_class] = String
-     subject[:reporter_class].must_equal String
+     subject[:reporter_class] = "MyOwnReporter"
+     subject[:reporter_class].must_equal "MyOwnReporter"
    end
  end
 

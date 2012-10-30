@@ -4,11 +4,14 @@ module Spinach
   class Runner
     describe ScenarioRunner do
       let(:feature) { stub(name: 'Feature', background_steps: []) }
-      let(:steps) { [stub(name: 'go shopping'), stub(name: 'do something')] }
+      let(:steps) { [
+        stub(name: 'go shopping', keyword: "key"), stub(name: 'do something', keyword: "key2")
+      ] }
       let(:scenario) do
         stub(
           feature: feature,
-          steps:   steps
+          steps:   steps,
+          name:    "scenario name"
         )
       end
 
@@ -89,9 +92,9 @@ module Spinach
 
       describe '#run_step' do
         before do
-          @step             = stub(name: 'Go shopping')
+          @step             = stub(name: 'Go shopping', keyword: "key")
           @step_definitions = stub
-          @step_definitions.stubs(:step_location_for).with('Go shopping').returns @location = stub
+          @step_definitions.stubs(:step_location_for).with('Go shopping').returns @location = [ "" ]
           subject.stubs(:step_definitions).returns @step_definitions
         end
 
