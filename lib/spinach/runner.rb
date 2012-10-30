@@ -46,8 +46,10 @@ module Spinach
     # The default path where the support files are located
     attr_reader :support_path
 
+    # Inits the reporter with a default one.
+    #
+    # @api public
     def init_reporter
-      p Helpers.constantize(Spinach.config[:reporter_class])
       reporter = Helpers.constantize(Spinach.config[:reporter_class]).new({})
       reporter.bind
     end
@@ -67,7 +69,6 @@ module Spinach
 
       successful = true
 
-      p filenames
       filenames.map do |filename|
         filename.split(':')
       end.each do |filename, line|

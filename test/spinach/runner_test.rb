@@ -36,6 +36,30 @@ describe Spinach::Runner do
     end
   end
 
+  describe '#init_reporter' do
+    describe "when no reporter_class option is passed in" do
+      it 'inits the default reporter' do
+        reporter = stub
+        reporter.expects(:bind)
+        Spinach::Reporter::Stdout.stubs(new: reporter)
+        runner.init_reporter
+      end
+    end
+
+    describe "when reporter_class option is passed in" do
+
+      it "inits the reporter class" do
+        config = Spinach::Config.new
+        Spinach.stubs(:config).returns(config)
+        config.reporter_class = "String"
+        reporter = stub
+        reporter.expects(:bind)
+        String.stubs(new: reporter)
+        runner.init_reporter
+      end
+    end
+  end
+
   describe '#run' do
     before do
       @feature_runner = stub
@@ -47,7 +71,13 @@ describe Spinach::Runner do
           returns(@feature_runner)
       end
 
+      @feature_runner.stubs(:run).returns(true)
       runner.stubs(required_files: [])
+    end
+
+    it "inits reporter" do
+      runner.expects(:init_reporter)
+      runner.run
     end
 
     it 'instantiates a new Feature and runs it with every file' do

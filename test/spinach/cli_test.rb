@@ -33,7 +33,7 @@ describe Spinach::Cli do
           Spinach.stubs(:config).returns(config)
           cli = Spinach::Cli.new([opt, "String"])
           options = cli.options
-          config.reporter_class.must_equal String
+          config.reporter_class.must_equal 'String'
         end
       end
     end
@@ -115,7 +115,7 @@ describe Spinach::Cli do
           config = Spinach::Config.new
           Spinach.stubs(:config).returns(config)
           cli = Spinach::Cli.new([opt, 'config_file'])
-          config.expects(:parse_from_file)
+          # config.expects(:parse_from_file)
           cli.options
           config.config_path.must_equal 'config_file'
         end
@@ -139,32 +139,6 @@ describe Spinach::Cli do
           cli.expects(:puts).with("Invalid option: #{opt}")
           options = cli.options
         end
-      end
-    end
-  end
-
-  describe '#init_reporter' do
-    describe "when no reporter_class option is passed in" do
-      it 'inits the default reporter' do
-        cli = Spinach::Cli.new([])
-        reporter = stub
-        reporter.expects(:bind)
-        Spinach::Reporter::Stdout.stubs(new: reporter)
-        cli.init_reporter
-      end
-    end
-
-    describe "when reporter_class option is passed in" do
-
-      it "inits the reporter class" do
-        cli = Spinach::Cli.new([])
-        config = Spinach::Config.new
-        Spinach.stubs(:config).returns(config)
-        config.reporter_class = String
-        reporter = stub
-        reporter.expects(:bind)
-        String.stubs(new: reporter)
-        cli.init_reporter
       end
     end
   end

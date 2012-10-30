@@ -24,14 +24,6 @@ module Spinach
       Spinach::Runner.new(feature_files).run
     end
 
-    # Inits the reporter with a default one.
-    #
-    # @api public
-    def init_reporter
-      reporter = Spinach.config[:reporter_class].new(options[:reporter])
-      reporter.bind
-    end
-
     # @return [Hash]
     #   A hash of options separated by its type.
     #
@@ -53,7 +45,6 @@ module Spinach
     #
     # @api private
     def parse_options
-      p "enter parse_options"
       reporter_options = {}
       reporter_options[:backtrace] = false
       config = {}
@@ -61,7 +52,6 @@ module Spinach
 
       begin
         OptionParser.new do |opts|
-          p opts
           opts.on('-c', '--config_path PATH',
                   'Parse options from file (will get overriden by flags)') do |file|
             Spinach.config[:config_path] = file
@@ -100,7 +90,6 @@ module Spinach
 
           opts.on('-r', '--reporter CLASS_NAME',
                   'Formatter class name') do |class_name|
-            p class_name
             config[:reporter_class] = class_name
           end
         end.parse!(@args)
