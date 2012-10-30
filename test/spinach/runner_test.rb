@@ -47,7 +47,6 @@ describe Spinach::Runner do
     end
 
     describe "when reporter_class option is passed in" do
-
       it "inits the reporter class" do
         config = Spinach::Config.new
         Spinach.stubs(:config).returns(config)
@@ -55,6 +54,18 @@ describe Spinach::Runner do
         reporter = stub
         reporter.expects(:bind)
         String.stubs(new: reporter)
+        runner.init_reporter
+      end
+    end
+
+    describe "when backtrace is passed in" do
+      it "inits with backtrace" do
+        config = Spinach::Config.new
+        Spinach.stubs(:config).returns(config)
+        config.reporter_options = {backtrace: true}
+        reporter = stub
+        reporter.stubs(:bind)
+        Spinach::Reporter::Stdout.expects(new: reporter).with(backtrace: true)
         runner.init_reporter
       end
     end
