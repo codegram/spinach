@@ -115,7 +115,7 @@ describe Spinach::Cli do
           config = Spinach::Config.new
           Spinach.stubs(:config).returns(config)
           cli = Spinach::Cli.new([opt, 'config_file'])
-          # config.expects(:parse_from_file)
+          config.expects(:parse_from_file)
           cli.options
           config.config_path.must_equal 'config_file'
         end

@@ -11,7 +11,6 @@ module Spinach
     # @api public
     def initialize(args = ARGV)
       @args = args
-      options # make sure options is parsed
     end
 
     # Runs all the features.
@@ -21,6 +20,7 @@ module Spinach
     #
     # @api public
     def run
+      options #sets config
       Spinach::Runner.new(feature_files).run
     end
 
