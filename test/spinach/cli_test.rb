@@ -144,12 +144,28 @@ describe Spinach::Cli do
   end
 
   describe '#init_reporter' do
-    it 'inits the default reporter' do
-      cli = Spinach::Cli.new([])
-      reporter = stub
-      reporter.expects(:bind)
-      Spinach::Reporter::Stdout.stubs(new: reporter)
-      cli.init_reporter
+    describe "when no reporter_class option is passed in" do
+      it 'inits the default reporter' do
+        cli = Spinach::Cli.new([])
+        reporter = stub
+        reporter.expects(:bind)
+        Spinach::Reporter::Stdout.stubs(new: reporter)
+        cli.init_reporter
+      end
+    end
+
+    describe "when reporter_class option is passed in" do
+
+      it "inits the reporter class" do
+        cli = Spinach::Cli.new([])
+        config = Spinach::Config.new
+        Spinach.stubs(:config).returns(config)
+        config.reporter_class = String
+        reporter = stub
+        reporter.expects(:bind)
+        String.stubs(new: reporter)
+        cli.init_reporter
+      end
     end
   end
 
@@ -199,13 +215,13 @@ describe Spinach::Cli do
                   'path/to/features/domain/feature4.feature'])
 
         Spinach::Runner.expects(:new).with([
-                   'path/to/features/feature1.feature', 
-                   'path/to/features/feature2.feature',
-                   'path/to/features/feature3.feature',
-                   'path/to/features/domain/feature4.feature']).
-          returns(stub(:run))
+                                           'path/to/features/feature1.feature', 
+                                           'path/to/features/feature2.feature',
+                                           'path/to/features/feature3.feature',
+                                           'path/to/features/domain/feature4.feature']).
+                                           returns(stub(:run))
 
-        cli.run
+                                           cli.run
       end
     end
   end

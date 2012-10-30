@@ -27,7 +27,7 @@ module Spinach
     #
     # @api public
     def init_reporter
-      reporter = Spinach::Reporter::Stdout.new(options[:reporter])
+      reporter = Spinach.config[:reporter_class].new(options[:reporter])
       reporter.bind
     end
 
