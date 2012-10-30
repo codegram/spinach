@@ -50,7 +50,7 @@ module Spinach
     #
     # @api public
     def init_reporter
-      reporter = Helpers.constantize(Spinach.config[:reporter_class]).new({})
+      reporter = Helpers.constantize(Spinach.config[:reporter_class]).new(Spinach.config.reporter_options)
       reporter.bind
     end
 

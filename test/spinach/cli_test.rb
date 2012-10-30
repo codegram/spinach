@@ -3,10 +3,12 @@ require_relative '../test_helper'
 describe Spinach::Cli do
   describe '#options' do
     it 'sets the default options' do
+      config = Spinach::Config.new
+      Spinach.stubs(:config).returns(config)
       cli = Spinach::Cli.new([])
       options = cli.options
-      options[:reporter][:backtrace].must_equal false
-     end
+      config[:reporter_options].must_equal({})
+    end
 
     it 'sets default tags' do
       config = Spinach::Config.new
@@ -19,9 +21,11 @@ describe Spinach::Cli do
     describe 'backtrace' do
       %w{-b --backtrace}.each do |opt|
         it 'sets the backtrace if #{opt}' do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
           cli = Spinach::Cli.new([opt])
           options = cli.options
-          options[:reporter][:backtrace].must_equal true
+          config[:reporter_options][:backtrace].must_equal true
         end
       end
     end

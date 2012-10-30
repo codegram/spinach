@@ -30,7 +30,8 @@ module Spinach
                 :config_path,
                 :tags,
                 :save_and_open_page_on_failure,
-                :reporter_class
+                :reporter_class,
+                :reporter_options
 
 
     # The "features path" holds the place where your features will be
@@ -53,6 +54,13 @@ module Spinach
     # @api public
     def reporter_class
       @reporter_class || "Spinach::Reporter::Stdout"
+    end
+
+    # The "reporter_options" holds the options of reporter_class
+    #
+    # @api public
+    def reporter_options
+      @reporter_options || {}
     end
 
     # The "step definitions path" holds the place where your feature step

@@ -20,6 +20,7 @@ module Spinach
     #
     # @api public
     def run
+      options
       Spinach::Runner.new(feature_files).run
     end
 
@@ -44,8 +45,6 @@ module Spinach
     #
     # @api private
     def parse_options
-      reporter_options = {}
-      reporter_options[:backtrace] = false
       config = {}
       config[:tags] = []
 
@@ -58,7 +57,7 @@ module Spinach
 
           opts.on('-b', '--backtrace',
                   'Show backtrace of errors') do |show_backtrace|
-            reporter_options[:backtrace] = show_backtrace
+            config[:reporter_options] = {backtrace: show_backtrace}
           end
 
           opts.on('-t', '--tags TAG',
@@ -101,8 +100,6 @@ module Spinach
         puts exception.message.capitalize
         exit 1
       end
-
-      {reporter: reporter_options}
     end
 
     # Uses given args to list the feature files to run. It will find a single
