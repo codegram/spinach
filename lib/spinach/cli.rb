@@ -94,6 +94,11 @@ module Spinach
                   'Path where your features will be searched for') do |path|
             config[:features_path] = path
           end
+
+          opts.on('-r', '--reporter CLASS_NAME',
+                  'Formatter class name') do |class_name|
+            config[:reporter_class] = Helpers.constantize(class_name)
+          end
         end.parse!(@args)
 
         config[:tags] << ['~wip'] if config[:tags].empty?

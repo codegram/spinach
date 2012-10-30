@@ -26,6 +26,18 @@ describe Spinach::Cli do
       end
     end
 
+    describe 'reporter class' do
+      %w{-r --reporter}.each do |opt|
+        it 'sets the reporter class' do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
+          cli = Spinach::Cli.new([opt, "String"])
+          options = cli.options
+          config.reporter_class.must_equal String
+        end
+      end
+    end
+
     describe 'features_path' do
       %w{-f --features_path}.each do |opt|
         it 'sets the given features_path' do
