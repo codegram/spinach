@@ -52,7 +52,7 @@ module Spinach
     #
     # @api public
     def reporter_class
-      @reporter_class || Spinach::Reporter::Stdout
+      @reporter_class || "Spinach::Reporter::Stdout"
     end
 
     # The "step definitions path" holds the place where your feature step

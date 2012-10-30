@@ -11,6 +11,7 @@ module Spinach
     # @api public
     def initialize(args = ARGV)
       @args = args
+      options # make sure options is parsed
     end
 
     # Runs all the features.
@@ -52,6 +53,7 @@ module Spinach
     #
     # @api private
     def parse_options
+      p "enter parse_options"
       reporter_options = {}
       reporter_options[:backtrace] = false
       config = {}
@@ -59,6 +61,7 @@ module Spinach
 
       begin
         OptionParser.new do |opts|
+          p opts
           opts.on('-c', '--config_path PATH',
                   'Parse options from file (will get overriden by flags)') do |file|
             Spinach.config[:config_path] = file
@@ -97,7 +100,8 @@ module Spinach
 
           opts.on('-r', '--reporter CLASS_NAME',
                   'Formatter class name') do |class_name|
-            config[:reporter_class] = Helpers.constantize(class_name)
+            p class_name
+            config[:reporter_class] = class_name
           end
         end.parse!(@args)
 
