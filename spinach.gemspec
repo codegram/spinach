@@ -12,13 +12,13 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'gherkin-ruby', '~> 0.2.0'
   gem.add_runtime_dependency 'colorize'
   gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'mocha'
+  gem.add_development_dependency 'mocha', "0.12.7"
   gem.add_development_dependency 'sinatra'
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'minitest'
+  gem.add_development_dependency 'minitest', "4.2.0"
   gem.add_development_dependency 'turn'
 
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
