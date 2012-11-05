@@ -29,7 +29,10 @@ module Spinach
                 :failure_exceptions,
                 :config_path,
                 :tags,
-                :save_and_open_page_on_failure
+                :save_and_open_page_on_failure,
+                :reporter_class,
+                :reporter_options
+
 
     # The "features path" holds the place where your features will be
     # searched for. Defaults to 'features'
@@ -40,6 +43,24 @@ module Spinach
     # @api public
     def features_path
       @features_path || 'features'
+    end
+
+    # The "reporter class" holds the reporter class name
+    # Default to Spinach::Reporter::Stdout
+    #
+    # @return [reporter object]
+    #    The reporter that responds to specific messages.
+    #
+    # @api public
+    def reporter_class
+      @reporter_class || "Spinach::Reporter::Stdout"
+    end
+
+    # The "reporter_options" holds the options of reporter_class
+    #
+    # @api public
+    def reporter_options
+      @reporter_options || {}
     end
 
     # The "step definitions path" holds the place where your feature step

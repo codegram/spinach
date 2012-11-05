@@ -1,7 +1,13 @@
 require_relative '../../test_helper'
 
 describe Spinach::Runner::FeatureRunner do
-  let(:feature) { stub('feature', name: 'Feature') }
+  let(:feature) { 
+    stub('feature', 
+         name: 'Feature',
+         scenarios: [],
+         background_steps: []
+        )
+  }
   subject{ Spinach::Runner::FeatureRunner.new(feature) }
 
   describe '#initialize' do

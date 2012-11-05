@@ -20,15 +20,8 @@ module Spinach
     #
     # @api public
     def run
+      options
       Spinach::Runner.new(feature_files).run
-    end
-
-    # Inits the reporter with a default one.
-    #
-    # @api public
-    def init_reporter
-      reporter = Spinach::Reporter::Stdout.new(options[:reporter])
-      reporter.bind
     end
 
     # @return [Hash]
@@ -52,8 +45,6 @@ module Spinach
     #
     # @api private
     def parse_options
-      reporter_options = {}
-      reporter_options[:backtrace] = false
       config = {}
       config[:tags] = []
 
@@ -66,7 +57,7 @@ module Spinach
 
           opts.on('-b', '--backtrace',
                   'Show backtrace of errors') do |show_backtrace|
-            reporter_options[:backtrace] = show_backtrace
+            config[:reporter_options] = {backtrace: show_backtrace}
           end
 
           opts.on('-t', '--tags TAG',
@@ -94,6 +85,11 @@ module Spinach
                   'Path where your features will be searched for') do |path|
             config[:features_path] = path
           end
+
+          opts.on('-r', '--reporter CLASS_NAME',
+                  'Formatter class name') do |class_name|
+            config[:reporter_class] = class_name
+          end
         end.parse!(@args)
 
         config[:tags] << ['~wip'] if config[:tags].empty?
@@ -104,8 +100,6 @@ module Spinach
         puts exception.message.capitalize
         exit 1
       end
-
-      {reporter: reporter_options}
     end
 
     # Uses given args to list the feature files to run. It will find a single

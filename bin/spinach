@@ -12,5 +12,4 @@ rescue LoadError
 end
 
 cli = Spinach::Cli.new(ARGV)
-cli.init_reporter
 exit cli.run

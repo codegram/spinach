@@ -1,7 +1,7 @@
 Feature: Show step source location
   As a developer
   I want spinach to give me every step source location in output
-  So I can easyly know where I defined a step
+  So I can easily know where I defined a step
 
   Scenario: Show class steps source location in output when all is ok
     Given I have a feature that has no error or failure
