@@ -16,6 +16,26 @@ describe Spinach::Cli do
       config[:tags].must_equal [['~wip']]
     end
 
+    it 'sets default tags some are defined in config file' do
+      in_current_dir do
+        config = Spinach::Config.new
+        config.config_path = "spinach.yml"
+        File.open(config.config_path, "w") do |f|
+          f.write <<-EOS
+---
+tags:
+  - v1
+  - - ~external
+    - js
+          EOS
+        end
+        Spinach.stubs(:config).returns(config)
+        cli = Spinach::Cli.new([])
+        cli.options
+        config[:tags].must_equal [['~wip'], 'v1', ['~external', 'js']]
+      end
+    end
+
     describe 'backtrace' do
       %w{-b --backtrace}.each do |opt|
         it 'sets the backtrace if #{opt}' do
@@ -62,6 +82,24 @@ describe Spinach::Cli do
           cli = Spinach::Cli.new([opt,'javascript'])
           cli.options
           config.tags.must_equal [['~wip', 'javascript']]
+        end
+
+        it 'has precedence over tags specified in config file' do
+          in_current_dir do
+            config = Spinach::Config.new
+            config.config_path = "spinach.yml"
+            File.open(config.config_path, "w") do |f|
+              f.write <<-EOS
+---
+tags:
+  - v1
+              EOS
+            end
+            Spinach.stubs(:config).returns(config)
+            cli = Spinach::Cli.new([opt,'javascript'])
+            cli.options
+            config[:tags].must_equal [['~wip', 'javascript']]
+          end
         end
       end
 
