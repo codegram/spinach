@@ -153,6 +153,18 @@ describe Spinach::Runner::FeatureRunner do
           @runner = Spinach::Runner::FeatureRunner.new(@feature)
           @runner.run
         end
+
+        it "doesn't accumulate tags from one scenario to the next" do
+          next_scenario = stub(line: 14, tags: [])
+          @feature.stubs(:scenarios).returns [@scenario, next_scenario]
+
+          Spinach::TagsMatcher.expects(:match).with(["feature_tag", "scenario_tag"]).returns true
+          Spinach::TagsMatcher.expects(:match).with(["feature_tag"]).returns false
+          Spinach::Runner::ScenarioRunner.expects(:new).with(@scenario).returns stub(run: true)
+
+          @runner = Spinach::Runner::FeatureRunner.new(@feature)
+          @runner.run
+        end
       end
     end
   end
