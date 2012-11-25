@@ -55,7 +55,6 @@ module Spinach
       reporter_options = {}
       reporter_options[:backtrace] = false
       config = {}
-      config[:tags] = []
 
       begin
         OptionParser.new do |opts|
@@ -71,6 +70,7 @@ module Spinach
 
           opts.on('-t', '--tags TAG',
                   'Run all scenarios for given tags.') do |tag|
+            config[:tags] ||= []
             tags = tag.delete('@').split(',')
 
             if (config[:tags] + tags).flatten.none? { |t| t =~ /wip$/ }
@@ -96,10 +96,12 @@ module Spinach
           end
         end.parse!(@args)
 
-        config[:tags] << ['~wip'] if config[:tags].empty?
-
         Spinach.config.parse_from_file
         config.each{|k,v| Spinach.config[k] = v}
+        if Spinach.config.tags.empty? ||
+          Spinach.config.tags.flatten.none?{ |t| t =~ /wip$/ }
+          Spinach.config.tags.unshift ['~wip']
+        end
       rescue OptionParser::ParseError => exception
         puts exception.message.capitalize
         exit 1
