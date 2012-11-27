@@ -9,7 +9,7 @@ group :test do
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-spinach'
-  gem 'capybara', '~> 1.1.3'
+  gem 'capybara', '~> 2.0.0'
 end
 
 group :darwin do
