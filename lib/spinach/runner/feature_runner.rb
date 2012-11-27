@@ -74,7 +74,7 @@ module Spinach
 
       def run_scenario?(scenario, current_scenario_index)
         match_line(current_scenario_index) && 
-          TagsMatcher.match((feature_tags << scenario.tags).flatten.compact)
+          TagsMatcher.match(feature_tags + scenario.tags)
       end
 
       def match_line(current_scenario_index)
