@@ -46,6 +46,14 @@ module Spinach
     # The default path where the support files are located
     attr_reader :support_path
 
+    # Inits the reporter with a default one.
+    #
+    # @api public
+    def init_reporter
+      reporter = Helpers.constantize(Spinach.config[:reporter_class]).new(Spinach.config.reporter_options)
+      reporter.bind
+    end
+
     # Runs this runner and outputs the results in a colorful manner.
     #
     # @return [true, false]
@@ -55,6 +63,7 @@ module Spinach
     def run
       require_dependencies
       require_frameworks
+      init_reporter
 
       Spinach.hooks.run_before_run
 

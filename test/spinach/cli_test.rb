@@ -3,10 +3,12 @@ require_relative '../test_helper'
 describe Spinach::Cli do
   describe '#options' do
     it 'sets the default options' do
+      config = Spinach::Config.new
+      Spinach.stubs(:config).returns(config)
       cli = Spinach::Cli.new([])
       options = cli.options
-      options[:reporter][:backtrace].must_equal false
-     end
+      config[:reporter_options].must_equal({})
+    end
 
     it 'sets default tags' do
       config = Spinach::Config.new
@@ -19,9 +21,23 @@ describe Spinach::Cli do
     describe 'backtrace' do
       %w{-b --backtrace}.each do |opt|
         it 'sets the backtrace if #{opt}' do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
           cli = Spinach::Cli.new([opt])
           options = cli.options
-          options[:reporter][:backtrace].must_equal true
+          config[:reporter_options][:backtrace].must_equal true
+        end
+      end
+    end
+
+    describe 'reporter class' do
+      %w{-r --reporter}.each do |opt|
+        it 'sets the reporter class' do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
+          cli = Spinach::Cli.new([opt, "String"])
+          options = cli.options
+          config.reporter_class.must_equal 'String'
         end
       end
     end
@@ -131,16 +147,6 @@ describe Spinach::Cli do
     end
   end
 
-  describe '#init_reporter' do
-    it 'inits the default reporter' do
-      cli = Spinach::Cli.new([])
-      reporter = stub
-      reporter.expects(:bind)
-      Spinach::Reporter::Stdout.stubs(new: reporter)
-      cli.init_reporter
-    end
-  end
-
   describe '#run' do
     describe 'when a particular feature list is passed' do
       it 'runs the feature' do
@@ -187,13 +193,13 @@ describe Spinach::Cli do
                   'path/to/features/domain/feature4.feature'])
 
         Spinach::Runner.expects(:new).with([
-                   'path/to/features/feature1.feature', 
-                   'path/to/features/feature2.feature',
-                   'path/to/features/feature3.feature',
-                   'path/to/features/domain/feature4.feature']).
-          returns(stub(:run))
+                                           'path/to/features/feature1.feature', 
+                                           'path/to/features/feature2.feature',
+                                           'path/to/features/feature3.feature',
+                                           'path/to/features/domain/feature4.feature']).
+                                           returns(stub(:run))
 
-        cli.run
+                                           cli.run
       end
     end
   end
