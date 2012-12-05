@@ -6,7 +6,7 @@ executable specifications of your application or library's acceptance criteria.
 
 Conceived as an alternative to Cucumber, here are some of its design goals:
 
-* Step maintanability: since features map to their own classes, their steps are
+* Step maintainability: since features map to their own classes, their steps are
   just methods of that class. This encourages step encapsulation.
 
 * Step reusability: In case you want to reuse steps across features, you can
@@ -178,7 +178,7 @@ module CommonSteps
     extend ActiveSupport::Concern
 
     included do
-      Givin 'I am logged in' do
+      Given 'I am logged in' do
         # log in stuff...
       end
     end
