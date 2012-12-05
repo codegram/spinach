@@ -4,6 +4,10 @@ require 'fileutils'
 # and lets the host know about it.
 #
 module Filesystem
+  def self.dirs
+    ['tmp/fs']
+  end
+
   # Writes a file with some contents.
   #
   # @param [String] filename

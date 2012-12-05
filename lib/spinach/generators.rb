@@ -3,21 +3,19 @@ module Spinach
   # given some parsed feature data.
   #
   module Generators
-    # Binds the feature generator to the "feature not found" hook
-    def self.bind
-      Spinach.hooks.on_undefined_feature do |data|
-        Spinach::Generators.generate_feature(data)
-      end
-    end
+    # generates steps for features
+    # @files [Array]
+    #   filenames to evaluate for step generation
+    def self.run(files)
+      files.each do |file|
+        feature = Parser.open_file(file).parse
 
-    # Generates a feature given a parsed feature data
-    #
-    # @param [Hash] data
-    #   the parsed feature data
-    def self.generate_feature(data)
-      FeatureGenerator.new(data).store
-    rescue FeatureGeneratorException => e
-      $stderr.puts e
+        begin
+          FeatureGenerator.new(feature).store
+        rescue FeatureGeneratorException
+          # probably not optimal, but ignoring this
+        end
+      end
     end
   end
 end

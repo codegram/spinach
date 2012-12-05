@@ -131,7 +131,7 @@ tags:
     describe 'generate' do
       %w{-g --generate}.each do |opt|
         it 'inits the generator if #{opt}' do
-          Spinach::Generators.expects(:bind)
+          Spinach::Generators.expects(:run)
           cli = Spinach::Cli.new([opt])
           options = cli.options
         end
