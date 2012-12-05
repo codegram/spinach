@@ -113,15 +113,33 @@ module Spinach
     #
     # @api private
     def feature_files
-      path = @args.first.to_s
+      files_to_run = []
 
-      if File.file?(path.split(":").first.to_s)
-        @args
-      elsif File.directory?(path)
-        Dir.glob(File.join(path, '**', '*.feature'))
+      @args.each do |arg|
+        if arg.match /\.feature/
+          if File.exists? arg.gsub(/:\d*/, '')
+            files_to_run << arg
+          else
+            fail! "#{arg} could not be found"
+          end
+        elsif File.directory?(arg)
+          files_to_run << Dir.glob(File.join(arg, '**', '*.feature'))
+        else
+          fail! "invalid argument - #{arg}"
+        end
+      end
+
+      if !files_to_run.empty?
+        files_to_run
       else
         Dir.glob(File.join(Spinach.config[:features_path], '**', '*.feature'))
       end
+    end
+
+    # exit test run with an optional message to the user
+    def fail!(message)
+      puts message if message
+      exit 1
     end
   end
 end
