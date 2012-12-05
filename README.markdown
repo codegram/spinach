@@ -149,6 +149,65 @@ end
 
 Then run your feature again running `spinach` and watch it all turn green! :)
 
+## Shared Steps
+
+You'll often find that some steps need to be used in many
+features. In this case, it makes sense to put these steps in reusable
+modules. For example, let's say you need a step that logs the
+user into the site.
+
+This is one way to make that reusable:
+
+```ruby
+# ... features/steps/common_steps/login.rb
+module CommonSteps
+  module Login
+    extend ActiveSupport::Concern
+
+    def self.included(mod)
+      mod.send(:Given, 'I am logged in') do
+        # log in stuff...
+      end
+    end
+  end
+end
+
+# within a rails app, you might want to use ActiveSupport::Concern
+module CommonSteps
+  module Login
+    extend ActiveSupport::Concern
+
+    included do
+      Givin 'I am logged in' do
+        # log in stuff...
+      end
+    end
+  end
+end
+```
+
+Using the module (in any feature):
+
+```ruby
+# ... features/steps/buying_a_widget.rb
+class BuyAWidget < Spinach::FeatureSteps
+  # simply include this module and you are good to go
+  include CommonSteps::Login
+end
+```
+
+Also, don't forgot to require all of these common steps in your env.rb:
+
+```ruby
+# env.rb
+common_steps = Dir.glob(Rails.root.join("features/steps/common_steps/**/*.rb"))
+
+common_steps.each do |f|
+  require f
+end
+```
+
+
 ## Tags
 
 Feature and Scenarios can be marked with tags in the form: `@tag`. Tags can be
