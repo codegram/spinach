@@ -75,6 +75,7 @@ module Spinach
           FileUtils.mkdir_p path
           File.open(filename_with_path, 'w') do |file|
             file.write(generate)
+            puts "generating #{File.basename(filename_with_path)}"
           end
         end
       end

@@ -29,6 +29,7 @@ module Spinach
                 :failure_exceptions,
                 :config_path,
                 :tags,
+                :generate,
                 :save_and_open_page_on_failure,
                 :reporter_class,
                 :reporter_options
@@ -83,6 +84,10 @@ module Spinach
     # @api public
     def support_path
       @support_path || "#{self.features_path}/support"
+    end
+
+    def generate
+      @generate || false
     end
 
     # Allows you to read the config object using a hash-like syntax.
