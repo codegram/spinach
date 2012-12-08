@@ -36,6 +36,38 @@ module Spinach
       @options ||= parse_options
     end
 
+    # Uses given args to list the feature files to run. It will find a single
+    # feature, features in a folder and subfolders or every feature file in the
+    # feature path.
+    #
+    # @return [Array]
+    #   An array with the feature file names.
+    #
+    # @api public
+    def feature_files
+      files_to_run = []
+
+      @args.each do |arg|
+        if arg.match /\.feature/
+          if File.exists? arg.gsub(/:\d*/, '')
+            files_to_run << arg
+          else
+            fail! "#{arg} could not be found"
+          end
+        elsif File.directory?(arg)
+          files_to_run << Dir.glob(File.join(arg, '**', '*.feature'))
+        else
+          fail! "invalid argument - #{arg}"
+        end
+      end
+
+      if !files_to_run.empty?
+        files_to_run.flatten
+      else
+        Dir.glob(File.join(Spinach.config[:features_path], '**', '*.feature'))
+      end
+    end
+
     private
 
     # Parses the arguments into options.
@@ -101,38 +133,6 @@ module Spinach
       rescue OptionParser::ParseError => exception
         puts exception.message.capitalize
         exit 1
-      end
-    end
-
-    # Uses given args to list the feature files to run. It will find a single
-    # feature, features in a folder and subfolders or every feature file in the
-    # feature path.
-    #
-    # @return [Array]
-    #   An array with the feature file names.
-    #
-    # @api private
-    def feature_files
-      files_to_run = []
-
-      @args.each do |arg|
-        if arg.match /\.feature/
-          if File.exists? arg.gsub(/:\d*/, '')
-            files_to_run << arg
-          else
-            fail! "#{arg} could not be found"
-          end
-        elsif File.directory?(arg)
-          files_to_run << Dir.glob(File.join(arg, '**', '*.feature'))
-        else
-          fail! "invalid argument - #{arg}"
-        end
-      end
-
-      if !files_to_run.empty?
-        files_to_run
-      else
-        Dir.glob(File.join(Spinach.config[:features_path], '**', '*.feature'))
       end
     end
 

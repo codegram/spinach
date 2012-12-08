@@ -1,6 +1,17 @@
 require_relative '../test_helper'
 
 describe Spinach::Cli do
+  describe '#run' do
+    it 'gets the options and runs the features' do
+      cli = Spinach::Cli.new(['features/some_feature.feature'])
+      cli.stubs(:feature_files).returns(['features/some_feature.feature'])
+
+      cli.expects(:options)
+      Spinach::Runner.any_instance.expects(:run)
+      cli.run
+    end
+  end
+
   describe '#options' do
     it 'sets the default options' do
       config = Spinach::Config.new
@@ -185,59 +196,67 @@ tags:
     end
   end
 
-  describe '#run' do
+  describe '#feature_files' do
     describe 'when a particular feature list is passed' do
-      it 'runs the feature' do
-        cli = Spinach::Cli.new(['features/some_feature.feature'])
-        File.expects(:file?).with('features/some_feature.feature').returns(true)
+      describe 'the feature really exists' do
+        it 'runs the feature' do
+          cli = Spinach::Cli.new(['features/some_feature.feature'])
+          File.stubs(:exists?).returns(true)
+          cli.feature_files.must_equal ['features/some_feature.feature']
+        end
+      end
 
-        Spinach::Runner.expects(:new).with(['features/some_feature.feature']).
-          returns(stub(:run))
-        cli.run
+      describe 'it fails if the feature does not exist' do
+        cli = Spinach::Cli.new(['features/some_feature.feature'])
+        File.stubs(:exists?).returns(false)
+        cli.expects(:fail!).with('features/some_feature.feature could not be found')
+
+        cli.feature_files
       end
     end
 
     describe 'when a particular feature list is passed with line' do
-      it 'runs the feature' do
+      it 'returns the feature with the line number' do
         cli = Spinach::Cli.new(['features/some_feature.feature:10'])
-        File.expects(:file?).with('features/some_feature.feature').returns(true)
+        File.stubs(:exists?).returns(true)
 
-        Spinach::Runner.expects(:new).with(['features/some_feature.feature:10']).
-          returns(stub(:run))
-        cli.run
+        cli.feature_files.must_equal ['features/some_feature.feature:10']
       end
     end
 
     describe 'when no feature is passed' do
-      it 'runs the feature' do
+      it 'returns all the features' do
         cli = Spinach::Cli.new([])
-        Dir.expects(:glob).with('features/**/*.feature').
-          returns(['features/some_feature.feature'])
-        Spinach::Runner.expects(:new).with(['features/some_feature.feature']).
-          returns(stub(:run))
-        cli.run
+        Dir.expects(:glob).with('features/**/*.feature')
+
+        cli.feature_files
       end
     end
 
     describe 'when a folder is given' do
-      it 'runs all feature files in the folder and subfolders' do
+      it 'returns all feature files in the folder and subfolders' do
         cli = Spinach::Cli.new(['path/to/features'])
 
-        File.expects(:directory?).with('path/to/features').returns(true)
-        Dir.expects(:glob).with('path/to/features/**/*.feature').
-          returns(['path/to/features/feature1.feature', 
-                  'path/to/features/feature2.feature',
-                  'path/to/features/feature3.feature',
-                  'path/to/features/domain/feature4.feature'])
+        File.stubs(:directory?).returns(true)
+        Dir.expects(:glob).with('path/to/features/**/*.feature')
 
-        Spinach::Runner.expects(:new).with([
-                                           'path/to/features/feature1.feature', 
-                                           'path/to/features/feature2.feature',
-                                           'path/to/features/feature3.feature',
-                                           'path/to/features/domain/feature4.feature']).
-                                           returns(stub(:run))
+        cli.feature_files
+      end
+    end
 
-                                           cli.run
+    describe 'when multiple arguments are passed in' do
+      describe 'a folder followed by file' do
+        it 'returns the features in the folder and the particular file' do
+          cli = Spinach::Cli.new(['path/to/features', 'some_feature.feature'])
+
+          File.stubs(:directory?).returns(true)
+          Dir.expects(:glob).with('path/to/features/**/*.feature')
+            .returns(['several features'])
+
+          File.stubs(:exists?).returns(true)
+
+          cli.feature_files.must_equal ['several features', 'some_feature.feature']
+        end
       end
     end
   end
