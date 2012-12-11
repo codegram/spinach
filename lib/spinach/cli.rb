@@ -137,7 +137,7 @@ module Spinach
     end
 
     # exit test run with an optional message to the user
-    def fail!(message)
+    def fail!(message=nil)
       puts message if message
       exit 1
     end
