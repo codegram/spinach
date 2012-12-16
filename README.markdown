@@ -334,6 +334,7 @@ Check out our [spinach-sinatra demo](https://github.com/codegram/spinach-sinatra
 
 * [guard-spinach](http://github.com/codegram/guard-spinach)
 * [spinach-rails](http://github.com/codegram/spinach-rails)
+* [spinach-console-reporter](https://github.com/ywen/spinach-console-reporter) (to be used with Jenkins)
 
 ### Demos
 
