@@ -17,6 +17,21 @@ module Spinach
       name.to_s.strip.split(/[^a-z0-9]/i).map{|w| w.capitalize}.join
     end
 
+    # @param [String] name
+    #   The name to camelize.
+    #
+    # @return [String]
+    #   The +name+ in camel case scoped to Spinach::Features.
+    #
+    # @example
+    #   Spinach::Support.scoped_camelize('User authentication')
+    #   => 'Spinach::Features::UserAuthentication'
+    #
+    # @api public
+    def self.scoped_camelize(name)
+      "Spinach::Features::#{camelize(name)}"
+    end
+
     # Makes an underscored, lowercase form from the expression in the string.
     #
     # Changes '::' to '/' to convert namespaces to paths.

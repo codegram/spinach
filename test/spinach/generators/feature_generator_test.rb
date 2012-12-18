@@ -40,6 +40,11 @@ Feature: Cheezburger can I has
         result.must_match(/step 'I haz a sad' do/)
         result.must_match(/pending 'step not implemented'/)
       end
+
+      it 'scopes the generated class to prevent conflicts' do
+        result = subject.generate
+        result.must_match(/class Spinach::Features::CheezburgerCanIHas < Spinach::FeatureSteps/)
+      end
     end
 
     describe "#filename" do
