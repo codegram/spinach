@@ -34,7 +34,7 @@ module Spinach
       #   an example feature steps definition
       def generate
         result = StringIO.new
-        result.puts "class #{Spinach::Support.camelize name} < Spinach::FeatureSteps"
+        result.puts "class #{Spinach::Support.scoped_camelize name} < Spinach::FeatureSteps"
         generated_steps = steps.map do |step|
           step_generator = Generators::StepGenerator.new(step)
           step_generator.generate.split("\n").map do |line|
@@ -49,7 +49,7 @@ module Spinach
       # @return [String]
       #   an example filename for this feature steps
       def filename
-        Spinach::Support.underscore (
+        Spinach::Support.underscore(
           Spinach::Support.camelize name
         ) + ".rb"
       end
@@ -83,6 +83,5 @@ module Spinach
     end
 
     class FeatureGeneratorException < Exception; end;
-
   end
 end
