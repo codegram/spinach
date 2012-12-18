@@ -6,8 +6,9 @@ describe Spinach do
     @feature_steps2 = OpenStruct.new(feature_name: 'Slip management')
     @feature_steps3 = OpenStruct.new(feature_name: 'File attachments')
     @feature_steps4 = OpenStruct.new(name: 'UserSendsAMessage')
+    @feature_steps5 = OpenStruct.new(name: 'Spinach::Features::ScopedFeature')
     [@feature_steps1, @feature_steps2,
-      @feature_steps3, @feature_steps4].each do |feature|
+      @feature_steps3, @feature_steps4, @feature_steps5].each do |feature|
       Spinach.feature_steps << feature
     end
   end
@@ -39,6 +40,10 @@ describe Spinach do
     describe 'when a feature class does not set a feature_name' do
       it 'guesses the feature class from the feature name' do
         Spinach.find_step_definitions('User sends a message').must_equal @feature_steps4
+      end
+
+      it 'finds scoped features' do
+        Spinach.find_step_definitions('Scoped feature').must_equal @feature_steps5
       end
 
       it 'returns nil when it cannot find the class' do

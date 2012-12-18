@@ -15,6 +15,7 @@ require_relative 'spinach/generators'
 
 require_relative 'spinach/background'
 require_relative 'spinach/feature'
+require_relative 'spinach/features'
 require_relative 'spinach/scenario'
 require_relative 'spinach/step'
 
@@ -67,9 +68,11 @@ module Spinach
   # @api public
   def self.find_step_definitions(name)
     klass = Spinach::Support.camelize(name)
+    scoped_klass = Spinach::Support.scoped_camelize(name)
     feature_steps.detect do |feature|
-      feature.feature_name.to_s == name.to_s ||
-        feature.name == klass
+        feature.name == klass ||
+        feature.name == scoped_klass ||
+        feature.feature_name.to_s == name.to_s
     end
   end
 end

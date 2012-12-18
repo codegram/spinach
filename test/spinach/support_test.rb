@@ -23,6 +23,12 @@ describe Spinach::Support do
     end
   end
 
+  describe '#scoped_camelize' do
+    it 'prepends a scope to the class' do
+      Spinach::Support.scoped_camelize('feature name').must_equal 'Spinach::Features::FeatureName'
+    end
+  end
+
   describe '#underscore' do
     it 'changes dashes to underscores' do
       Spinach::Support.underscore('feature-name').must_equal 'feature_name'
