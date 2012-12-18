@@ -71,7 +71,7 @@ Spinach will detect your features and generate the following class:
 ## features/steps/test_how_spinach_works.rb
 
 ```ruby
-class TestHowSpinachWorks < Spinach::FeatureSteps
+class Spinach::Features::TestHowSpinachWorks < Spinach::FeatureSteps
   Given 'I have an empty array' do
   end
 
@@ -96,7 +96,7 @@ Then, you can fill it in with your logic - remember, it's just a class, you can
 use private methods, mix in modules or whatever!
 
 ```ruby
-class TestHowSpinachWorks < Spinach::FeatureSteps
+class Spinach::Features::TestHowSpinachWorks < Spinach::FeatureSteps
   Given 'I have an empty array' do
     @array = Array.new
   end
@@ -190,7 +190,7 @@ Using the module (in any feature):
 
 ```ruby
 # ... features/steps/buying_a_widget.rb
-class BuyAWidget < Spinach::FeatureSteps
+class Spinach::Features::BuyAWidget < Spinach::FeatureSteps
   # simply include this module and you are good to go
   include CommonSteps::Login
 end
@@ -299,7 +299,7 @@ Full hook documentation is here:
 Sometimes it feels awkward to add steps into feature file just because you need to do some test setup and cleanup. And it is equally awkward to add a global hooks for this purpose. For example, if you want to add a session timeout feature, to do so, you want to set the session timeout time to 1 second just for this feature, and put the normal timeout back after this feature. It doesn't make sense to add two steps in the feature file just to change the session timeout value. In this scenario, a ```before``` and ```after``` blocks are perfect for this kind of tasks. Below is an example implementation:
 
 ```ruby
-class SessionTimeout < Spinach::FeatureSteps
+class Spinach::Features::SessionTimeout < Spinach::FeatureSteps
   attr_accessor :original_timeout_value
   before do
     self.original_timeout_value = session_timeout_value
