@@ -149,9 +149,9 @@ module Spinach
               raises Spinach::StepPendingException, @step
           end
 
-          it 'sets the exception' do
+          it 'does not set the exception' do
             subject.run_step(@step)
-            subject.instance_variable_get(:@exception).must_be_kind_of(Spinach::StepPendingException)
+            subject.instance_variable_get(:@exception).must_be_kind_of(NilClass)
           end
 
           it 'runs the pending hooks' do
