@@ -3,11 +3,11 @@ require_relative 'stdout/error_reporting'
 
 module Spinach
   class Reporter
-    # The Stdout reporter outputs the runner results to the standard output
+    # The Progress reporter outputs the runner results to the standard output
     #
-    class Stdout < Reporter
+    class Progress < Reporter
 
-      include ErrorReporting
+      include Stdout::ErrorReporting
 
       # The output buffers to store the reports.
       attr_reader :out, :error
@@ -28,40 +28,6 @@ module Spinach
         super(*args)
         @out = options[:output] || $stdout
         @error = options[:error] || $stderr
-        @max_step_name_length = 0
-      end
-
-      # Prints the feature name to the standard output
-      #
-      # @param [Hash] data
-      #   The feature in a JSON Gherkin format
-      #
-      def before_feature_run(feature)
-        name = feature.name
-        out.puts "\n#{'Feature:'.magenta} #{name.light_magenta}"
-      end
-
-      # Prints the scenario name to the standard ouput
-      #
-      # @param [Hash] data
-      #   The feature in a JSON Gherkin format
-      #
-      def before_scenario_run(scenario, step_definitions = nil)
-        @max_step_name_length = scenario.steps.map(&:name).map(&:length).max if scenario.steps.any?
-        name = scenario.name
-        out.puts "\n  #{'Scenario:'.green} #{name.light_green}"
-      end
-
-      # Adds an error report and re
-      #
-      # @param [Hash] data
-      #   The feature in a JSON Gherkin format
-      #
-      def after_scenario_run(scenario, step_definitions = nil)
-        if scenario_error
-          report_error(scenario_error, :full)
-          self.scenario_error = nil
-        end
       end
 
       # Adds a passed step to the output buffer.
@@ -73,7 +39,7 @@ module Spinach
       #   The step source location
       #
       def on_successful_step(step, step_location, step_definitions = nil)
-        output_step('✔', step, :green, step_location)
+        output_step('.', :green)
         self.scenario = [current_feature, current_scenario, step]
         successful_steps << scenario
       end
@@ -87,7 +53,7 @@ module Spinach
       #   The exception that caused the failure
       #
       def on_failed_step(step, failure, step_location, step_definitions = nil)
-        output_step('✘', step, :red, step_location)
+        output_step('F', :red)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         failed_steps << scenario_error
       end
@@ -101,7 +67,7 @@ module Spinach
       #   The exception that caused the failure
       #
       def on_error_step(step, failure, step_location, step_definitions = nil)
-        output_step('!', step, :red, step_location)
+        output_step('E', :red)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         error_steps << scenario_error
       end
@@ -112,7 +78,7 @@ module Spinach
       #   The step in a JSON Gherkin format
       #
       def on_undefined_step(step, failure, step_definitions = nil)
-        output_step('?', step, :yellow)
+        output_step('U', :yellow)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         undefined_steps << scenario_error
       end
@@ -123,32 +89,9 @@ module Spinach
       #   The step in a JSON Gherkin format
       #
       def on_pending_step(step, failure)
-        output_step('P', step, :yellow)
+        output_step('P', :yellow)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         pending_steps << scenario_error
-      end
-
-      # Adds a feature not found message to the output buffer.
-      #
-      # @param [Hash] feature
-      #   the feature in a json gherkin format
-      #
-      # @param [Spinach::FeatureNotFoundException] exception
-      #   the related exception
-      #
-      def on_feature_not_found(feature)
-        generator = Generators::FeatureGenerator.new(feature)
-        lines = "Could not find steps for `#{feature.name}` feature\n\n"
-        lines << "\nPlease create the file #{generator.filename} at #{generator.path}, with:\n\n"
-
-        lines << generator.generate
-
-        lines.split("\n").each do |line|
-          out.puts "    #{line}".yellow
-        end
-        out.puts "\n\n"
-
-        undefined_features << feature
       end
 
       # Adds a step that has been skipped to the output buffer.
@@ -157,39 +100,20 @@ module Spinach
       #   The step that Gherkin extracts
       #
       def on_skipped_step(step, step_definitions = nil)
-        output_step('~', step, :cyan)
+        output_step('~', :cyan)
       end
 
       # Adds to the output buffer a step result
       #
-      # @param [String] symbol
+      # @param [String] text
       #   A symbol to prepend before the step keyword (might be useful to
       #   indicate if everything went ok or not).
-      #
-      # @param [Hash] step
-      #   The step in a JSON Gherkin format
       #
       # @param [Symbol] color
       #   The color code to use with Colorize to colorize the output.
       #
-      # @param [Array] step_location
-      #   step source location and file line
-      #
-      def output_step(symbol, step, color, step_location = nil)
-        step_location = step_location.first.gsub("#{File.expand_path('.')}/", '# ')+":#{step_location.last.to_s}" if step_location
-        max_length = @max_step_name_length + 60 # Colorize and output format correction
-
-        # REMEMBER TO CORRECT PREVIOUS MAX LENGTH IF OUTPUT FORMAT IS MODIFIED
-        buffer = []
-        buffer << indent(4)
-        buffer << symbol.colorize(:"light_#{color}")
-        buffer << indent(2)
-        buffer << step.keyword.colorize(:"light_#{color}")
-        buffer << indent(1)
-        buffer << step.name.colorize(color)
-        joined = buffer.join.ljust(max_length)
-
-        out.puts(joined + step_location.to_s.colorize(:grey))
+      def output_step(text, color = :grey)
+        out.print(text.to_s.colorize(color))
       end
 
       # It prints the error summary if the run has failed
@@ -217,10 +141,6 @@ module Spinach
       end
 
       private
-      def indent(n = 1)
-        " " * n
-      end
-
       def format_summary(color, steps, message)
         buffer = []
         buffer << "(".colorize(color)
@@ -232,3 +152,4 @@ module Spinach
     end
   end
 end
+

@@ -24,11 +24,17 @@ module Spinach
         end
 
         def report_undefined_steps
-          report_errors('Undefined steps', undefined_steps, :yellow) if undefined_steps.any?
+          if undefined_steps.any?
+            error.puts "\nUndefined steps summary:\n"
+            report_errors('Undefined steps', undefined_steps, :yellow)
+          end
         end
 
         def report_pending_steps
-          report_errors('Pending steps', pending_steps, :yellow) if pending_steps.any?
+          if pending_steps.any?
+            error.puts "\nPending steps summary:\n"
+            report_errors('Pending steps', pending_steps, :yellow) 
+          end
         end
 
         def report_undefined_features
@@ -141,7 +147,6 @@ module Spinach
           output
         end
 
-
         # Prints a information when an exception is raised.
         #
         # @param [Exception] exception
@@ -164,6 +169,14 @@ module Spinach
           end
         end
 
+        # Constructs the full step definition
+        #
+        # @param [Hash] step
+        #   The step.
+        #
+        def full_step(step)
+          "#{step.keyword} #{step.name}"
+        end
       end
     end
   end
