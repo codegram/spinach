@@ -268,7 +268,7 @@ describe Spinach::Reporter::Stdout do
           stub(keyword: 'Given', name: 'foo'),
           @exception]
         output = @reporter.full_error(@error)
-        output.must_include "Given"
+        output.must_include "step"
         output.must_include "foo"
       end
     end
