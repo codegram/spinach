@@ -12,8 +12,8 @@ module Spinach
 
         begin
           FeatureGenerator.new(feature).store
-        rescue FeatureGeneratorException
-          # probably not optimal, but ignoring this
+        rescue FeatureGeneratorException => e
+          $stderr.puts e
         end
       end
     end
