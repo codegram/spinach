@@ -20,15 +20,6 @@ Feature: Cheezburger can I has
     Then I am OMG ROFLMAO""").parse
   end
 
-  describe "#bind" do
-    it "binds the generator to the missing feature hook" do
-      subject.expects(:generate_feature).with(data)
-      subject.bind
-      Spinach.hooks.run_on_undefined_feature data
-      Spinach.hooks.reset
-    end
-  end
-
   describe "#generate_feature" do
     it "generates a file" do
       feature_data = data
