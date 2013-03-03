@@ -93,3 +93,4 @@ module Spinach
 end
 
 require_relative 'reporter/stdout'
+require_relative 'reporter/progress'
