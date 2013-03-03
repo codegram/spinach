@@ -17,7 +17,7 @@ describe Spinach::Cli do
       config = Spinach::Config.new
       Spinach.stubs(:config).returns(config)
       cli = Spinach::Cli.new([])
-      options = cli.options
+      cli.options
       config[:reporter_options].must_equal({})
     end
 
@@ -55,7 +55,7 @@ tags:
           config = Spinach::Config.new
           Spinach.stubs(:config).returns(config)
           cli = Spinach::Cli.new([opt])
-          options = cli.options
+          cli.options
           config[:reporter_options][:backtrace].must_equal true
         end
       end
@@ -66,9 +66,9 @@ tags:
         it 'sets the reporter class' do
           config = Spinach::Config.new
           Spinach.stubs(:config).returns(config)
-          cli = Spinach::Cli.new([opt, "String"])
-          options = cli.options
-          config.reporter_class.must_equal 'String'
+          cli = Spinach::Cli.new([opt, 'progress'])
+          cli.options
+          config.reporter_class.must_equal 'Spinach::Reporter::Progress'
         end
       end
     end
@@ -160,7 +160,7 @@ tags:
           cli = Spinach::Cli.new([opt])
           cli.expects(:exit)
           cli.expects(:puts).with(Spinach::VERSION)
-          output = capture_stdout do
+          capture_stdout do
             cli.options
           end
         end
@@ -195,7 +195,7 @@ tags:
           cli = Spinach::Cli.new([opt])
           cli.expects(:exit)
           cli.expects(:puts).with("Invalid option: #{opt}")
-          options = cli.options
+          cli.options
         end
       end
     end

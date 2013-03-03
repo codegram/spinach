@@ -51,7 +51,7 @@ module Spinach
       files_to_run = []
 
       @args.each do |arg|
-        if arg.match /\.feature/
+        if arg.match(/\.feature/)
           if File.exists? arg.gsub(/:\d*/, '')
             files_to_run << arg
           else
@@ -124,7 +124,7 @@ module Spinach
 
           opts.on('-r', '--reporter CLASS_NAME',
                   'Formatter class name') do |class_name|
-            config[:reporter_class] = class_name
+            config[:reporter_class] = reporter_class(class_name)
           end
         end.parse!(@args)
 
@@ -144,6 +144,23 @@ module Spinach
     def fail!(message=nil)
       puts message if message
       exit 1
+    end
+
+    # Builds the class name to use an output reporter.
+    #
+    # @param [String] klass
+    #   The class name fo the reporter.
+    #
+    # @return [String]
+    #   The full name of the reporter class.
+    #
+    # @example
+    #   reporter_class('progress')
+    #   # => Spinach::Reporter::Progress
+    #
+    # @api private
+    def reporter_class(klass)
+      "Spinach::Reporter::" + Spinach::Support.camelize(klass)
     end
   end
 end
