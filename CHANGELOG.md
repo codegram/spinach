@@ -1,4 +1,4 @@
-== 0.8.0 (unreleased)
+== 0.8.0
 
 * backwards incompatible changes
   * Pending steps no longer exit with -1
@@ -8,6 +8,8 @@
 
 * enhancements
   * Add CHANGELOG
+  * Add progress reporter
+  * Add official ruby 2.0.0 support
 
 * deprecations
   * Nothing
