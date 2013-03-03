@@ -83,11 +83,14 @@ Feature: Cheezburger can I has
         file = "features/steps/cheezburger_can_i_has.rb"
         in_current_dir do
           FileUtils.mkdir_p "features/steps"
+
           File.open(file, 'w') do |f|
             f.write("Fake content")
           end
+
           Proc.new{subject.store}.must_raise(
             Spinach::Generators::FeatureGeneratorException)
+
           FileUtils.rm_rf("features/steps")
         end
       end

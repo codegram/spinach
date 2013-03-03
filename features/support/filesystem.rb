@@ -60,8 +60,8 @@ module Filesystem
       wout.close
       werr.close
 
-      @stdout = rout.readlines.join("\n")
-      @stderr = rerr.readlines.join("\n")
+      @stdout = rout.readlines.join("\n").force_encoding('utf-8')
+      @stderr = rerr.readlines.join("\n").force_encoding('utf-8')
 
       # dispose the read ends of the pipes
       rout.close

@@ -22,12 +22,9 @@ module Spinach
     def run
       options
 
-      # only generating steps, do not run tests
-      if Spinach.config.generate
-        exit 0
-      else
-        Spinach::Runner.new(feature_files).run
-      end
+      return true if Spinach.config.generate
+
+      Spinach::Runner.new(feature_files).run
     end
 
     # @return [Hash]

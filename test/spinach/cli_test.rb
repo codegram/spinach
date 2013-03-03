@@ -142,9 +142,14 @@ tags:
     describe 'generate' do
       %w{-g --generate}.each do |opt|
         it 'inits the generator if #{opt}' do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
+
           Spinach::Generators.expects(:run)
-          cli = Spinach::Cli.new([opt])
-          options = cli.options
+
+          Spinach::Cli.new([opt]).run
+
+          config.generate.must_equal true
         end
       end
     end

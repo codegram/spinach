@@ -18,8 +18,8 @@ describe Spinach::Reporter::Stdout do
 
 
   before do
-    @out = StringIO.new
-    @error = StringIO.new
+    @out = StringIO.new("")
+    @error = StringIO.new("")
     @reporter = Spinach::Reporter::Stdout.new(
       output: @out,
       error: @error
