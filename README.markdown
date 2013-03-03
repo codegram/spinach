@@ -179,18 +179,6 @@ class Spinach::Features::BuyAWidget < Spinach::FeatureSteps
 end
 ```
 
-Also, don't forgot to require all of these common steps in your env.rb:
-
-```ruby
-# env.rb
-common_steps = Dir.glob(Rails.root.join("features/steps/common_steps/**/*.rb"))
-
-common_steps.each do |f|
-  require f
-end
-```
-
-
 ## Tags
 
 Feature and Scenarios can be marked with tags in the form: `@tag`. Tags can be
