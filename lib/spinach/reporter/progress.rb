@@ -1,22 +1,12 @@
 # encoding: utf-8
-require_relative 'stdout/error_reporting'
+require_relative 'reporting'
 
 module Spinach
   class Reporter
     # The Progress reporter outputs the runner results to the standard output
     #
     class Progress < Reporter
-
-      include Stdout::ErrorReporting
-
-      # The output buffers to store the reports.
-      attr_reader :out, :error
-
-      # The last scenario error
-      attr_accessor :scenario_error
-
-      # The last scenario
-      attr_accessor :scenario
+      include Reporting
 
       # Initialitzes the runner
       #
@@ -114,40 +104,6 @@ module Spinach
       #
       def output_step(text, color = :grey)
         out.print(text.to_s.colorize(color))
-      end
-
-      # It prints the error summary if the run has failed
-      # It always print feature success summary
-      #
-      # @param [True,False] success
-      #   whether the run has succeed or not
-      #
-      def after_run(success)
-        error_summary unless success
-        out.puts ""
-        run_summary
-      end
-
-      # Prints the feature success summary for this run.
-      #
-      def run_summary
-        successful_summary = format_summary(:green,  successful_steps, 'Successful')
-        undefined_summary  = format_summary(:yellow, undefined_steps,  'Undefined')
-        pending_summary    = format_summary(:yellow, pending_steps,    'Pending')
-        failed_summary     = format_summary(:red,    failed_steps,     'Failed')
-        error_summary      = format_summary(:red,    error_steps,      'Error')
-
-        out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{pending_summary}, #{failed_summary}, #{error_summary}\n\n"
-      end
-
-      private
-      def format_summary(color, steps, message)
-        buffer = []
-        buffer << "(".colorize(color)
-        buffer << steps.length.to_s.colorize(:"light_#{color}")
-        buffer << ") ".colorize(color)
-        buffer << message.colorize(color)
-        buffer.join
       end
     end
   end
