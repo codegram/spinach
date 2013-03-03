@@ -162,25 +162,8 @@ This is one way to make that reusable:
 # ... features/steps/common_steps/login.rb
 module CommonSteps
   module Login
-    extend ActiveSupport::Concern
-
-    def self.included(mod)
-      mod.send(:step, 'I am logged in') do
-        # log in stuff...
-      end
-    end
-  end
-end
-
-# within a rails app, you might want to use ActiveSupport::Concern
-module CommonSteps
-  module Login
-    extend ActiveSupport::Concern
-
-    included do
-      step 'I am logged in' do
-        # log in stuff...
-      end
+    step 'I am logged in' do
+      # log in stuff...
     end
   end
 end
