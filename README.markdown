@@ -72,22 +72,22 @@ Spinach will detect your features and generate the following class:
 
 ```ruby
 class Spinach::Features::TestHowSpinachWorks < Spinach::FeatureSteps
-  Given 'I have an empty array' do
+  step 'I have an empty array' do
   end
 
-  And 'I append my first name and my last name to it' do
+  step 'I append my first name and my last name to it' do
   end
 
-  When 'I pass it to my super-duper method' do
+  step 'I pass it to my super-duper method' do
   end
 
-  Then 'the output should contain a formal greeting' do
+  step 'the output should contain a formal greeting' do
   end
 
-  And 'I append only my first name to it' do
+  step 'I append only my first name to it' do
   end
 
-  Then 'the output should contain a casual greeting' do
+  step 'the output should contain a casual greeting' do
   end
 end
 ```
@@ -97,29 +97,29 @@ use private methods, mix in modules or whatever!
 
 ```ruby
 class Spinach::Features::TestHowSpinachWorks < Spinach::FeatureSteps
-  Given 'I have an empty array' do
+  step 'I have an empty array' do
     @array = Array.new
   end
 
-  And 'I append my first name and my last name to it' do
+  step 'I append my first name and my last name to it' do
     @array += ["John", "Doe"]
   end
 
-  When 'I pass it to my super-duper method' do
+  step 'I pass it to my super-duper method' do
     @output = capture_output do
       Greeter.greet(@array)
     end
   end
 
-  Then 'the output should contain a formal greeting' do
+  step 'the output should contain a formal greeting' do
     @output.must_include "Hello, mr. John Doe"
   end
 
-  And 'I append only my first name to it' do
+  step 'I append only my first name to it' do
     @array += ["John"]
   end
 
-  Then 'the output should contain a casual greeting' do
+  step 'the output should contain a casual greeting' do
     @output.must_include "Yo, John! Whassup?"
   end
 
@@ -165,7 +165,7 @@ module CommonSteps
     extend ActiveSupport::Concern
 
     def self.included(mod)
-      mod.send(:Given, 'I am logged in') do
+      mod.send(:step, 'I am logged in') do
         # log in stuff...
       end
     end
@@ -178,7 +178,7 @@ module CommonSteps
     extend ActiveSupport::Concern
 
     included do
-      Given 'I am logged in' do
+      step 'I am logged in' do
         # log in stuff...
       end
     end
