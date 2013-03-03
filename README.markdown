@@ -314,6 +314,19 @@ class Spinach::Features::SessionTimeout < Spinach::FeatureSteps
 end
 ```
 
+## Reporters
+
+Spinach supports two kinds of reporters by default: `stdout` and `progress`.
+You can specify them when calling the `spinach` binary:
+
+    spinach --reporter progress
+
+When no reporter is specified, `stdout` will be used by default.
+
+For a console reporter with no colors, try:
+
+* [spinach-console-reporter](https://github.com/ywen/spinach-console-reporter) (to be used with Jenkins)
+
 ## Wanna use it with Rails 3?
 
 Use [spinach-rails](http://github.com/codegram/spinach-rails)
