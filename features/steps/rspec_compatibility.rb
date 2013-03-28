@@ -78,8 +78,6 @@ Feature: Greeting
     write_file('features/steps/greeting.rb',
                'require "spinach/capybara"
                 class Greeting < Spinach::FeatureSteps
-                  include Spinach::FeatureSteps::Capybara
-
                   Given "I am on the front page" do
                     visit "/"
                   end

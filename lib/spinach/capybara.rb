@@ -76,3 +76,5 @@ end
 
 Spinach.hooks.on_error_step(&open_page)
 Spinach.hooks.on_failed_step(&open_page)
+
+Spinach::FeatureSteps.send :include, Spinach::FeatureSteps::Capybara
