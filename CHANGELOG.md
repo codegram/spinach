@@ -1,3 +1,7 @@
+== 0.8.1
+* bug fix
+  * Requiring `spinach/capybara` now auto-includes Capybara's DSL
+
 == 0.8.0
 
 * backwards incompatible changes
