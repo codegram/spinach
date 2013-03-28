@@ -72,22 +72,22 @@ Spinach will detect your features and generate the following class:
 
 ```ruby
 class Spinach::Features::TestHowSpinachWorks < Spinach::FeatureSteps
-  Given 'I have an empty array' do
+  step 'I have an empty array' do
   end
 
-  And 'I append my first name and my last name to it' do
+  step 'I append my first name and my last name to it' do
   end
 
-  When 'I pass it to my super-duper method' do
+  step 'I pass it to my super-duper method' do
   end
 
-  Then 'the output should contain a formal greeting' do
+  step 'the output should contain a formal greeting' do
   end
 
-  And 'I append only my first name to it' do
+  step 'I append only my first name to it' do
   end
 
-  Then 'the output should contain a casual greeting' do
+  step 'the output should contain a casual greeting' do
   end
 end
 ```
@@ -97,29 +97,29 @@ use private methods, mix in modules or whatever!
 
 ```ruby
 class Spinach::Features::TestHowSpinachWorks < Spinach::FeatureSteps
-  Given 'I have an empty array' do
+  step 'I have an empty array' do
     @array = Array.new
   end
 
-  And 'I append my first name and my last name to it' do
+  step 'I append my first name and my last name to it' do
     @array += ["John", "Doe"]
   end
 
-  When 'I pass it to my super-duper method' do
+  step 'I pass it to my super-duper method' do
     @output = capture_output do
       Greeter.greet(@array)
     end
   end
 
-  Then 'the output should contain a formal greeting' do
+  step 'the output should contain a formal greeting' do
     @output.must_include "Hello, mr. John Doe"
   end
 
-  And 'I append only my first name to it' do
+  step 'I append only my first name to it' do
     @array += ["John"]
   end
 
-  Then 'the output should contain a casual greeting' do
+  step 'the output should contain a casual greeting' do
     @output.must_include "Yo, John! Whassup?"
   end
 
@@ -162,25 +162,8 @@ This is one way to make that reusable:
 # ... features/steps/common_steps/login.rb
 module CommonSteps
   module Login
-    extend ActiveSupport::Concern
-
-    def self.included(mod)
-      mod.send(:Given, 'I am logged in') do
-        # log in stuff...
-      end
-    end
-  end
-end
-
-# within a rails app, you might want to use ActiveSupport::Concern
-module CommonSteps
-  module Login
-    extend ActiveSupport::Concern
-
-    included do
-      Given 'I am logged in' do
-        # log in stuff...
-      end
+    step 'I am logged in' do
+      # log in stuff...
     end
   end
 end
@@ -195,18 +178,6 @@ class Spinach::Features::BuyAWidget < Spinach::FeatureSteps
   include CommonSteps::Login
 end
 ```
-
-Also, don't forgot to require all of these common steps in your env.rb:
-
-```ruby
-# env.rb
-common_steps = Dir.glob(Rails.root.join("features/steps/common_steps/**/*.rb"))
-
-common_steps.each do |f|
-  require f
-end
-```
-
 
 ## Tags
 

@@ -78,7 +78,7 @@ module Spinach
 
         it "binds a callback before every scenario" do
           @reporter.expects(:before_scenario_run)
-          Spinach.hooks.run_before_scenario(anything)
+          Spinach.hooks.run_before_scenario(stub_everything)
         end
 
         it "binds a callback around every scenario" do

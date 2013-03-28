@@ -6,7 +6,7 @@ class UseCustomizedReporter < Spinach::FeatureSteps
 
   before do
     class_str = <<-EOF
-  class Spinach::TestReporter < Spinach::Reporter
+  class Spinach::Reporter::TestReporter < Spinach::Reporter
     attr_reader :out, :error
     attr_accessor :scenario_error
     attr_accessor :scenario
@@ -89,7 +89,7 @@ class ASuccessFeature < Spinach::FeatureSteps
   end
 
   When 'I run it using the new reporter' do
-    run_feature @feature, append: "-r Spinach::TestReporter"
+    run_feature @feature, append: "-r test_reporter"
   end
 
   Then 'I see the desired output' do

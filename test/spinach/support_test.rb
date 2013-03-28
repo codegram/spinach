@@ -73,4 +73,10 @@ describe Spinach::Support do
       ).must_include "I\\'ve been doing things I shouldn\\'t be doing"
     end
   end
+
+  describe '#constantize' do
+    it "converts a string into a class" do
+      Spinach::Support.constantize("Spinach::FeatureSteps").must_equal Spinach::FeatureSteps
+    end
+  end
 end
