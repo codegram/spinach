@@ -3,19 +3,18 @@ require 'capybara'
 require 'rack/test'
 require 'spinach'
 require 'spinach/capybara'
-require 'sinatra'
+require 'sinatra/base'
+
+class SinatraStubApp < Sinatra::Base
+  get '/' do
+    'Hello world!'
+  end
+end
 
 describe Spinach::FeatureSteps::Capybara do
   before do
     Capybara.current_driver = :rack_test
-
-    @sinatra_app = Sinatra::Application.new do
-      get '/' do
-        'Hello world!'
-      end
-    end
-
-    Capybara.app = @sinatra_app
+    Capybara.app = SinatraStubApp
 
     class TestFeature < Spinach::FeatureSteps
       include Spinach::FeatureSteps::Capybara
