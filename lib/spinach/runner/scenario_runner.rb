@@ -3,7 +3,7 @@ module Spinach
     # A Scenario Runner handles a particular scenario run.
     #
     class ScenarioRunner
-      # @param [Gherkin::AST::Scenario] scenario
+      # @param [GherkinRuby::AST::Scenario] scenario
       #   The scenario.
       #
       # @api public
@@ -11,7 +11,7 @@ module Spinach
         @scenario = scenario
       end
 
-      # @return [Gherkin::AST::Feature>]
+      # @return [GherkinRuby::AST::Feature>]
       #   The feature containing the scenario.
       #
       # @api public
@@ -19,7 +19,7 @@ module Spinach
         @scenario.feature
       end
 
-      # @return [Array<Gherkin::AST::Step>]
+      # @return [Array<GherkinRuby::AST::Step>]
       #   An array of steps.
       #
       # @api public
@@ -68,7 +68,7 @@ module Spinach
 
       # Runs a particular step.
       #
-      # @param [Gherkin::AST::Step] step
+      # @param [GherkinRuby::AST::Step] step
       #   The step to be run.
       #
       # @api semipublic

@@ -18,7 +18,7 @@ require_relative 'spinach/features'
 require_relative 'spinach/scenario'
 require_relative 'spinach/step'
 
-# Spinach is a BDD framework leveraging the great Gherkin language. This
+# Spinach is a BDD framework leveraging the great GherkinRuby language. This
 # language is the one used defining features in Cucumber, the BDD framework
 # Spinach is inspired upon.
 #

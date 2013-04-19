@@ -7,7 +7,7 @@ module Spinach
     class FeatureRunner
       attr_reader :feature
 
-      # @param [Gherkin::AST::Feature] feature
+      # @param [GherkinRuby::AST::Feature] feature
       #   The feature to run.
       #
       # @param [#to_i] line
@@ -28,7 +28,7 @@ module Spinach
         @feature.name
       end
 
-      # @return [Array<Gherkin::AST::Scenario>]
+      # @return [Array<GherkinRuby::AST::Scenario>]
       #   The parsed scenarios for this runner's feature.
       #
       # @api public

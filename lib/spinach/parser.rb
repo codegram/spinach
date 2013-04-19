@@ -1,8 +1,8 @@
-require 'gherkin'
+require 'gherkin_ruby'
 require_relative 'parser/visitor'
 
 module Spinach
-  # Parser leverages Gherkin to parse the feature definition.
+  # Parser leverages GherkinRuby to parse the feature definition.
   #
   class Parser
     # @param [String] content
@@ -36,7 +36,7 @@ module Spinach
     #
     # @api public
     def parse
-      ast = Gherkin.parse(@content + "\n")
+      ast = GherkinRuby.parse(@content + "\n")
       Visitor.new.visit(ast)
     end
   end

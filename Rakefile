@@ -11,7 +11,7 @@ end
 
 desc 'Run spinach features'
 task :spinach do
-  exec "bundle exec spinach"
+  exec "bin/spinach"
 end
 
 task :default => [:test, :spinach]

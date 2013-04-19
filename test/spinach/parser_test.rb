@@ -17,7 +17,7 @@ Feature: User authentication
 
   describe '#parse' do
     it 'parses the file' do
-      Gherkin.expects(:parse).returns ast = stub
+      GherkinRuby.expects(:parse).returns ast = stub
       Spinach::Parser::Visitor.stubs(:new).returns visitor = stub
       visitor.expects(:visit).with ast
       @parser.parse

@@ -24,7 +24,7 @@ module Spinach
       # Prints the feature name to the standard output
       #
       # @param [Hash] data
-      #   The feature in a JSON Gherkin format
+      #   The feature in a JSON GherkinRubyRuby format
       #
       def before_feature_run(feature)
         name = feature.name
@@ -34,7 +34,7 @@ module Spinach
       # Prints the scenario name to the standard ouput
       #
       # @param [Hash] data
-      #   The feature in a JSON Gherkin format
+      #   The feature in a JSON GherkinRubyRuby format
       #
       def before_scenario_run(scenario, step_definitions = nil)
         @max_step_name_length = scenario.steps.map(&:name).map(&:length).max if scenario.steps.any?
@@ -45,7 +45,7 @@ module Spinach
       # Adds an error report and re
       #
       # @param [Hash] data
-      #   The feature in a JSON Gherkin format
+      #   The feature in a JSON GherkinRubyRuby format
       #
       def after_scenario_run(scenario, step_definitions = nil)
         if scenario_error
@@ -71,7 +71,7 @@ module Spinach
       # Adds a failing step to the output buffer.
       #
       # @param [Hash] step
-      #   The step in a JSON Gherkin format
+      #   The step in a JSON GherkinRubyRuby format
       #
       # @param [Exception] failure
       #   The exception that caused the failure
@@ -85,7 +85,7 @@ module Spinach
       # Adds a step that has raised an error to the output buffer.
       #
       # @param [Hash] step
-      #   The step in a JSON Gherkin format
+      #   The step in a JSON GherkinRubyRuby format
       #
       # @param [Exception] failure
       #   The exception that caused the failure
@@ -99,7 +99,7 @@ module Spinach
       # Adds an undefined step to the output buffer.
       #
       # @param [Hash] step
-      #   The step in a JSON Gherkin format
+      #   The step in a JSON GherkinRubyRuby format
       #
       def on_undefined_step(step, failure, step_definitions = nil)
         output_step('?', step, :yellow)
@@ -110,7 +110,7 @@ module Spinach
       # Adds an undefined step to the output buffer.
       #
       # @param [Hash] step
-      #   The step in a JSON Gherkin format
+      #   The step in a JSON GherkinRubyRuby format
       #
       def on_pending_step(step, failure)
         output_step('P', step, :yellow)
@@ -144,7 +144,7 @@ module Spinach
       # Adds a step that has been skipped to the output buffer.
       #
       # @param [Hash] step
-      #   The step that Gherkin extracts
+      #   The step that GherkinRubyRuby extracts
       #
       def on_skipped_step(step, step_definitions = nil)
         output_step('~', step, :cyan)
@@ -157,7 +157,7 @@ module Spinach
       #   indicate if everything went ok or not).
       #
       # @param [Hash] step
-      #   The step in a JSON Gherkin format
+      #   The step in a JSON GherkinRubyRuby format
       #
       # @param [Symbol] color
       #   The color code to use with Colorize to colorize the output.

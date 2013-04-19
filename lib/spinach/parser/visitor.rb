@@ -1,11 +1,11 @@
 module Spinach
   class Parser
-    # The Spinach Visitor traverses the output AST from the Gherkin parser and
+    # The Spinach Visitor traverses the output AST from the GherkinRuby parser and
     # populates its Feature with all the scenarios, tags, steps, etc.
     #
     # @example
     #
-    #   ast     = Gherkin.parse(File.read('some.feature')
+    #   ast     = GherkinRuby.parse(File.read('some.feature')
     #   visitor = Spinach::Parser::Visitor.new
     #   feature = visitor.visit(ast)
     #
@@ -20,7 +20,7 @@ module Spinach
         @feature = Feature.new
       end
 
-      # @param [Gherkin::AST::Feature] ast
+      # @param [GherkinRuby::AST::Feature] ast
       #   The AST root node to visit.
       #
       # @api public
@@ -31,7 +31,7 @@ module Spinach
 
       # Sets the feature name and iterates over the feature scenarios.
       #
-      # @param [Gherkin::AST::Feature] feature
+      # @param [GherkinRuby::AST::Feature] feature
       #   The feature to visit.
       #
       # @api public
@@ -48,7 +48,7 @@ module Spinach
 
       # Iterates over the steps.
       #
-      # @param [Gherkin::AST::Scenario] node
+      # @param [GherkinRuby::AST::Scenario] node
       #   The scenario to visit.
       #
       # @api public
@@ -65,7 +65,7 @@ module Spinach
 
       # Sets the scenario name and iterates over the steps.
       #
-      # @param [Gherkin::AST::Scenario] node
+      # @param [GherkinRuby::AST::Scenario] node
       #   The scenario to visit.
       #
       # @api public
@@ -87,7 +87,7 @@ module Spinach
 
       # Adds the tag to the current scenario.
       #
-      # @param [Gherkin::AST::Tag] node
+      # @param [GherkinRuby::AST::Tag] node
       #   The tag to add.
       #
       # @api public
@@ -97,7 +97,7 @@ module Spinach
 
       # Adds the step to the current scenario.
       #
-      # @param [Gherkin::AST::Step] step
+      # @param [GherkinRuby::AST::Step] step
       #   The step to add.
       #
       # @api public
