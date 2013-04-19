@@ -1,3 +1,7 @@
+== 0.8.2
+* upgrade to gherkin-ruby 0.3 in order to avoid naming conflicts when using at
+the same time spinach & cucumber (transitioning)
+
 == 0.8.1
 * bug fix
   * Requiring `spinach/capybara` now auto-includes Capybara's DSL
