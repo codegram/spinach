@@ -162,6 +162,8 @@ This is one way to make that reusable:
 # ... features/steps/common_steps/login.rb
 module CommonSteps
   module Login
+    include Spinach::DSL
+    
     step 'I am logged in' do
       # log in stuff...
     end
