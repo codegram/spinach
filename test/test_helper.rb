@@ -1,5 +1,8 @@
 gem 'minitest'
 
+require 'coveralls'
+
+SimpleCov.formatter = Coveralls::SimpleCov::Formatter
 if ENV['COVERAGE']
   require 'simplecov'
 

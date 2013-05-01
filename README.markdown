@@ -1,4 +1,8 @@
-# Spinach - BDD framework on top of Gherkin [![Build Status](https://secure.travis-ci.org/codegram/spinach.png)](http://travis-ci.org/codegram/spinach) [![Dependency Status](https://gemnasium.com/codegram/spinach.png)](http://gemnasium.com/codegram/spinach)
+# Spinach - BDD framework on top of Gherkin 
+[![Gem Version](https://badge.fury.io/rb/spinach.png)](http://badge.fury.io/rb/spinach)
+[![Build Status](https://secure.travis-ci.org/codegram/spinach.png)](http://travis-ci.org/codegram/spinach) 
+[![Dependency Status](https://gemnasium.com/codegram/spinach.png)](http://gemnasium.com/codegram/spinach)
+[![Coverage Status](https://coveralls.io/repos/codegram/spinach/badge.png?branch=master)](https://coveralls.io/r/codegram/spinach)
 
 Spinach is a high-level BDD framework that leverages the expressive
 [Gherkin language][gherkin] (used by [Cucumber][cucumber]) to help you define
