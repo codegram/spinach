@@ -29,8 +29,7 @@ Feature: Feature with failures
 
   Scenario: This scenario will fail
     Given true is false
-    Then remove all the files in my hard drive
-""")
+    Then remove all the files in my hard drive""")
 
     write_file('features/steps/failure_feature.rb',
                'class FeatureWithFailures < Spinach::FeatureSteps
