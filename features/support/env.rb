@@ -5,7 +5,7 @@ require 'simplecov'
 require 'coveralls'
 
 SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-if ENV['COVERAGE']
+if ENV['CI']
   require 'simplecov'
 
   SimpleCov.start do
