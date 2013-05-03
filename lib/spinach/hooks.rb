@@ -83,7 +83,7 @@ module Spinach
     # Runs after every step execution
     #
     # @example
-    #   Spinach.hooks.before_step do |step_data, step_definitions|
+    #   Spinach.hooks.after_step do |step_data, step_definitions|
     #     # step_data contains a hash with this step's data
     #   end
     hook :after_step
