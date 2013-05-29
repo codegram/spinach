@@ -354,3 +354,7 @@ You can easily contribute to Spinach. Its codebase is simple and
 ## License
 
 MIT License. Copyright 2011 [Codegram Technologies](http://codegram.com)
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/codegram/spinach/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
