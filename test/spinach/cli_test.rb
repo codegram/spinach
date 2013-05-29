@@ -21,6 +21,14 @@ describe Spinach::Cli do
       config[:reporter_options].must_equal({})
     end
 
+    it 'sets the default fail-fast option to false' do
+      config = Spinach::Config.new
+      Spinach.stubs(:config).returns(config)
+      cli = Spinach::Cli.new([])
+      cli.options
+      config[:fail_fast].wont_equal(true)
+    end
+
     it 'sets default tags' do
       config = Spinach::Config.new
       Spinach.stubs(:config).returns(config)
