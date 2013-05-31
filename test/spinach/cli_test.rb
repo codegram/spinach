@@ -162,6 +162,15 @@ tags:
       end
     end
 
+    describe 'fail-fast' do
+      it 'set the fail_fast flag given "--fail-fast"' do
+        config = Spinach::Config.new
+        Spinach.stubs(:config).returns(config)
+        Spinach::Cli.new(["--fail-fast"]).run
+        config.fail_fast.must_equal true
+      end
+    end
+
     describe "version" do
       %w{-v --version}.each do |opt|
         it "outputs the version" do
@@ -264,7 +273,7 @@ tags:
 
           File.stubs(:directory?).returns(true)
           Dir.expects(:glob).with('path/to/features/**/*.feature')
-            .returns(['several features'])
+          .returns(['several features'])
 
           File.stubs(:exists?).returns(true)
 

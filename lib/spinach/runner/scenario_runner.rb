@@ -63,6 +63,7 @@ module Spinach
         end
         raise "around_scenario hooks *must* yield" if !scenario_run && !@exception
         Spinach.hooks.run_after_scenario @scenario, step_definitions
+        # exit(1) if fail_and_fail_fast?
         !@exception
       end
 
@@ -88,6 +89,11 @@ module Spinach
       rescue Exception => e
         @exception = e
         Spinach.hooks.run_on_error_step step, @exception, step_location, step_definitions
+      end
+
+      private
+      def fail_and_fail_fast?
+        Spinach.config.fail_fast && @exception
       end
     end
   end
