@@ -163,10 +163,10 @@ tags:
     end
 
     describe 'fail-fast' do
-      it 'set the fail_fast flag given "--fail-fast"' do
+      it 'set the fail_fast flag, given "--fail-fast"' do
         config = Spinach::Config.new
         Spinach.stubs(:config).returns(config)
-        Spinach::Cli.new(["--fail-fast"]).run
+        Spinach::Cli.new(["--fail-fast"]).options
         config.fail_fast.must_equal true
       end
     end
