@@ -1,6 +1,7 @@
 require 'capybara'
 require 'capybara/dsl'
 require 'rbconfig'
+require 'spinach/config'
 require_relative 'feature_steps'
 
 module Spinach
