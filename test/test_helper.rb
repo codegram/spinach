@@ -1,5 +1,3 @@
-gem 'minitest'
-
 require 'simplecov'
 require 'coveralls'
 
@@ -13,8 +11,8 @@ if ENV['CI']
   end
 end
 
-require 'minitest/spec'
 require 'minitest/autorun'
+require 'minitest/spec'
 require 'mocha/setup'
 require 'ostruct'
 require 'stringio'
