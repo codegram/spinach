@@ -60,7 +60,7 @@ module Spinach
 end
 
 Spinach.hooks.after_scenario do
-  ::Capybara.current_session.reset! if ::Capybara.app
+  ::Capybara.reset_sessions! if ::Capybara.app
   ::Capybara.use_default_driver
 end
 
