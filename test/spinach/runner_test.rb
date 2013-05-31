@@ -122,6 +122,12 @@ describe Spinach::Runner do
         feature_runners[1].expects(:run).never
         runner.run.must_equal false
       end
+
+      it "doesn't break when success" do
+        feature_runners[0].stubs(:run).returns(true)
+        feature_runners[1].expects(:run).returns true
+        runner.run.must_equal true
+      end
     end
   end
 
