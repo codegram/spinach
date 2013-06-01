@@ -3,7 +3,7 @@ class Spinach::Features::FailFastOption < Spinach::FeatureSteps
 
   step 'I have a feature that has a failure' do
     @features ||= []
-    @features << Integration::FeatureGenerator.failure_feature
+    @features << Integration::FeatureGenerator.failure_feature_with_two_scenarios
   end
 
   step 'I have a feature that has no error or failure' do

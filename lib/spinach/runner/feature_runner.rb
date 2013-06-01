@@ -68,6 +68,7 @@ module Spinach
           if run_scenario?(scenario, current_scenario_index)
             success = ScenarioRunner.new(scenario).run
             @failed = true unless success
+            break if Spinach.config.fail_fast && @failed
           end
         end
       end
