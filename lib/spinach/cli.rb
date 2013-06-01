@@ -128,7 +128,7 @@ module Spinach
           end
 
           opts.on_tail('--fail-fast',
-                  'Terminate the suite run on the first failure') do |class_name|
+                       'Terminate the suite run on the first failure') do |class_name|
             config[:fail_fast] = true
           end
         end.parse!(@args)

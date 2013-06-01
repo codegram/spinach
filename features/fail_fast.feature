@@ -5,6 +5,6 @@ Feature: Fail fast option
 
   Scenario: fail fast
     Given I have a feature that has a failure
-    Given I have a feature that has no error or failure
+    And I have a feature that has no error or failure
     When I run both of them with fail-fast option
     Then the tests stop at the first one
