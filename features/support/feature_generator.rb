@@ -5,28 +5,31 @@ module Integration
 
       def success_feature
         feature= success_scenario_title + success_scenario
-        write_file 'features/success_feature.feature', feature
         steps = success_step_class_str + success_step + "\nend"
-        write_file 'features/steps/success_feature.rb', steps
-        "features/success_feature.feature"
+        write_feature 'features/success_feature.feature', feature,
+          'features/steps/success_feature.rb', steps
       end
 
       def failure_feature_with_two_scenarios
         feature = failure_feature_title + failure_sceario + success_scenario
-        write_file(failure_filename, feature)
         steps = failure_step + success_step + "\nend"
-        write_file(failure_step_filename, steps)
-        failure_filename
+        write_feature failure_filename, feature,
+          failure_step_filename, steps
       end
 
       def failure_feature
         feature = failure_feature_title + failure_sceario
-        write_file failure_filename, feature
-        write_file failure_step_filename, failure_step+"\nend"
-        failure_filename
+        write_feature failure_filename, feature,
+          failure_step_filename, failure_step + "\nend"
       end
 
       private
+
+      def write_feature(feature_file, feature, step_file, steps)
+        write_file(feature_file, feature)
+        write_file(step_file, steps)
+        feature_file
+      end
 
       def failure_step
         'class AFailureFeature < Spinach::FeatureSteps
