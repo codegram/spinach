@@ -55,6 +55,7 @@ module Integration
         %Q|class ASuccessFeature < Spinach::FeatureSteps
         feature "A success feature"\n\n|
       end
+
       def failure_step_filename
         'features/steps/failure_feature.rb'
       end
