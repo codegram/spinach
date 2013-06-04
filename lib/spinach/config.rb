@@ -32,7 +32,8 @@ module Spinach
                 :generate,
                 :save_and_open_page_on_failure,
                 :reporter_class,
-                :reporter_options
+                :reporter_options,
+                :fail_fast
 
 
     # The "features path" holds the place where your features will be
@@ -129,6 +130,17 @@ module Spinach
     # @api public
     def failure_exceptions
       @failure_exceptions ||= []
+    end
+
+    # The "fail_fast" determines if the suite run should exit
+    # when encountering a failure/error
+    #
+    # @return [true/false]
+    #    The fail_fast flag.
+    #
+    # @api public
+    def fail_fast
+      @fail_fast
     end
 
     # It allows you to set a config file to parse for all the other options to be set

@@ -126,6 +126,11 @@ module Spinach
                   'Formatter class name') do |class_name|
             config[:reporter_class] = reporter_class(class_name)
           end
+
+          opts.on_tail('--fail-fast',
+                       'Terminate the suite run on the first failure') do |class_name|
+            config[:fail_fast] = true
+          end
         end.parse!(@args)
 
         Spinach.config.parse_from_file

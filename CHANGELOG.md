@@ -1,3 +1,6 @@
+== 0.8.3
+* Add ```--fail-fast``` option. When specified, the suite will terminate after the first failed scenario
+
 == 0.8.2
 * upgrade to gherkin-ruby 0.3 in order to avoid naming conflicts when using at
 the same time spinach & cucumber (transitioning)
