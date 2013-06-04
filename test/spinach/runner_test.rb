@@ -72,12 +72,12 @@ describe Spinach::Runner do
   end
 
   describe '#run' do
-    before do
+    before(:each) do
       @feature_runner = stub
       filenames.each do |filename|
-        Spinach::Parser.expects(:open_file).with(filename).returns parser = stub
+        Spinach::Parser.stubs(:open_file).with(filename).returns parser = stub
         parser.stubs(:parse).returns feature = stub
-        Spinach::Runner::FeatureRunner.expects(:new).
+        Spinach::Runner::FeatureRunner.stubs(:new).
           with(feature, anything).
           returns(@feature_runner)
       end
@@ -99,6 +99,35 @@ describe Spinach::Runner do
     it 'returns false if it fails' do
       @feature_runner.stubs(:run).returns(false)
       runner.run.must_equal false
+    end
+
+    describe "when fail_fast set" do
+      let(:feature_runners) { [ stub, stub ] }
+
+      before(:each) do
+        filenames.each_with_index do |filename, i|
+          Spinach::Parser.stubs(:open_file).with(filename).returns parser = stub
+          parser.stubs(:parse).returns feature = stub
+          Spinach::Runner::FeatureRunner.stubs(:new).
+            with(feature, anything).
+            returns(feature_runners[i])
+        end
+
+        feature_runners[0].stubs(:run).returns(false)
+        runner.stubs(required_files: [])
+        Spinach.config.stubs(:fail_fast).returns true
+      end
+
+      it "breaks with a failure" do
+        feature_runners[1].expects(:run).never
+        runner.run.must_equal false
+      end
+
+      it "doesn't break when success" do
+        feature_runners[0].stubs(:run).returns(true)
+        feature_runners[1].expects(:run).returns true
+        runner.run.must_equal true
+      end
     end
   end
 

@@ -70,6 +70,22 @@ describe Spinach::Runner::FeatureRunner do
 
           @runner.run.must_equal false
         end
+
+        describe "with config option fail_fast set" do
+          let(:runners) { [ stub('runner1', run: false), stub('runner2') ] }
+
+          before(:each) do
+            Spinach.config.stubs(:fail_fast).returns(true)
+            @scenarios.each_with_index do |scenario, i|
+              Spinach::Runner::ScenarioRunner.stubs(:new).with(scenario).returns runners[i]
+            end
+          end
+
+          it "breaks with fail_fast config option" do
+            runners[1].expects(:run).never
+            @runner.run.must_equal(false)
+          end
+        end
       end
     end
 

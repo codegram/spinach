@@ -43,7 +43,7 @@ module Spinach
             step_definitions.stubs(:before_each)
             step_definitions.stubs(:after_each)
           end
-          
+
           it 'runs hooks in order' do
             hooks = sequence('hooks')
 

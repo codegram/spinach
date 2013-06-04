@@ -75,6 +75,7 @@ module Spinach
         feature = Parser.open_file(filename).parse
         success = FeatureRunner.new(feature, line).run
         successful = false unless success
+        break if fail_fast? && !successful
       end
 
       Spinach.hooks.run_after_run(successful)
@@ -132,6 +133,12 @@ module Spinach
     # @api public
     def required_files
       support_files + step_definition_files
+    end
+
+    private
+
+    def fail_fast?
+      Spinach.config.fail_fast
     end
   end
 end
