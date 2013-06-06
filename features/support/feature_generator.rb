@@ -16,6 +16,18 @@ module Integration
           'features/steps/success_feature.rb', steps
       end
 
+      # Generate a feature with 1 scenario that has a pending step in between
+      #
+      # @return feature_filename
+      #   The feature file name
+      #
+      # @api private
+      def pending_feature
+        steps = pending_step_class_str + pending_step + success_step + "\nend"
+        write_feature 'features/success_feature.feature', pending_feature_str,
+          'features/steps/success_feature.rb', steps
+      end
+
       # Generate a feature that has 2 scenarios. The first one should
       # pass and the second one should fail
       #
@@ -72,6 +84,13 @@ module Integration
       end'
       end
 
+      def pending_feature_str
+        "Feature: A pending feature
+        Scenario: This is scenario will be pending
+        When this is a pending step
+    Then I succeed"
+      end
+
       def success_scenario
         'Scenario: This is scenario will succeed
     Then I succeed'
@@ -84,6 +103,18 @@ module Integration
       def success_step
         '
       step "I succeed" do
+      end'
+      end
+
+      def pending_step_class_str
+        %Q|class ApendingFeature < Spinach::FeatureSteps
+        feature "A pending feature"\n\n|
+      end
+
+      def pending_step
+        '
+      step "this is a pending step" do
+        pending "to be implemented"
       end'
       end
 
