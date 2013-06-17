@@ -154,6 +154,11 @@ module Spinach
             subject.instance_variable_get(:@exception).must_be_kind_of(NilClass)
           end
 
+          it 'sets the has_pending_step' do
+            subject.run_step(@step)
+            subject.instance_variable_get(:@has_pending_step).must_equal(true)
+          end
+
           it 'runs the pending hooks' do
             Spinach.hooks.expects(:run_on_pending_step).with(@step, kind_of(Spinach::StepPendingException))
             subject.run_step(@step)

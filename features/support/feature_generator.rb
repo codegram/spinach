@@ -22,9 +22,10 @@ module Integration
       #   The feature file name
       #
       # @api private
-      def pending_feature
-        steps = pending_step_class_str + pending_step + success_step + "\nend"
-        write_feature 'features/success_feature.feature', pending_feature_str,
+      def pending_feature_with_multiple_scenario
+        feature_str = pending_feature_str + "\n" + success_scenario
+        steps = pending_step_class_str + pending_step + "\n" + failure_step_definition + success_step + "\nend"
+        write_feature 'features/success_feature.feature', feature_str,
           'features/steps/success_feature.rb', steps
       end
 
@@ -77,9 +78,14 @@ module Integration
       end
 
       def failure_step
-        'class AFailureFeature < Spinach::FeatureSteps
+        %Q|class AFailureFeature < Spinach::FeatureSteps
       feature "A failure feature"
-      Then "I fail" do
+      %{failure_step_definition}
+      |
+      end
+
+      def failure_step_definition
+      'Then "I fail" do
         true.must_equal false
       end'
       end
@@ -88,7 +94,7 @@ module Integration
         "Feature: A pending feature
         Scenario: This is scenario will be pending
         When this is a pending step
-    Then I succeed"
+    Then I fail"
       end
 
       def success_scenario
