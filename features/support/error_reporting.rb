@@ -5,12 +5,18 @@ module Integration
     include Filesystem
 
     def check_error_messages(n = 1)
-      @stderr.must_match /Failures \(#{n}\)/
+      @stderr.must_match failure_regex(n)
     end
 
     def check_backtrace(n = 1)
-      @stderr.must_match /Failures \(#{n}\)/
-      @stderr.must_match /gems.*(minitest|rspec).*assert_equal/
+      @stderr.must_match failure_regex(n)
+      @stderr.must_match /.*(minitest|rspec).*assert_equal/
+    end
+
+    private
+
+    def failure_regex(n)
+      /Failures \(#{n}\)/
     end
   end
 end
