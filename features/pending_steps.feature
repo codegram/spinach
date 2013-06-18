@@ -3,7 +3,7 @@ Feature: Pending steps
   As a developer
   I want spinach to fail fast when I so desire
 
-  Scenario: fail fast
+  Scenario: multiple scenarios
     Given I have a feature that has a pending step
     When I run the feature
     Then the test stops at the pending step and reported as such
