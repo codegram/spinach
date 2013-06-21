@@ -26,6 +26,7 @@ module Spinach
       #
       # @param [Proc] block
       #   Action to perform in that step.
+      #   If no block is given, step will be defined as pending.
       #
       # @example
       #   These 3 examples are equivalent:
@@ -50,7 +51,11 @@ module Spinach
       #
       # @api public
       def step(step, &block)
-        define_method(Spinach::Support.underscore(step), &block)
+        method_body = if block_given? then block
+                      else lambda { pending "step not implemented" }
+                      end
+
+        define_method(Spinach::Support.underscore(step), &method_body)
       end
 
       alias_method :Given, :step
