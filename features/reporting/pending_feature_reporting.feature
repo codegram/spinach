@@ -8,3 +8,9 @@ Feature: Pending feature reporting
     When I run spinach
     Then I should see a message telling me that there's a pending scenario
     And I should see a message showing me the reason of the pending scenario
+ 
+ Scenario: Step definition without body
+    Given I've written a step definition without body
+    When I run spinach
+    Then I should see a message telling me that there's a pending scenario
+    And I should see a message showing me the default reason of the pending scenario

@@ -24,6 +24,29 @@ class PendingFeatureReporting < Spinach::FeatureSteps
            pending "This step is pending."
          end
        end')
+
+    @feature = "features/pending_feature.feature"
+  end
+
+  Given "I've written a step definition without body" do
+    write_file(
+      'features/pending_feature.feature',
+      """
+      Feature: A pending feature
+
+      Scenario: This scenario is pending 
+        Given this is also a pending step
+      """)
+
+    write_file(
+      'features/steps/pending_feature.rb',
+      'class APendingFeature < Spinach::FeatureSteps
+
+         feature "A pending feature"
+
+         Given "this is also a pending step"
+       end')
+
     @feature = "features/pending_feature.feature"
   end
 
@@ -38,4 +61,9 @@ class PendingFeatureReporting < Spinach::FeatureSteps
   And "I should see a message showing me the reason of the pending scenario" do
     @stderr.must_include("This step is pending")
   end
+
+  And "I should see a message showing me the default reason of the pending scenario" do
+    @stderr.must_include("step not implemented")
+  end
+
 end
