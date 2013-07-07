@@ -26,7 +26,7 @@ module Integration
         feature_str = pending_feature_str + "\n" + success_scenario
         steps = pending_step_class_str + pending_step + "\n" + failure_step_definition + success_step + "\nend"
         write_feature 'features/success_feature.feature', feature_str,
-          'features/steps/success_feature.rb', steps
+          'features/steps/pending_feature_with_multiple_scenario.rb', steps
       end
 
       # Generate a feature that has 2 scenarios. The first one should
