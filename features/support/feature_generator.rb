@@ -85,13 +85,13 @@ module Integration
       end
 
       def failure_step_definition
-      'Then "I fail" do
+      'step "I fail" do
         true.must_equal false
       end'
       end
 
       def pending_feature_str
-        "Feature: A pending feature
+        "Feature: A feature with pending steps
         Scenario: This is scenario will be pending
         When this is a pending step
     Then I fail"
@@ -114,7 +114,7 @@ module Integration
 
       def pending_step_class_str
         %Q|class ApendingFeature < Spinach::FeatureSteps
-        feature "A pending feature"\n\n|
+        feature "A feature with pending steps"\n\n|
       end
 
       def pending_step
