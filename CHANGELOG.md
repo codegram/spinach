@@ -2,7 +2,6 @@
 * fixed #138: The pending steps should abort the remaining scenario, but continue running other scenarios
 * added the feature #140: Allow blockless step definitions
 
-
 == 0.8.3
 * add ```--fail-fast``` option. when specified, the suite will terminate after the first failed scenario
 
