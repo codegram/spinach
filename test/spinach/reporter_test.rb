@@ -108,6 +108,7 @@ module Spinach
 
         it "binds a callback after every failed step" do
           @reporter.expects(:on_failed_step)
+          puts Spinach.config.save_and_open_page_on_failure.inspect + "---------"
           Spinach.hooks.run_on_failed_step
         end
 
