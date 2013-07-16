@@ -51,7 +51,7 @@ module Spinach
           steps.each do |step|
             Spinach.hooks.run_before_step step, step_definitions
 
-            if @exception
+            if @exception || @has_pending_step
               Spinach.hooks.run_on_skipped_step step, step_definitions
             else
               run_step(step)
@@ -84,6 +84,7 @@ module Spinach
         Spinach.hooks.run_on_undefined_step step, @exception, step_definitions
       rescue Spinach::StepPendingException => e
         e.step = step
+        @has_pending_step = true
         Spinach.hooks.run_on_pending_step step, e
       rescue Exception => e
         @exception = e
