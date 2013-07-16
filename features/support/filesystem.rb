@@ -67,6 +67,8 @@ module Filesystem
       rout.close
       rerr.close
 
+      puts @stdout
+      puts @stderr
       @last_exit_status = status.exitstatus
     end
   end
