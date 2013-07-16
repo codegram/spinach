@@ -37,7 +37,7 @@ module Integration
 
     def use_rspec
       write_file('features/support/minitest.rb',
-                "require 'rspec'")
+                "require 'rspec/core'\nrequire 'rspec/expectations'")
     end
   end
 end
