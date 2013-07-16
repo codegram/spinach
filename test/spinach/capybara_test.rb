@@ -95,6 +95,7 @@ Feature: A test feature
       @feature_runner = Spinach::Runner::FeatureRunner.new(failing_feature)
       Spinach.config.save_and_open_page_on_failure = true
       @feature_class.any_instance.expects(:save_and_open_page).once
+      Spinach.config.save_and_open_page_on_failure = false
       @feature_runner.run
     end
 
