@@ -49,6 +49,7 @@ module Spinach
 
       describe "bindings" do
         before do
+          Spinach.hooks.reset
           @reporter.bind
         end
 

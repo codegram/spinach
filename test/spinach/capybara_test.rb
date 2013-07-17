@@ -96,8 +96,9 @@ Feature: A test feature
       Spinach.config.save_and_open_page_on_failure = true
       @feature_class.any_instance.expects(:save_and_open_page).once
       @feature_runner.run
+      Spinach.config.save_and_open_page_on_failure = false
     end
-    
+
     it "doesn't saves and open the page if the option is deactivated" do
       @feature_runner = Spinach::Runner::FeatureRunner.new(failing_feature)
       Spinach.config.save_and_open_page_on_failure = false

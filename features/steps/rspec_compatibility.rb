@@ -25,7 +25,7 @@ Feature: Feature without failures
 
   Given "I have a feature with some failed expectations" do
     write_file('features/feature_with_failures.feature', """
-Feature: Feature with failures
+Feature: Feature with failures in RSpec compatibility test
 
   Scenario: This scenario will fail
     Given true is false
@@ -33,7 +33,7 @@ Feature: Feature with failures
 
     write_file('features/steps/failure_feature.rb',
                'class FeatureWithFailures < Spinach::FeatureSteps
-                  feature "Feature with failures"
+                  feature "Feature with failures in RSpec compatibility test"
                   Given "true is false" do
                     true.should == false
                   end
