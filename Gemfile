@@ -11,6 +11,7 @@ group :test do
   gem 'guard-minitest'
   gem 'guard-spinach'
   gem 'capybara', '~> 2.0.0'
+  gem "rspec"
 end
 
 group :darwin do
