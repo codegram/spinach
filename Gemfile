@@ -12,6 +12,7 @@ group :test do
   gem 'guard-spinach'
   gem 'capybara', '~> 2.0.0'
   gem "rspec"
+  gem 'fakefs'
 end
 
 group :darwin do
