@@ -17,6 +17,7 @@ require 'mocha/setup'
 require 'ostruct'
 require 'stringio'
 require 'pry'
+require 'fakefs/safe'
 
 require 'spinach'
 

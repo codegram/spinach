@@ -144,12 +144,23 @@ describe Spinach::Runner do
   end
 
   describe '#required_files' do
+    it 'requires the most deeply nested files first, then alphabetically' do
+      FakeFS do
+        FileUtils.mkdir_p('features/steps/a')
+        FileUtils.mkdir_p('features/steps/z')
+        ['features/steps/a.rb', 'features/steps/a/a.rb', 'features/steps/z.rb', 'features/steps/z/z.rb'].each do |f|
+          FileUtils.touch(f)
+        end
+        runner.required_files.must_equal(['features/steps/a/a.rb', 'features/steps/z/z.rb', 'features/steps/a.rb', 'features/steps/z.rb'])
+      end
+    end
+
     it 'requires environment files first' do
       runner.stubs(:step_definition_path).returns('steps')
       runner.stubs(:support_path).returns('support')
       Dir.stubs(:glob).returns(['/support/bar.rb', '/support/env.rb', '/support/quz.rb'])
-      runner.stubs(:step_definition_files).returns(['/steps/bar.feature'])
-      runner.required_files.must_equal(['/support/env.rb', '/support/bar.rb', '/support/quz.rb', '/steps/bar.feature'])
+      runner.stubs(:step_definition_files).returns(['/steps/bar.rb'])
+      runner.required_files.must_equal(['/support/env.rb', '/support/bar.rb', '/support/quz.rb', '/steps/bar.rb'])
     end
   end
 

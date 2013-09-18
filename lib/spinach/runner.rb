@@ -99,6 +99,7 @@ module Spinach
       require_relative 'frameworks'
     end
 
+    # Returns an array of files to be required. Sorted by the most nested files first, then alphabetically.
     # @return [Array<String>] files
     #   The step definition files.
     #
@@ -106,7 +107,7 @@ module Spinach
     def step_definition_files
       Dir.glob(
         File.expand_path File.join(step_definitions_path, '**', '*.rb')
-      )
+      ).sort{|a,b| [b.count(File::SEPARATOR), a] <=> [a.count(File::SEPARATOR), b]}
     end
 
     # Returns an array of support files inside the support_path. Will
