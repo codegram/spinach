@@ -41,7 +41,7 @@ module Spinach
       def report_pending_steps
         if pending_steps.any?
           error.puts "\nPending steps summary:\n"
-          report_errors('Pending steps', pending_steps, :yellow) 
+          report_errors('Pending steps', pending_steps, :yellow)
         end
       end
 
@@ -195,6 +195,10 @@ module Spinach
         buffer.join
       end
 
+      def before_run(*)
+        @start_time = Time.now
+      end
+
       # It prints the error summary if the run has failed
       # It always print feature success summary
       #
@@ -217,6 +221,7 @@ module Spinach
         error_summary      = format_summary(:red,    error_steps,      'Error')
 
         out.puts "Steps Summary: #{successful_summary}, #{undefined_summary}, #{pending_summary}, #{failed_summary}, #{error_summary}\n\n"
+        out.puts "Finished in #{Time.now - @start_time} seconds" if @start_time
       end
     end
   end

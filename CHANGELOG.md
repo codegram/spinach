@@ -1,3 +1,7 @@
+== 0.8.6
+* add total run time after each run
+* fixed #145: Issue with step autoloading
+
 == 0.8.4
 * fixed #138: The pending steps should abort the remaining scenario, but continue running other scenarios
 * added the feature #140: Allow blockless step definitions

@@ -27,6 +27,7 @@ module Spinach
     # Hooks the reporter to the runner endpoints
     def bind
       Spinach.hooks.tap do |hooks|
+        hooks.before_run { |*args| before_run(*args) }
         hooks.after_run { |*args| after_run(*args) }
         hooks.before_feature { |*args| before_feature_run(*args) }
         hooks.after_feature { |*args| after_feature_run(*args) }
@@ -48,6 +49,7 @@ module Spinach
       end
     end
 
+    def before_run(*args); end;
     def after_run(*args); end;
     def before_feature_run(*args); end
     def after_feature_run(*args); end

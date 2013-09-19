@@ -57,6 +57,11 @@ module Spinach
           Spinach.hooks.reset
         end
 
+        it "binds a callback before running" do
+          @reporter.expects(:before_run)
+          Spinach.hooks.run_before_run
+        end
+
         it "binds a callback after running" do
           @reporter.expects(:after_run)
           Spinach.hooks.run_after_run
