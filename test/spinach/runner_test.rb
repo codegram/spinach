@@ -151,7 +151,7 @@ describe Spinach::Runner do
         ['features/steps/a.rb', 'features/steps/a/a.rb', 'features/steps/z.rb', 'features/steps/z/z.rb'].each do |f|
           FileUtils.touch(f)
         end
-        runner.required_files.must_equal(['features/steps/a/a.rb', 'features/steps/z/z.rb', 'features/steps/a.rb', 'features/steps/z.rb'])
+        runner.required_files.must_equal(['/features/steps/a/a.rb', '/features/steps/z/z.rb', '/features/steps/a.rb', '/features/steps/z.rb'])
       end
     end
 
