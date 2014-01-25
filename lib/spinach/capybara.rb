@@ -17,43 +17,43 @@ module Spinach
     #   end
     #
     module Capybara
-      # Enhances a FeatureSteps with Capybara goodness.
-      #
-      # @param [Class] base
-      #   The host class.
-      #
-      # @api public
-      def self.included(base)
-        base.class_eval do
-          include ::Capybara::DSL
-          if defined?(RSpec)
-            require 'rspec/matchers'
-            require 'capybara/rspec'
-            include ::Capybara::RSpecMatchers
-          end
-
-          def visit(*args)
-            stream = STDOUT
-            old_stream = stream.dup
-            stream.reopen(null_device)
-            stream.sync = true
-            super
-          ensure
-            stream.reopen(old_stream)
-          end
-
-          def null_device
-            return @null_device if defined?(@null_device)
-
-            if RbConfig::CONFIG["host_os"] =~ /mingw|mswin/
-              @null_device = "NUL"
-            else
-              @null_device = "/dev/null"
-            end
-
-            @null_device
-          end
+      class CapybaraDslDelegator
+        include ::Capybara::DSL
+        if defined?(RSpec)
+          require 'rspec/matchers'
+          require 'capybara/rspec'
+          include ::Capybara::RSpecMatchers
         end
+      end
+
+      def visit(*args)
+        stream = STDOUT
+        old_stream = stream.dup
+        stream.reopen(null_device)
+        stream.sync = true
+        instance.visit *args
+      ensure
+        stream.reopen(old_stream)
+      end
+
+      def instance
+        @instance ||= CapybaraDslDelegator.new
+      end
+
+      def method_missing(m, *args)
+        instance.send m, *args
+      end
+
+      def null_device
+        return @null_device if defined?(@null_device)
+
+        if RbConfig::CONFIG["host_os"] =~ /mingw|mswin/
+          @null_device = "NUL"
+        else
+          @null_device = "/dev/null"
+        end
+
+        @null_device
       end
     end
   end
