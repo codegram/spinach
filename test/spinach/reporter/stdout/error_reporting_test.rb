@@ -3,7 +3,11 @@
 require_relative '../../../test_helper'
 
 describe Spinach::Reporter::Stdout do
-  let(:exception) { StandardError.new('Something went wrong') }
+  let(:exception) do
+    mock "exception" do
+      stubs(:message).returns "Something went wrong"
+    end
+  end
 
   let(:error) do
     [stub(name: 'My feature'),
