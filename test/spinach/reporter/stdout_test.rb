@@ -48,8 +48,6 @@ describe Spinach::Reporter::Stdout do
 
   describe '#after_scenario_run' do
     describe 'in case of error' do
-      let(:exception) { anything }
-
       before do
         @reporter.scenario_error = exception
       end
