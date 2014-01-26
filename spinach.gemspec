@@ -13,6 +13,7 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'gherkin-ruby', '>= 0.3.1'
   gem.add_runtime_dependency 'colorize', '0.5.8'
   gem.add_runtime_dependency 'json'
+  gem.add_runtime_dependency 'rubysl' if RUBY_ENGINE == 'rbx'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'mocha'
   gem.add_development_dependency 'sinatra'

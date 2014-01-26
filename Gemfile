@@ -23,4 +23,3 @@ end
 group :docs do
   gem 'yard'
 end
-gem 'rubysl', :platforms => :rbx
