@@ -2,10 +2,10 @@ require 'minitest/spec'
 require_relative 'filesystem'
 
 require 'simplecov'
-require 'coveralls'
 
-SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-if ENV['CI']
+if ENV['CI'] && !defined?(Rubinius)
+  require 'coveralls'
+  SimpleCov.formatter = Coveralls::SimpleCov::Formatter
   require 'simplecov'
 
   SimpleCov.start do
