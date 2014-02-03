@@ -10,7 +10,7 @@ group :test do
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-spinach'
-  gem 'capybara', '~> 2.0.0'
+  gem 'capybara'
   gem "rspec"
   gem 'fakefs'
 end
@@ -23,3 +23,5 @@ end
 group :docs do
   gem 'yard'
 end
+
+gem 'rubysl', :platforms => :rbx

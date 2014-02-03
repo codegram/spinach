@@ -2,7 +2,7 @@ require 'simplecov'
 require 'coveralls'
 
 SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-if ENV['CI']
+if ENV['CI'] && !defined?(Rubinius)
   require 'simplecov'
 
   SimpleCov.start do

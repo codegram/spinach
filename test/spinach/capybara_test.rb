@@ -5,16 +5,18 @@ require 'spinach'
 require 'spinach/capybara'
 require 'sinatra/base'
 
-class SinatraStubApp < Sinatra::Base
-  get '/' do
-    'Hello world!'
-  end
-end
-
 describe Spinach::FeatureSteps::Capybara do
+  let(:sinatra_class) do
+    Class.new(Sinatra::Base) do
+      get '/' do
+        'Hello world!'
+      end
+    end
+  end
+
   before do
     Capybara.current_driver = :rack_test
-    Capybara.app = SinatraStubApp
+    Capybara.app = sinatra_class
 
     class TestFeature < Spinach::FeatureSteps
       include Spinach::FeatureSteps::Capybara
@@ -46,18 +48,26 @@ Feature: A test feature
   Scenario: Another test scenario
     Given Hello
     Then Goodbye
-""").parse
+                                             """).parse
   }
 
   let(:failing_feature) { Spinach::Parser.new("""
 Feature: A test feature
   Scenario: A test scenario
     Given Fail
-""").parse
+                                              """).parse
   }
 
-  it 'includes capybara into all features' do
-    @feature.kind_of?(Capybara::DSL).must_equal true
+  it 'responds to Capybara::DSL methods' do
+    @feature.respond_to?(:page).must_equal false
+  end
+
+  it 'does not respond to non Capybara::DSL methods' do
+    @feature.respond_to?(:strange).must_equal false
+  end
+
+  it 'raises NoMethodError when calling a non Capybara::DSL methods' do
+    proc { @feature.strange }.must_raise(NoMethodError)
   end
 
   it 'goes to a capybara page and returns its result' do
