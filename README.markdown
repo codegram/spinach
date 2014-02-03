@@ -4,6 +4,8 @@
 [![Dependency Status](https://gemnasium.com/codegram/spinach.png)](http://gemnasium.com/codegram/spinach)
 [![Coverage Status](https://coveralls.io/repos/codegram/spinach/badge.png?branch=master)](https://coveralls.io/r/codegram/spinach)
 
+**Join a live discussion on Gitter**: [![Gitter chat](https://badges.gitter.im/codegram/spinach.png)](https://gitter.im/codegram/spinach)
+
 Spinach is a high-level BDD framework that leverages the expressive
 [Gherkin language][gherkin] (used by [Cucumber][cucumber]) to help you define
 executable specifications of your application or library's acceptance criteria.
