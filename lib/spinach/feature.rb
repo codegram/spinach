@@ -3,6 +3,7 @@ module Spinach
     attr_accessor :line
     attr_accessor :name, :scenarios, :tags
     attr_accessor :background
+    attr_accessor :description
 
     def initialize
       @scenarios = []

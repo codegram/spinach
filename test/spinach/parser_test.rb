@@ -4,6 +4,9 @@ describe Spinach::Parser do
   before do
     @contents = """
 Feature: User authentication
+  As a developer
+  I expect some stuff
+  So that I have it
 
   Scenario: User logs in
     Given I am on the front page
@@ -22,6 +25,11 @@ Feature: User authentication
       visitor.expects(:visit).with ast
       @parser.parse
     end
+
+    it 'includes description text in the feature' do
+      feature = @parser.parse
+      feature.description.must_equal ['As a developer', 'I expect some stuff', 'So that I have it']
+    end
   end
 
   describe '.open_file' do
@@ -31,4 +39,5 @@ Feature: User authentication
         'feature_definition.feature')
     end
   end
+
 end
