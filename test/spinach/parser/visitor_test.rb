@@ -29,6 +29,7 @@ module Spinach
           @node  = stub(
             scenarios: @scenarios,
             name: 'Go shopping',
+            description: ['some non-interpreted info','from the description'],
             background: @background,
             tags: @tags
           )
@@ -37,6 +38,11 @@ module Spinach
         it 'sets the name' do
           visitor.visit_Feature(@node)
           visitor.feature.name.must_equal 'Go shopping'
+        end
+
+        it 'sets the description' do
+          visitor.visit_Feature(@node)
+          visitor.feature.description.must_equal ['some non-interpreted info','from the description']
         end
 
         it 'sets the tags' do

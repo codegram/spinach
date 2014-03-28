@@ -37,6 +37,7 @@ module Spinach
       # @api public
       def visit_Feature(node)
         @feature.name = node.name
+        @feature.description = node.description
         node.background.accept(self) if node.background
 
         @current_tag_set = @feature
