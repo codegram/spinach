@@ -97,7 +97,7 @@ describe Spinach::Reporter::Stdout do
       it 'outputs the failing steps' do
         steps = [anything]
         @reporter.stubs(:undefined_steps).returns(steps)
-        @reporter.expects(:report_errors).with('Undefined steps', steps, :yellow)
+        @reporter.expects(:report_errors).with('Undefined steps', steps, :red)
 
         @reporter.report_undefined_steps
       end
@@ -220,11 +220,11 @@ describe Spinach::Reporter::Stdout do
     end
 
     describe 'when given an undefined step exception' do
-      it 'prints the error in yellow' do
+      it 'prints the error in red' do
         undefined_error = error
         undefined_error.insert(3, Spinach::StepNotDefinedException.new(anything))
 
-        String.any_instance.expects(:yellow)
+        String.any_instance.expects(:red)
 
         @reporter.summarized_error(error)
       end
@@ -292,10 +292,10 @@ describe Spinach::Reporter::Stdout do
     end
 
     describe 'when given an undefined step exception' do
-      it 'prints the error in yellow' do
+      it 'prints the error in red' do
         undefined_exception = Spinach::StepNotDefinedException.new(stub(name: 'some step'))
 
-        String.any_instance.expects(:yellow)
+        String.any_instance.expects(:red)
 
         @reporter.report_exception(undefined_exception)
       end

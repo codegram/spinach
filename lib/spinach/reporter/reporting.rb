@@ -34,7 +34,7 @@ module Spinach
       def report_undefined_steps
         if undefined_steps.any?
           error.puts "\nUndefined steps summary:\n"
-          report_errors('Undefined steps', undefined_steps, :yellow)
+          report_errors('Undefined steps', undefined_steps, :red)
         end
       end
 
@@ -47,9 +47,9 @@ module Spinach
 
       def report_undefined_features
         if undefined_features.any?
-          error.puts "  Undefined features (#{undefined_features.length})".light_yellow
+          error.puts "  Undefined features (#{undefined_features.length})".red
           undefined_features.each do |feature|
-            error.puts "    #{feature.name}".yellow
+            error.puts "    #{feature.name}".red
           end
         end
       end
@@ -108,7 +108,7 @@ module Spinach
         feature, scenario, step, exception = error
         summary = "    #{feature.name} :: #{scenario.name} :: #{full_step step}"
         if exception.kind_of?(Spinach::StepNotDefinedException)
-          summary.yellow
+          summary.red
         elsif exception.kind_of?(Spinach::StepPendingException)
           summary += "\n      Reason: '#{exception.reason}'\n"
           summary.yellow
@@ -133,10 +133,10 @@ module Spinach
 
         if exception.kind_of?(Spinach::StepNotDefinedException)
           output << "\n"
-          output << "        You can define it with: \n\n".yellow
+          output << "        You can define it with: \n\n".red
           suggestion = Generators::StepGenerator.new(step).generate
           suggestion.split("\n").each do |line|
-            output << "          #{line}\n".yellow
+            output << "          #{line}\n".red
           end
           output << "\n"
         elsif exception.kind_of?(Spinach::StepPendingException)
@@ -169,7 +169,7 @@ module Spinach
         }.join("\n")
 
         if exception.kind_of?(Spinach::StepNotDefinedException)
-          output.yellow
+          output.red
         elsif exception.kind_of?(Spinach::StepPendingException)
           output.yellow
         else
@@ -215,7 +215,7 @@ module Spinach
       #
       def run_summary
         successful_summary = format_summary(:green,  successful_steps, 'Successful')
-        undefined_summary  = format_summary(:yellow, undefined_steps,  'Undefined')
+        undefined_summary  = format_summary(:red,    undefined_steps,  'Undefined')
         pending_summary    = format_summary(:yellow, pending_steps,    'Pending')
         failed_summary     = format_summary(:red,    failed_steps,     'Failed')
         error_summary      = format_summary(:red,    error_steps,      'Error')
