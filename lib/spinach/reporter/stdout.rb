@@ -102,7 +102,7 @@ module Spinach
       #   The step in a JSON GherkinRubyRuby format
       #
       def on_undefined_step(step, failure, step_definitions = nil)
-        output_step('?', step, :yellow)
+        output_step('?', step, :red)
         self.scenario_error = [current_feature, current_scenario, step, failure]
         undefined_steps << scenario_error
       end
@@ -134,7 +134,7 @@ module Spinach
         lines << generator.generate
 
         lines.split("\n").each do |line|
-          out.puts "    #{line}".yellow
+          out.puts "    #{line}".red
         end
         out.puts "\n\n"
 
