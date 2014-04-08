@@ -17,31 +17,24 @@ module Spinach
     #   end
     #
     module Capybara
-      class CapybaraDslDelegator
-        include ::Capybara::DSL
-        if defined?(RSpec)
-          require 'rspec/matchers'
-          require 'capybara/rspec'
-          include ::Capybara::RSpecMatchers
-        end
+      include ::Capybara::DSL
+
+      if defined?(RSpec)
+        require 'rspec/matchers'
+        require 'capybara/rspec'
+        include ::Capybara::RSpecMatchers
       end
+
+      alias_method :capybara_visit, :visit
 
       def visit(*args)
         stream = STDOUT
         old_stream = stream.dup
         stream.reopen(null_device)
         stream.sync = true
-        instance.visit *args
+        capybara_visit *args
       ensure
         stream.reopen(old_stream)
-      end
-
-      def instance
-        @instance ||= CapybaraDslDelegator.new
-      end
-
-      def method_missing(m, *args)
-        instance.send m, *args
       end
 
       def null_device
