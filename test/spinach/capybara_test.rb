@@ -59,7 +59,7 @@ Feature: A test feature
   }
 
   it 'responds to Capybara::DSL methods' do
-    @feature.respond_to?(:page).must_equal false
+    @feature.respond_to?(:page).must_equal true
   end
 
   it 'does not respond to non Capybara::DSL methods' do
