@@ -49,9 +49,11 @@ module Spinach
       # @return [String]
       #   an example filename for this feature steps
       def filename
-        Spinach::Support.underscore(
-          Spinach::Support.camelize name
-        ) + ".rb"
+        name.split('/').map do |segment|
+          Spinach::Support.underscore(
+            Spinach::Support.camelize segment
+          )
+        end.join('/') + '.rb'
       end
 
       # @return [String]
@@ -72,7 +74,7 @@ module Spinach
         if File.exists?(filename_with_path)
           raise FeatureGeneratorException.new("File #{filename_with_path} already exists.")
         else
-          FileUtils.mkdir_p path
+          FileUtils.mkdir_p File.dirname(filename_with_path)
           File.open(filename_with_path, 'w') do |file|
             file.write(generate)
             puts "Generating #{File.basename(filename_with_path)}"
