@@ -69,8 +69,8 @@ module Spinach
       # Stores the example feature steps definition into an expected path
       #
       def store
-        if File.exists?(filename_with_path)
-          raise FeatureGeneratorException.new("File #{filename_with_path} already exists.")
+        if file_exists?(filename)
+          raise FeatureGeneratorException.new("File #{file_path(filename)} already exists.")
         else
           FileUtils.mkdir_p path
           File.open(filename_with_path, 'w') do |file|
@@ -80,6 +80,14 @@ module Spinach
         end
       end
 
+      private
+      def file_exists?(filename)
+        !!file_path(filename)
+      end
+
+      def file_path(filename)
+        Dir.glob("#{path}/**/#{filename}").first
+      end
     end
 
     class FeatureGeneratorException < Exception; end;
