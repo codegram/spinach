@@ -17,6 +17,5 @@ module Spinach
     def line=(value)
       @line = value.to_i if value
     end
-
   end
 end

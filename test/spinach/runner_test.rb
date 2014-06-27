@@ -76,13 +76,12 @@ describe Spinach::Runner do
       @feature_runner = stub
       filenames.each do |filename|
         Spinach::Parser.stubs(:open_file).with(filename).returns parser = stub
-        parser.stubs(:parse).returns feature = stub
-        feature.stubs(:filename=).with(filename)
-        feature.stubs(:line=).with(nil)
+        parser.stubs(:parse).returns feature = Spinach::Feature.new
         Spinach::Runner::FeatureRunner.stubs(:new).
           with(feature, anything).
           returns(@feature_runner)
       end
+
       @feature_runner.stubs(:run).returns(true)
       runner.stubs(required_files: [])
     end
@@ -102,10 +101,10 @@ describe Spinach::Runner do
       runner.run.must_equal false
     end
 
-    describe "when line set" do
-      let(:filename) {'features/cool_feature.feature'}
-      let(:line) {12}
-      let(:filenames) {["#{filename}:#{line}"]}
+    describe 'when line set' do
+      let(:filename) { 'features/cool_feature.feature' }
+      let(:line) { 12 }
+      let(:filenames) { ["#{filename}:#{line}"] }
       let(:runner) { Spinach::Runner.new(filenames) }
 
       it 'sets filename and line on the feature' do
@@ -117,11 +116,11 @@ describe Spinach::Runner do
           returns(@feature_runner)
         runner.stubs(required_files: [])
         @feature_runner.stubs(:run).returns(true)
+
         runner.run.must_equal true
         feature.filename.must_equal filename
         feature.line.must_equal line
       end
-
     end
 
     describe "when fail_fast set" do
@@ -130,9 +129,7 @@ describe Spinach::Runner do
       before(:each) do
         filenames.each_with_index do |filename, i|
           Spinach::Parser.stubs(:open_file).with(filename).returns parser = stub
-          parser.stubs(:parse).returns feature = stub
-          feature.stubs(:filename=).with(filename)
-          feature.stubs(:line=).with(nil)
+          parser.stubs(:parse).returns feature = Spinach::Feature.new
           Spinach::Runner::FeatureRunner.stubs(:new).
             with(feature, anything).
             returns(feature_runners[i])
