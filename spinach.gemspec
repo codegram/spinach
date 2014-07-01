@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.homepage      = "http://github.com/codegram/spinach"
   gem.license       = 'MIT'
 
-  gem.add_runtime_dependency 'gherkin-ruby', '>= 0.3.1'
+  gem.add_runtime_dependency 'gherkin-ruby', '>= 0.3.2'
   gem.add_runtime_dependency 'colorize', '0.5.8'
   gem.add_runtime_dependency 'json'
   gem.add_development_dependency 'rake'
