@@ -1,3 +1,4 @@
+require 'minitest/autorun'
 require 'minitest/spec'
 require_relative 'filesystem'
 

@@ -3,7 +3,6 @@ source 'http://rubygems.org'
 # Specify your gem's dependencies in spinach.gemspec
 gemspec
 
-gem 'rake'
 gem 'coveralls', require: false
 
 group :test do
