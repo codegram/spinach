@@ -10,9 +10,6 @@ group :test do
   gem 'guard'
   gem 'guard-minitest'
   gem 'guard-spinach'
-  gem 'capybara'
-  gem "rspec"
-  gem 'fakefs'
 end
 
 group :darwin do
