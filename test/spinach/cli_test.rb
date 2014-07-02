@@ -228,7 +228,7 @@ tags:
         end
       end
 
-      describe 'it fails if the feature does not exist' do
+      it 'it fails if the feature does not exist' do
         cli = Spinach::Cli.new(['features/some_feature.feature'])
         File.stubs(:exists?).returns(false)
         cli.expects(:fail!).with('features/some_feature.feature could not be found')
