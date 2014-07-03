@@ -81,6 +81,7 @@ module Spinach
       end
 
       private
+      
       def file_exists?(filename)
         !!file_path(filename)
       end
