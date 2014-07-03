@@ -80,7 +80,7 @@ module Integration
       def failure_step
         %Q|class AFailureFeature < Spinach::FeatureSteps
       feature "A failure feature"
-      %{failure_step_definition}
+      #{failure_step_definition}
       |
       end
 
