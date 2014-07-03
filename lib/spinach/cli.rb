@@ -59,7 +59,7 @@ module Spinach
           end
         elsif File.directory?(arg)
           files_to_run << Dir.glob(File.join(arg, '**', '*.feature'))
-        else
+        elsif arg != "{}"
           fail! "invalid argument - #{arg}"
         end
       end
