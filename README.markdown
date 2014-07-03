@@ -1,6 +1,6 @@
-# Spinach - BDD framework on top of Gherkin 
+# Spinach - BDD framework on top of Gherkin
 [![Gem Version](https://badge.fury.io/rb/spinach.png)](http://badge.fury.io/rb/spinach)
-[![Build Status](https://secure.travis-ci.org/codegram/spinach.png)](http://travis-ci.org/codegram/spinach) 
+[![Build Status](https://secure.travis-ci.org/codegram/spinach.png)](http://travis-ci.org/codegram/spinach)
 [![Dependency Status](https://gemnasium.com/codegram/spinach.png)](http://gemnasium.com/codegram/spinach)
 [![Coverage Status](https://coveralls.io/repos/codegram/spinach/badge.png?branch=master)](https://coveralls.io/r/codegram/spinach)
 
@@ -18,7 +18,8 @@ Conceived as an alternative to Cucumber, here are some of its design goals:
 * Step reusability: In case you want to reuse steps across features, you can
   always wrap those in plain ol' Ruby modules.
 
-Spinach is tested against **MRI 1.9.3 and 2.0.0**.
+Spinach is tested against **MRI 1.9.3, 2.0 and 2.1** as well as **JRuby 1.7+**
+and **Rubinius 2.2+**.
 
 We are not planning to make it compatible with MRI 1.8.7 since, you know, this
 would be irresponsible :)
@@ -168,7 +169,7 @@ This is one way to make that reusable:
 module CommonSteps
   module Login
     include Spinach::DSL
-    
+
     step 'I am logged in' do
       # log in stuff...
     end
@@ -287,7 +288,7 @@ class Spinach::Features::SessionTimeout < Spinach::FeatureSteps
   after do
     change_session_timeout_to original_timeout_value
   end
-  
+
   # remaining steps
 end
 ```

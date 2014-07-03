@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'open3'
 
 # The Filesystem module runs commands, captures their output and exit status
 # and lets the host know about it.
@@ -49,25 +50,8 @@ module Filesystem
   # @api public
   def run(command)
     in_current_dir do
-      # stdout, stderr pipes
-      rout, wout = IO.pipe
-      rerr, werr = IO.pipe
-
-      pid = Process.spawn(command, :out => wout, :err => werr)
-      _, status = Process.wait2(pid)
-
-      # close write ends so we could read them
-      wout.close
-      werr.close
-
-      @stdout = rout.readlines.join("\n").force_encoding('utf-8')
-      @stderr = rerr.readlines.join("\n").force_encoding('utf-8')
-
-      # dispose the read ends of the pipes
-      rout.close
-      rerr.close
-
-      @last_exit_status = status.exitstatus
+      args = command.strip.split(" ")
+      @stdout, @stderr, @last_exit_status = Open3.capture3(*args)
     end
   end
 
@@ -88,5 +72,4 @@ module Filesystem
   def dirs
     ['tmp/fs']
   end
-
 end
