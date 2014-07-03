@@ -73,6 +73,8 @@ module Spinach
         filename.split(':')
       end.each do |filename, line|
         feature = Parser.open_file(filename).parse
+        feature.filename = filename
+        feature.line = line
         success = FeatureRunner.new(feature, line).run
         successful = false unless success
         break if fail_fast? && !successful
