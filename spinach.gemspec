@@ -11,7 +11,7 @@ Gem::Specification.new do |gem|
   gem.license       = 'MIT'
 
   gem.add_runtime_dependency 'gherkin-ruby', '>= 0.3.2'
-  gem.add_runtime_dependency 'colorize', '0.5.8'
+  gem.add_runtime_dependency 'colorize'
   gem.add_runtime_dependency 'json'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'mocha', '~> 1.0'

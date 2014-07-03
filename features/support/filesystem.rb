@@ -53,6 +53,9 @@ module Filesystem
       args = command.strip.split(" ")
       @stdout, @stderr, @last_exit_status = Open3.capture3(*args)
     end
+
+    @stdout = strip_colors(@stdout)
+    @stderr = strip_colors(@stderr)
   end
 
   private
@@ -71,5 +74,9 @@ module Filesystem
 
   def dirs
     ['tmp/fs']
+  end
+
+  def strip_colors(string)
+    string.gsub(/\e\[((\d;?)+)m/, "")
   end
 end
