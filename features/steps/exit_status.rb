@@ -17,10 +17,10 @@ class ExitStatus < Spinach::FeatureSteps
   end
 
   Then "the exit status should be 0" do
-    @last_exit_status.must_equal 0
+    @last_exit_status.success?.must_equal true
   end
 
   Then "the exit status should be 1" do
-    @last_exit_status.must_equal 1
+    @last_exit_status.success?.must_equal false
   end
 end

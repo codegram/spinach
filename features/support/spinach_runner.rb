@@ -15,11 +15,12 @@ module Integration
       end
     end
 
-    def run_feature(command, options={})
+    def run_feature(feature, options={})
       options[:framework] ||= :minitest
       use_minitest if options[:framework] == :minitest
       use_rspec if options[:framework] == :rspec
-      run "#{ruby} ../../bin/spinach #{command} #{options[:append]}"
+      spinach = File.expand_path("bin/spinach")
+      run "#{ruby} #{spinach} #{feature} #{options[:append]}"
     end
 
     def ruby
