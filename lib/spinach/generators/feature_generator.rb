@@ -70,7 +70,7 @@ module Spinach
       #
       def store
         if file_exists?(filename)
-          raise FeatureGeneratorException.new("File #{file_path(filename)} already exists.")
+          raise FeatureGeneratorException.new("File #{filename} already exists at #{file_path(filename)}.")
         else
           FileUtils.mkdir_p path
           File.open(filename_with_path, 'w') do |file|
