@@ -21,6 +21,11 @@ class ExitStatus < Spinach::FeatureSteps
   end
 
   Then "the exit status should be 1" do
+    puts @stdout
+    puts '-----------'
+    puts @stderr
+    puts '-----------'
+    puts @last_exit_status.inspect
     @last_exit_status.success?.must_equal false
   end
 end
