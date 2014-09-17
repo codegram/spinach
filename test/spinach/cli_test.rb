@@ -148,17 +148,28 @@ tags:
     end
 
     describe 'generate' do
-      %w{-g --generate}.each do |opt|
-        it 'inits the generator if #{opt}' do
+      %w{-g --generate}.each do |generate_opt|
+        it 'inits the generator if #{generate_opt}' do
           config = Spinach::Config.new
           Spinach.stubs(:config).returns(config)
 
           Spinach::Generators.expects(:run)
 
-          Spinach::Cli.new([opt]).run
+          Spinach::Cli.new([generate_opt]).run
 
           config.generate.must_equal true
         end
+
+        %w{-f --features_path}.each do |feature_path_opt|
+          it "honors the #{feature_path_opt} option" do
+            config = Spinach::Config.new
+            Spinach.stubs(:config).returns(config)
+            cli = Spinach::Cli.new([feature_path_opt,"custom_path", generate_opt])
+            cli.options
+            config.features_path.must_equal 'custom_path'
+          end
+        end
+
       end
     end
 

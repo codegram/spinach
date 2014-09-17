@@ -7,15 +7,18 @@ module Spinach
     # @files [Array]
     #   filenames to evaluate for step generation
     def self.run(files)
+      successful = true
       files.each do |file|
         feature = Parser.open_file(file).parse
 
         begin
           FeatureGenerator.new(feature).store
         rescue FeatureGeneratorException => e
+          successful = false
           $stderr.puts e
         end
       end
+      successful
     end
   end
 end

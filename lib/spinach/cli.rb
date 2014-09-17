@@ -22,9 +22,11 @@ module Spinach
     def run
       options
 
-      return true if Spinach.config.generate
-
-      Spinach::Runner.new(feature_files).run
+      if Spinach.config.generate
+        Spinach::Generators.run(feature_files)
+      else
+        Spinach::Runner.new(feature_files).run
+      end
     end
 
     # @return [Hash]
@@ -109,7 +111,6 @@ module Spinach
           opts.on('-g', '--generate',
                   'Auto-generate the feature steps files') do
             config[:generate] = true
-            Spinach::Generators.run(feature_files)
           end
 
           opts.on_tail('--version', 'Show version') do
