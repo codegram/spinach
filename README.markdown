@@ -271,7 +271,7 @@ end
 
 Full hook documentation is here:
 
-[Spinach's hook documentation on rubydoc](http://rubydoc.info/github/codegram/spinach/master/Spinach/Hooks)
+[Spinach's hook documentation](https://github.com/codegram/spinach/blob/master/lib/spinach/hooks.rb)
 
 ## Local Before and After Hooks
 
