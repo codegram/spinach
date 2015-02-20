@@ -69,15 +69,25 @@ module Spinach
 
       successful = true
 
-      filenames.map do |filename|
-        filename.split(':')
-      end.each do |filename, line|
-        feature = Parser.open_file(filename).parse
-        feature.filename = filename
-        feature.line = line
-        success = FeatureRunner.new(feature, line).run
-        successful = false unless success
-        break if fail_fast? && !successful
+      filenames.map! do |filename|
+        file, *lines = filename.split(":")
+        [file, lines]
+      end
+
+      catch :fail do
+        filenames.each do |filename, lines|
+          lines = [nil] if lines.empty?
+
+          feature = Parser.open_file(filename).parse
+          feature.filename = filename
+          feature.lines = lines
+
+          lines.each do |line|
+            success = FeatureRunner.new(feature, line).run
+            successful = false unless success
+            throw :fail if fail_fast? && !successful
+          end
+        end
       end
 
       Spinach.hooks.run_after_run(successful)

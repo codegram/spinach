@@ -257,6 +257,15 @@ tags:
       end
     end
 
+    describe "when a particular feature list is passed with multiple lines" do
+      it "returns the feature with the line numbers" do
+        cli = Spinach::Cli.new(['features/some_feature.feature:10:20'])
+        File.stubs(:exists?).returns(true)
+
+        cli.feature_files.must_equal ["features/some_feature.feature:10:20"]
+      end
+    end
+
     describe 'when no feature is passed' do
       it 'returns all the features' do
         cli = Spinach::Cli.new([])

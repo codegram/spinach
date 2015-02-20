@@ -119,7 +119,50 @@ describe Spinach::Runner do
 
         runner.run.must_equal true
         feature.filename.must_equal filename
-        feature.line.must_equal line
+        feature.lines.must_equal [line]
+      end
+    end
+
+    describe "when lines set" do
+      let(:filename) { "features/cool_feature.feature" }
+      let(:line) { "12:24" }
+      let(:filenames) { ["#{filename}:#{line}"] }
+      let(:runner) { Spinach::Runner.new(filenames) }
+
+      before(:each) do
+        @feature_runner = stub
+        Spinach::Parser.stubs(:open_file).with(filename).returns parser = stub
+        parser.stubs(:parse).returns @feature = Spinach::Feature.new
+        Spinach::Runner::FeatureRunner.stubs(:new).
+          with(@feature, anything).
+          returns(@feature_runner)
+        runner.stubs(required_files: [])
+      end
+
+      it "sets filename and lines on the feature" do
+        @feature_runner.stubs(:run).returns(true)
+        runner.run.must_equal true
+        @feature.filename.must_equal filename
+        @feature.lines.must_equal line.split(":").map(&:to_i)
+      end
+
+      it "returns false if it fails" do
+        @feature_runner.stubs(:run).returns(false)
+        runner.run.must_equal false
+      end
+
+      it "breaks with a failure when fail fast set" do
+        Spinach.config.stubs(:fail_fast).returns true
+        @feature_runner.stubs(:run).returns(false)
+        @feature_runner.expects(:run).never
+        runner.run.must_equal false
+      end
+
+      it "does not break when success when fail fast set" do
+        Spinach.config.stubs(:fail_fast).returns true
+        @feature_runner.stubs(:run).returns(true)
+        @feature_runner.expects(:run).returns true
+        runner.run.must_equal true
       end
     end
 
