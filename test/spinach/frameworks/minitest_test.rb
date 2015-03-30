@@ -12,4 +12,12 @@ describe "minitest framework" do
   it "extends the FeatureSteps class with MiniTest DSL" do
     Spinach::FeatureSteps.ancestors.must_include MiniTest::Assertions
   end
+
+  it "makes FeatureSteps respond to 'assertions'" do
+    Spinach::FeatureSteps.new.must_respond_to :assertions
+  end
+
+  it "initializes FeatureSteps' assertions with zero" do
+    Spinach::FeatureSteps.new.assertions.must_equal 0
+  end
 end
