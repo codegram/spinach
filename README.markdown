@@ -302,9 +302,10 @@ You can specify them when calling the `spinach` binary:
 
 When no reporter is specified, `stdout` will be used by default.
 
-For a console reporter with no colors, try:
+Other reporters:
 
-* [spinach-console-reporter](https://github.com/ywen/spinach-console-reporter) (to be used with Jenkins)
+* For a console reporter with no colors, try [spinach-console-reporter][spinach-console-reporter] (to be used with Jenkins)
+* For a rerun reporter, try [spinach-rerun-reporter][spinach-rerun-reporter] (writes failed scenarios in a file)
 
 ## Wanna use it with Rails 3?
 
@@ -326,7 +327,8 @@ Check out our [spinach-sinatra demo](https://github.com/codegram/spinach-sinatra
 
 * [guard-spinach](http://github.com/codegram/guard-spinach)
 * [spinach-rails](http://github.com/codegram/spinach-rails)
-* [spinach-console-reporter](https://github.com/ywen/spinach-console-reporter) (to be used with Jenkins)
+* [spinach-console-reporter][spinach-console-reporter] (to be used with Jenkins)
+* [spinach-rerun-reporter][spinach-rerun-reporter] (writes failed scenarios in a file)
 * [spring-commands-spinach](https://github.com/jvanbaarsen/spring-commands-spinach) (to be used with spring)
 
 ### Demos
@@ -351,13 +353,15 @@ You can easily contribute to Spinach. Its codebase is simple and
   in a commit by itself I can ignore when I pull.
 * Send me a pull request. Bonus points for topic branches.
 
-[gherkin]: http://github.com/codegram/gherkin-ruby
-[cucumber]: http://github.com/cucumber/cucumber
-[documentation]: http://rubydoc.info/github/codegram/spinach/master/frames
-
 ## License
 
 MIT (Expat) License. Copyright 2011-2013 [Codegram Technologies](http://codegram.com)
 
+
 [![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/codegram/spinach/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
+[gherkin]: http://github.com/codegram/gherkin-ruby
+[cucumber]: http://github.com/cucumber/cucumber
+[documentation]: http://rubydoc.info/github/codegram/spinach/master/frames
+[spinach-console-reporter]: https://github.com/ywen/spinach-console-reporter
+[spinach-rerun-reporter]: https://github.com/arandaio/spinach-rerun-reporter
