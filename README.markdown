@@ -364,4 +364,4 @@ MIT (Expat) License. Copyright 2011-2013 [Codegram Technologies](http://codegram
 [cucumber]: http://github.com/cucumber/cucumber
 [documentation]: http://rubydoc.info/github/codegram/spinach/master/frames
 [spinach-console-reporter]: https://github.com/ywen/spinach-console-reporter
-[spinach-rerun-reporter]: https://github.com/arandaio/spinach-rerun-reporter
+[spinach-rerun-reporter]: https://github.com/javierav/spinach-rerun-reporter
