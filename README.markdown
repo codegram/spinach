@@ -18,11 +18,7 @@ Conceived as an alternative to Cucumber, here are some of its design goals:
 * Step reusability: In case you want to reuse steps across features, you can
   always wrap those in plain ol' Ruby modules.
 
-Spinach is tested against **MRI 1.9.3, 2.0 and 2.1** as well as **JRuby 1.7+**
-and **Rubinius 2.2+**.
-
-We are not planning to make it compatible with MRI 1.8.7 since, you know, this
-would be irresponsible :)
+Spinach is tested against **2.0, 2.1, 2.2 and 2.3** as well as **JRuby 9000**.
 
 ## Getting started
 
