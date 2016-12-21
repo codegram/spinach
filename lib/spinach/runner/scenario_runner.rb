@@ -86,7 +86,7 @@ module Spinach
         e.step = step
         @has_pending_step = true
         Spinach.hooks.run_on_pending_step step, e
-      rescue Exception => e
+      rescue StandardError => e
         @exception = e
         Spinach.hooks.run_on_error_step step, @exception, step_location, step_definitions
       end
