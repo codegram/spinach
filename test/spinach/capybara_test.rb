@@ -26,7 +26,7 @@ describe Spinach::FeatureSteps::Capybara do
       Then 'Goodbye' do
       end
       Given 'Fail' do
-        1.must_equal 2
+        raise StandardError
       end
       def go_home
         visit '/'
