@@ -7,7 +7,7 @@ Feature: Step auditing
     Given I have defined a "Cheezburger can I has" feature
     And I have an associated step file with missing steps and obsolete steps
     When I run spinach with "--audit"
-    Then I should see a list of obsolete steps
+    Then I should see a list of unused steps
     And I should see the code to paste for missing steps
     
   Scenario: With common steps
@@ -16,4 +16,7 @@ Feature: Step auditing
     When I run spinach with "--audit"
     Then I should not see the common steps marked as missing
   
+  #Scenario: Steps not marked unused if they're used in at least one feature
     
+  #Scenario: Tells the user to generate if step file missing
+  

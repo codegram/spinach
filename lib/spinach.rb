@@ -11,6 +11,7 @@ require_relative 'spinach/feature_steps'
 require_relative 'spinach/reporter'
 require_relative 'spinach/cli'
 require_relative 'spinach/generators'
+require_relative 'spinach/auditor'
 
 require_relative 'spinach/background'
 require_relative 'spinach/feature'

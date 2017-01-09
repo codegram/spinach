@@ -33,7 +33,8 @@ module Spinach
                 :save_and_open_page_on_failure,
                 :reporter_class,
                 :reporter_options,
-                :fail_fast
+                :fail_fast,
+                :audit
 
 
     # The "features path" holds the place where your features will be
@@ -141,6 +142,16 @@ module Spinach
     # @api public
     def fail_fast
       @fail_fast
+    end
+    
+    # "audit" enables step auditing mode
+    #
+    # @return [true/false]
+    #    The audit flag.
+    #
+    # @api public
+    def audit
+      @audit || false
     end
 
     # It allows you to set a config file to parse for all the other options to be set

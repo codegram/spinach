@@ -17,7 +17,7 @@ Feature: Cheezburger can I has
   
   step 'I have an associated step file with missing steps and obsolete steps' do
     write_file('features/steps/cheezburger_can_i_has.rb', """
-class Spinach::Features::CheezburgerCanIHaz < Spinach::FeatureSteps
+class Spinach::Features::CheezburgerCanIHas < Spinach::FeatureSteps
   step 'I haz a sad' do
     pending 'step not implemented'
   end
@@ -38,8 +38,8 @@ end
     run_feature 'features/cheezburger_can_i_has.feature', append: '--audit'
   end
 
-  step 'I should see a list of obsolete steps' do
-    @stdout.must_match("Obsolete step: step_auditing.rb:24 'I get some roxxorz'")
+  step 'I should see a list of unused steps' do
+    @stdout.must_match(/Unused step: .*cheezburger_can_i_has.rb:6 'I get some roxxorz'/)
   end
 
   step 'I should see the code to paste for missing steps' do
@@ -75,4 +75,9 @@ end
     @stdout.wont_match("step 'I haz a sad' do")
     @stdout.wont_match("step 'I haz a happy' do")
   end
+  
+  step 'Deary me' do
+    puts "Oh dear"
+  end
+  
 end
