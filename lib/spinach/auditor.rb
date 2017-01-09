@@ -1,5 +1,3 @@
-require 'pry'
-
 module Spinach
   # The auditor audits steps and determines if any are missing or obsolete.
   #
@@ -47,7 +45,7 @@ module Spinach
       feature = Parser.open_file(file).parse
       step_defs_class = Spinach.find_step_definitions(feature.name)
       if !step_defs_class
-        puts "  Step file missing: please run --generate first!".colorize(:light_red)
+        puts "Step file missing: please run --generate first!".colorize(:light_red)
         return
       end
       step_defs = step_defs_class.new        
@@ -61,8 +59,9 @@ module Spinach
             # Do nothing for now
             # FIXME: Remove unused steps
           else
-            # OK - we can't find a step definition for this step
-            missing_steps << step
+            # OK - we can't find a step definition for this step - add it to the missing steps
+            # unless there is already a missing step of the same name
+            missing_steps << step unless missing_steps.map(&:name).include?(step.name)
           end
           # Having audited the step, remove it from the list of unused steps
           unused_step_names.delete step.name
@@ -79,7 +78,7 @@ module Spinach
       if missing_steps.length > 0
         puts "\nMissing steps:".colorize(:light_cyan)
         missing_steps.each do |step|        
-          puts "\n"+Generators::StepGenerator.new(step).generate.gsub(/^/, '  ').colorize(:cyan)
+          puts Generators::StepGenerator.new(step).generate.gsub(/^/, '  ').colorize(:cyan)
         end
         return false
       end

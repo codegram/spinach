@@ -43,13 +43,14 @@ end
   end
 
   step 'I should see the code to paste for missing steps' do
+    @stdout.must_match("Missing steps")
     @stdout.must_match("step 'I get some lulz' do")
     @stdout.must_match("step 'I cannot haz' do")
   end
 
   step 'I have an associated step file with some steps in a common module' do
     write_file('features/steps/cheezburger_can_i_has.rb', """
-class Spinach::Features::CheezburgerCanIHaz < Spinach::FeatureSteps
+class Spinach::Features::CheezburgerCanIHas < Spinach::FeatureSteps
   include HappySad
   step 'I get some roxxorz' do
     pending 'step not implemented'
@@ -71,13 +72,173 @@ end
 """)
   end
 
-  step 'I should not see the common steps marked as missing' do
-    @stdout.wont_match("step 'I haz a sad' do")
-    @stdout.wont_match("step 'I haz a happy' do")
+  step 'I should not see any steps marked as missing' do
+    @stdout.wont_match("Missing steps")
   end
   
-  step 'Deary me' do
-    puts "Oh dear"
+  step 'I should not see any steps marked as unused' do
+    @stdout.wont_match("Unused step")
+  end
+  
+  step 'I have defined an "Awesome new feature" feature' do
+    write_file('features/awesome_new_feature.feature', """
+  Feature: Awesome new feature
+    Scenario: Awesomeness
+      Given I am awesome
+      When I do anything
+      Then people will cheer
+  """)
+  end
+
+  step 'I have associated step files with common steps that are all used somewhere' do
+    write_file('features/steps/cheezburger_can_i_has.rb', """
+  class Spinach::Features::CheezburgerCanIHas < Spinach::FeatureSteps
+    include Awesome
+    step 'I haz a sad' do
+      pending 'step not implemented'
+    end
+    step 'I get some lulz' do
+      pending 'step not implemented'
+    end
+    step 'I wantz cheezburger' do
+      pending 'step not implemented'
+    end
+    step 'I ask can haz' do
+      pending 'step not implemented'
+    end
+    step 'I cannot haz' do
+      pending 'step not implemented'
+    end
+  end
+  """)
+    write_file('features/steps/awesome_new_feature.rb', """
+  class Spinach::Features::AwesomeNewFeature < Spinach::FeatureSteps
+    include Awesome
+    step 'I do anything' do
+      pending 'step not implemented'
+    end
+  end
+  """)
+    write_file('features/steps/awesome.rb', """
+  module Awesome
+    step 'I am awesome' do
+      pending 'step not implemented'
+    end
+    step 'people will cheer' do
+      pending 'step not implemented'
+    end
+    step 'I haz a happy' do
+      pending 'step not implemented'
+    end
+  end
+  """)
+  end
+
+  step 'I have not created an associated step file' do
+    # Do nothing
+  end
+
+  step 'I should be told to run "--generate"' do
+    @stdout.must_match("Step file missing: please run --generate first!")
+  end
+
+  step 'I have created a step file for each with a step from one feature pasted into the other\'s file' do    
+    write_file('features/steps/cheezburger_can_i_has.rb', """
+class Spinach::Features::CheezburgerCanIHas < Spinach::FeatureSteps
+  step 'I haz a sad' do
+    pending 'step not implemented'
+  end
+  step 'I get some lulz' do
+    pending 'step not implemented'
+  end
+  step 'I haz a happy' do
+    pending 'step not implemented'
+  end
+  step 'I wantz cheezburger' do
+    pending 'step not implemented'
+  end
+  step 'I ask can haz' do
+    pending 'step not implemented'
+  end
+  step 'I cannot haz' do
+    pending 'step not implemented'
+  end
+end
+""")
+    write_file('features/steps/awesome_new_feature.rb', """
+class Spinach::Features::AwesomeNewFeature < Spinach::FeatureSteps
+  step 'I am awesome' do
+    pending 'step not implemented'
+  end
+  step 'I do anything' do
+    pending 'step not implemented'
+  end
+  step 'people will cheer' do
+    pending 'step not implemented'
+  end
+  step 'I haz a happy' do
+    pending 'step not implemented'
+  end
+end
+""")
+  end
+
+  step 'I should be told that step is unused' do
+    @stdout.must_match(/Unused step: .*awesome_new_feature.rb:12 'I haz a happy'/)
+  end
+
+  step 'I have complete step files for both' do
+    write_file('features/steps/cheezburger_can_i_has.rb', """
+class Spinach::Features::CheezburgerCanIHas < Spinach::FeatureSteps
+  step 'I haz a sad' do
+    pending 'step not implemented'
+  end
+  step 'I get some lulz' do
+    pending 'step not implemented'
+  end
+  step 'I haz a happy' do
+    pending 'step not implemented'
+  end
+  step 'I wantz cheezburger' do
+    pending 'step not implemented'
+  end
+  step 'I ask can haz' do
+    pending 'step not implemented'
+  end
+  step 'I cannot haz' do
+    pending 'step not implemented'
+  end
+end
+""")
+    write_file('features/steps/awesome_new_feature.rb', """
+class Spinach::Features::AwesomeNewFeature < Spinach::FeatureSteps
+  step 'I am awesome' do
+    pending 'step not implemented'
+  end
+  step 'I do anything' do
+    pending 'step not implemented'
+  end
+  step 'people will cheer' do
+    pending 'step not implemented'
+  end
+end
+""")
+  end
+
+  step 'I should be told this was a clean audit' do
+    @stdout.must_match('Audit clean - no missing steps.')
+  end
+
+  step 'I have defined an "Exciting feature" feature with reused steps' do
+    pending 'step not implemented'
+  end
+
+  step 'I have created a step file without those reused steps' do
+    pending 'step not implemented'
+  end
+
+  step 'I should see the missing steps reported only once' do
+    pending 'step not implemented'
   end
   
 end
