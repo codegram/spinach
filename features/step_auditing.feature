@@ -20,3 +20,5 @@ Feature: Step auditing
     
   #Scenario: Tells the user to generate if step file missing
   
+  #Scenario: Steps still marked unused if they appear in the wrong file
+  
