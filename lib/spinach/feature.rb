@@ -17,11 +17,10 @@ module Spinach
     def lines=(value)
       @lines = value.map(&:to_i) if value
     end
-    
+
     # Run the provided code for every step
     def each_step
       scenarios.each { |scenario| scenario.steps.each { |step| yield step } }
     end
-    
   end
 end
