@@ -142,7 +142,7 @@ module Spinach
       def feature(name)
         @feature_name = name
       end
-      
+
       # Get the list of step names in this class
       def steps
         @steps ||= []

@@ -143,7 +143,7 @@ module Spinach
     def fail_fast
       @fail_fast
     end
-    
+
     # "audit" enables step auditing mode
     #
     # @return [true/false]
