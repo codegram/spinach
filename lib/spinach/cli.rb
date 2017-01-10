@@ -136,8 +136,8 @@ module Spinach
           end
 
           opts.on('-a', '--audit',
-                  'Audit steps instead of running them, outputting missing '+
-                  'and obsolete steps') do
+                  "Audit steps instead of running them, outputting missing \
+and obsolete steps") do
             config[:audit] = true
           end
         end.parse!(@args)

@@ -317,4 +317,8 @@ end
     @stdout.wont_match('I haz a happy')
   end
   
+  step 'bad' do
+    pending 'hello'
+  end
+  
 end
