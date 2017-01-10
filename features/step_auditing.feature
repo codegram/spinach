@@ -18,11 +18,18 @@ Feature: Step auditing
   
   Scenario: Steps not marked unused if they're in common modules
     Given I have defined a "Cheezburger can I has" feature
+    And I have defined an "Awesome new feature" feature
     And I have associated step files with common steps that are all used somewhere
     When I run spinach with "--audit"
     Then I should not see any steps marked as unused
     
-  #Scenario: Common steps are reported as missing if not used by any feature
+  Scenario: Common steps are reported as missing if not used by any feature
+    Given I have defined a "Cheezburger can I has" feature
+    And I have defined an "Awesome new feature" feature
+    And I have step files for both with common steps, but one common step is not used by either
+    When I run spinach with "--audit"
+    Then I should be told the extra step is unused
+    But I should not be told the other common steps are unused
     
   Scenario: Tells the user to generate if step file missing
     Given I have defined a "Cheezburger can I has" feature

@@ -1,3 +1,5 @@
+require 'set'
+
 module Spinach
   # The auditor audits steps and determines if any are missing or obsolete.
   #
@@ -6,11 +8,12 @@ module Spinach
   #
   class Auditor < Runner
     
-    attr_accessor :unused_steps
+    attr_accessor :unused_steps, :used_steps
     
     def initialize(filenames)
       super(filenames)
       @unused_steps = {}
+      @used_steps = Set.new
     end    
     
     # audits features
@@ -22,7 +25,8 @@ module Spinach
       # Find any missing steps in each file, and keep track of unused steps
       clean = true
       filenames.each do |file|
-        clean &&= audit_file(file)
+        result = audit_file(file)
+        clean &&= result # set to false if any result is false
       end
 
       # At the end, report any unused steps      
@@ -49,15 +53,16 @@ module Spinach
         return
       end
       step_defs = step_defs_class.new        
-      unused_step_names = step_defs_class.steps
+      unused_step_names = step_defs_class.ancestors.map {|a| a.respond_to?(:steps) ? a.steps : []  }.flatten
       missing_steps = []
                       
       feature.scenarios.each do |scenario|
         scenario.steps.each do |step|
           method_name = Spinach::Support.underscore step.name
           if step_defs.respond_to?(method_name)
-            # Do nothing for now
-            # FIXME: Remove unused steps
+            # Remember the location so we can subtract from unused_steps at the end
+            location = step_defs.step_location_for(step.name).join(':')
+            used_steps << location
           else
             # OK - we can't find a step definition for this step - add it to the missing steps
             # unless there is already a missing step of the same name
@@ -68,10 +73,10 @@ module Spinach
         end
       end
       
-      # If there are any steps left at the end, let's mark them as obsolete
+      # If there are any steps left at the end, let's mark them as unused
       unused_step_names.each do |name|
-        location = step_defs.step_location_for(name)
-        unused_steps[location.join ':'] = name
+        location = step_defs.step_location_for(name).join(':')
+        unused_steps[location] = name
       end
       
       # And then generate a report of missing steps
@@ -86,6 +91,8 @@ module Spinach
     end
     
     def report_unused_steps
+      # Remove any unused_steps that were in common modules and used in another feature
+      used_steps.each {|location| unused_steps.delete location}
       unused_steps.each do |location, name|
         puts "\n" + "Unused step: #{location} ".colorize(:yellow) + "'#{name}'".colorize(:light_yellow)
       end
