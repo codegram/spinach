@@ -181,6 +181,29 @@ class Spinach::Features::BuyAWidget < Spinach::FeatureSteps
 end
 ```
 
+## Audit
+
+Over time, the definitions of your features will change. When you add, remove
+or change steps in the feature files, you can easily audit your existing step 
+files with:
+
+```shell
+$ spinach --audit
+```
+
+This will find any new steps and print out boilerplate for them, and alert you
+to the filename and line number of any unused steps in your step files.
+
+This does not modify the step files, so you will need to paste the boilerplate
+into the appropriate places. If a new feature file is detected, you will be
+asked to run `spinach --generate` beforehand.
+
+**Important**: If auditing individual files, common steps (as above) may be 
+reported as unused when they are actually used in a feature file that is not 
+currently being audited. To avoid this, run the audit with no arguments to
+audit all step files simultaneously.
+
+
 ## Tags
 
 Feature and Scenarios can be marked with tags in the form: `@tag`. Tags can be
