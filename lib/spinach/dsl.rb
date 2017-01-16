@@ -56,6 +56,7 @@ module Spinach
                       end
 
         define_method(Spinach::Support.underscore(step), &method_body)
+        steps << step
       end
 
       alias_method :Given, :step
@@ -140,6 +141,11 @@ module Spinach
       # @api public
       def feature(name)
         @feature_name = name
+      end
+
+      # Get the list of step names in this class
+      def steps
+        @steps ||= []
       end
 
       private

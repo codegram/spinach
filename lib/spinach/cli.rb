@@ -24,6 +24,8 @@ module Spinach
 
       if Spinach.config.generate
         Spinach::Generators.run(feature_files)
+      elsif Spinach.config.audit
+        Spinach::Auditor.new(feature_files).run
       else
         Spinach::Runner.new(feature_files).run
       end
@@ -131,6 +133,12 @@ module Spinach
           opts.on_tail('--fail-fast',
                        'Terminate the suite run on the first failure') do |class_name|
             config[:fail_fast] = true
+          end
+
+          opts.on('-a', '--audit',
+                  "Audit steps instead of running them, outputting missing \
+and obsolete steps") do
+            config[:audit] = true
           end
         end.parse!(@args)
 

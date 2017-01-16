@@ -16,6 +16,6 @@ if ENV['CI'] && !defined?(Rubinius)
 end
 
 
-Spinach.hooks.after_run do |scenario|
+Spinach.hooks.after_scenario do |scenario|
   FileUtils.rm_rf(Filesystem.dirs)
 end
