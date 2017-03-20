@@ -310,6 +310,14 @@ class Spinach::Features::SessionTimeout < Spinach::FeatureSteps
 end
 ```
 
+## RSpec mocks
+
+If you need access to the [rspec-mocks](https://github.com/rspec/rspec-mocks) methods in your steps, add this line to your `env.rb`:
+
+```ruby
+require 'spinach/rspec/mocks'
+```
+
 ## Reporters
 
 Spinach supports two kinds of reporters by default: `stdout` and `progress`.
