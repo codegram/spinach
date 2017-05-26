@@ -6,7 +6,7 @@ class Spinach::Features::RunningSpecificScenarios < Spinach::FeatureSteps
   end
 
   When 'I specify that only the second should be run' do
-    feature_file = Pathname.new(Filesystem.dirs.first)/@feature
+    feature_file = Pathname.new(Filesystem.dirs.first).join(@feature)
     step_lines   = feature_file.each_line.with_index.select do |line, index|
       line.match(/^\s*Then/)
     end
