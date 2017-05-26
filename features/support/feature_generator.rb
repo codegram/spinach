@@ -32,6 +32,26 @@ module Integration
         )
       end
 
+      # Generate a feature that has 2 differently tagged scenarios.
+      # Both should pass.
+      #
+      # @return feature_filename
+      #   The feature file name
+      #
+      # @api private
+      def success_feature_with_two_scenarios_with_different_tags
+        feature = success_scenario_title +
+          "    @a\n" + success_scenario +
+          "\n\n" +
+          "    @b\n" + success_scenario
+        steps = success_step_class_str + success_step + "\nend"
+
+        write_feature(
+          'features/success_feature.feature', feature,
+          'features/steps/success_feature.rb', steps
+        )
+      end
+
       # Generate a feature with 1 scenario that has a pending step in between
       #
       # @return feature_filename
