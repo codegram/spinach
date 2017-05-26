@@ -10,10 +10,26 @@ module Integration
       #
       # @api private
       def success_feature
-        feature= success_scenario_title + success_scenario
-        steps = success_step_class_str + success_step + "\nend"
+        feature = success_scenario_title + success_scenario
+        steps   = success_step_class_str + success_step + "\nend"
         write_feature 'features/success_feature.feature', feature,
           'features/steps/success_feature.rb', steps
+      end
+
+      # Generate a feature that has 2 scenarios. Both should pass.
+      #
+      # @return feature_filename
+      #   The feature file name
+      #
+      # @api private
+      def success_feature_with_two_scenarios
+        feature = success_scenario_title + success_scenario + "\n\n" + success_scenario
+        steps   = success_step_class_str + success_step + "\nend"
+
+        write_feature(
+          'features/success_feature.feature', feature,
+          'features/steps/success_feature.rb', steps
+        )
       end
 
       # Generate a feature with 1 scenario that has a pending step in between
