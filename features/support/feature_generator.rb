@@ -16,42 +16,6 @@ module Integration
           'features/steps/success_feature.rb', steps
       end
 
-      # Generate a feature that has 2 scenarios. Both should pass.
-      #
-      # @return feature_filename
-      #   The feature file name
-      #
-      # @api private
-      def success_feature_with_two_scenarios
-        feature = success_scenario_title + success_scenario + "\n\n" + success_scenario
-        steps   = success_step_class_str + success_step + "\nend"
-
-        write_feature(
-          'features/success_feature.feature', feature,
-          'features/steps/success_feature.rb', steps
-        )
-      end
-
-      # Generate a feature that has 2 differently tagged scenarios.
-      # Both should pass.
-      #
-      # @return feature_filename
-      #   The feature file name
-      #
-      # @api private
-      def success_feature_with_two_scenarios_with_different_tags
-        feature = success_scenario_title +
-          "    @a\n" + success_scenario +
-          "\n\n" +
-          "    @b\n" + success_scenario
-        steps = success_step_class_str + success_step + "\nend"
-
-        write_feature(
-          'features/success_feature.feature', feature,
-          'features/steps/success_feature.rb', steps
-        )
-      end
-
       # Generate a feature with 1 scenario that has a pending step in between
       #
       # @return feature_filename
@@ -73,10 +37,35 @@ module Integration
       #
       # @api private
       def failure_feature_with_two_scenarios
-        feature = failure_feature_title + failure_sceario + success_scenario
+        feature = failure_feature_title + failure_scenario + success_scenario
         steps = failure_step + success_step + "\nend"
         write_feature failure_filename, feature,
           failure_step_filename, steps
+      end
+
+      # Generate a tagged feature that has 2 tagged scenarios.
+      # 1 should pass, and 1 should fail.
+      #
+      # @return feature_filename
+      #   The feature file name
+      #
+      # @api private
+      def tagged_failure_feature_with_two_scenarios
+        feature = "@feature\n" +
+          failure_feature_title +
+          "  @failing" +
+          failure_scenario + "\n" +
+          "  @passing\n" +
+          "  " + success_scenario
+
+        steps = failure_step +
+          success_step + "\n" +
+          "end"
+
+        write_feature(
+          failure_filename, feature,
+          failure_step_filename, steps
+        )
       end
 
       # Generate a feature with 1 scenario that should fail
@@ -86,7 +75,7 @@ module Integration
       #
       # @api private
       def failure_feature
-        feature = failure_feature_title + failure_sceario
+        feature = failure_feature_title + failure_scenario
         write_feature failure_filename, feature,
           failure_step_filename, failure_step + "\nend"
       end
@@ -177,11 +166,10 @@ module Integration
         "Feature: A failure feature\n\n"
       end
 
-      def failure_sceario
-        """
+      def failure_scenario
+        "
   Scenario: This is scenario will fail
-    Then I fail
-        """
+    Then I fail\n"
       end
     end
   end
