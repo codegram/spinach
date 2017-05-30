@@ -4,6 +4,7 @@ source 'http://rubygems.org'
 gemspec
 
 gem 'coveralls', require: false
+gem 'pry-byebug', platforms: [:ruby]
 
 group :docs do
   gem 'yard'
