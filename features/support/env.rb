@@ -1,7 +1,6 @@
 require 'minitest/autorun'
 require 'minitest/spec'
 require_relative 'filesystem'
-
 require 'simplecov'
 
 if ENV['CI'] && !defined?(Rubinius)
