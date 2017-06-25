@@ -48,6 +48,9 @@ module Spinach
 
         Spinach.hooks.run_after_feature(feature)
 
+        # FIXME The feature & scenario runners should have the same structure.
+        #       They should either both return inverted failure or both return
+        #       raw success.
         !@failed
       end
 
