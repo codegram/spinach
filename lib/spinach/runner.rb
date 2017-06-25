@@ -56,34 +56,34 @@ module Spinach
       require_frameworks
       init_reporter
 
+      features = filenames.map do |filename|
+        file, *lines = filename.split(":") # little more complex than just a "filename"
+
+        # FIXME these two lines should be Feature.from_file(filename, lines)
+        feature          = Parser.open_file(file).parse
+        feature.filename = file
+
+        if lines.any?
+          feature.only_run_scenarios_on_lines(lines)
+        end
+
+        feature
+      end
+
+      suite_passed = true
+
       Spinach.hooks.run_before_run
 
-      successful = true
+      features.each do |feature|
+        feature_passed = FeatureRunner.new(feature).run
+        suite_passed &&= feature_passed
 
-      filenames.map! do |filename|
-        file, *lines = filename.split(":")
-        [file, lines]
+        break if fail_fast? && !feature_passed
       end
 
-      catch :fail do
-        filenames.each do |filename, lines|
-          lines = [nil] if lines.empty?
+      Spinach.hooks.run_after_run(suite_passed)
 
-          feature = Parser.open_file(filename).parse
-          feature.filename = filename
-          feature.lines = lines
-
-          lines.each do |line|
-            success = FeatureRunner.new(feature, line).run
-            successful = false unless success
-            throw :fail if fail_fast? && !successful
-          end
-        end
-      end
-
-      Spinach.hooks.run_after_run(successful)
-
-      successful
+      suite_passed
     end
 
     # Loads support files and step definitions, ensuring that env.rb is loaded

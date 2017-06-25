@@ -10,14 +10,9 @@ module Spinach
       # @param [GherkinRuby::AST::Feature] feature
       #   The feature to run.
       #
-      # @param [#to_i] line
-      #   If a scenario line is passed, then only the scenario defined on that
-      #   line will be run.
-      #
       # @api public
-      def initialize(feature, line=nil)
+      def initialize(feature)
         @feature = feature
-        @line    = line.to_i if line
       end
 
       # @return [String]
@@ -64,31 +59,31 @@ module Spinach
       end
 
       def run_scenarios!
-        scenarios.each_with_index do |scenario, current_scenario_index|
-          if run_scenario?(scenario, current_scenario_index)
-            success = ScenarioRunner.new(scenario).run
-            @failed = true unless success
-            break if Spinach.config.fail_fast && @failed
-          end
+        scenarios_to_run.each do |scenario|
+          success = ScenarioRunner.new(scenario).run
+          @failed = true unless success
+
+          break if Spinach.config.fail_fast && @failed
         end
       end
 
-      def run_scenario?(scenario, current_scenario_index)
-        match_line(current_scenario_index) && 
-          TagsMatcher.match(feature_tags + scenario.tags)
-      end
-
-      def match_line(current_scenario_index)
-        return true unless @line
-        return false if @line < scenarios[current_scenario_index].line
-        next_scenario = scenarios[current_scenario_index+1]
-        !next_scenario || @line < next_scenario.line
-      end
-
-
       def undefined_steps!
-        Spinach.hooks.run_on_undefined_feature @feature
+        Spinach.hooks.run_on_undefined_feature(feature)
+
         @failed = true
+      end
+
+      def scenarios_to_run
+        feature.scenarios.select do |scenario|
+          has_a_tag_that_will_be_run = TagsMatcher.match(feature.tags + scenario.tags)
+          on_a_line_that_will_be_run = if feature.run_every_scenario?
+                                         true
+                                       else
+                                         (scenario.lines & feature.lines).any?
+                                       end
+
+          has_a_tag_that_will_be_run && on_a_line_that_will_be_run
+        end
       end
     end
   end
