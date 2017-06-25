@@ -35,7 +35,7 @@ describe Spinach::Runner::FeatureRunner do
       end
     end
 
-    describe 'when the steps exist' do
+    describe 'when all the steps exist' do
       before do
         @scenarios = [
           scenario         = stub(tags: []),
