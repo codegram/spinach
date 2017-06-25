@@ -73,9 +73,12 @@ module Spinach
       #
       # @api public
       def visit_Scenario(node)
-        scenario      = Scenario.new(@feature)
-        scenario.name = node.name
-        scenario.line = node.line
+        scenario       = Scenario.new(@feature)
+        scenario.name  = node.name
+        scenario.lines = [
+          node.line,
+          *node.steps.map(&:line)
+        ].uniq.sort
 
         @current_tag_set = scenario
         node.tags.each { |tag| tag.accept(self) }

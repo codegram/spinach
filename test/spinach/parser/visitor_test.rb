@@ -63,7 +63,11 @@ module Spinach
 
       describe '#visit_Scenario' do
         before do
-          @steps = [stub_everything, stub_everything, stub_everything]
+          @steps = [
+            stub_everything(line: 4),
+            stub_everything(line: 5),
+            stub_everything(line: 6)
+          ]
           @tags  = [stub_everything, stub_everything, stub_everything]
           @node  = stub(
             tags:  @tags,
@@ -83,9 +87,9 @@ module Spinach
           visitor.feature.scenarios.first.name.must_equal 'Go shopping on Saturday morning'
         end
 
-        it 'sets the line' do
+        it 'sets the lines' do
           visitor.visit_Scenario(@node)
-          visitor.feature.scenarios.first.line.must_equal 3
+          visitor.feature.scenarios.first.lines.must_equal (3..6).to_a
         end
 
         it 'sets the tags' do
