@@ -140,10 +140,14 @@ describe Spinach::Runner::FeatureRunner do
 
       describe "with feature" do
         before do
-          @feature = stub('feature', name: 'Feature', tags: ["feature_tag"])
+          @scenario = stub(tags: [])
+          @feature = stub('feature',
+            name:                'Feature',
+            tags:                ["feature_tag"],
+            scenarios:           [@scenario],
+            run_every_scenario?: true,
+          )
           Spinach.stubs(:find_step_definitions).returns(true)
-          @scenario = stub(line: 4, tags: [])
-          @feature.stubs(:scenarios).returns [@scenario]
         end
 
         it "runs matching feature" do
@@ -157,10 +161,14 @@ describe Spinach::Runner::FeatureRunner do
 
       describe "with scenario" do
         before do
-          @feature = stub('feature', name: 'Feature', tags: ["feature_tag"])
+          @scenario = stub(tags: ["scenario_tag"])
+          @feature = stub('feature',
+            name:                'Feature',
+            tags:                ["feature_tag"],
+            scenarios:           [@scenario],
+            run_every_scenario?: true,
+          )
           Spinach.stubs(:find_step_definitions).returns(true)
-          @scenario = stub(line: 4, tags: ["scenario_tag"])
-          @feature.stubs(:scenarios).returns [@scenario]
         end
 
         it "runs matching scenario" do
@@ -180,7 +188,7 @@ describe Spinach::Runner::FeatureRunner do
         end
 
         it "doesn't accumulate tags from one scenario to the next" do
-          next_scenario = stub(line: 14, tags: [])
+          next_scenario = stub(tags: [])
           @feature.stubs(:scenarios).returns [@scenario, next_scenario]
 
           Spinach::TagsMatcher.expects(:match).with(["feature_tag", "scenario_tag"]).returns true
