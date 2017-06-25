@@ -14,11 +14,6 @@ describe Spinach::Runner::FeatureRunner do
     it 'initializes the given filename' do
       subject.feature.must_equal feature
     end
-
-    it 'initalizes the given scenario line' do
-      @runner = Spinach::Runner::FeatureRunner.new(feature, '34')
-      @runner.instance_variable_get(:@line).must_equal 34
-    end
   end
 
   describe '#scenarios' do
