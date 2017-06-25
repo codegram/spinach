@@ -37,13 +37,17 @@ describe Spinach::Runner::FeatureRunner do
 
     describe 'when the steps exist' do
       before do
-        @feature = stub('feature', name: 'Feature')
-        Spinach.stubs(:find_step_definitions).returns(true)
         @scenarios = [
           scenario         = stub(tags: []),
           another_scenario = stub(tags: [])
         ]
-        @feature.stubs(:scenarios).returns @scenarios
+        @feature = stub('feature',
+          name:                "Feature",
+          tags:                [],
+          scenarios:           @scenarios,
+          run_every_scenario?: true
+        )
+        Spinach.stubs(:find_step_definitions).returns(true)
         @runner = Spinach::Runner::FeatureRunner.new(@feature)
       end
 
