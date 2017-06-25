@@ -24,13 +24,15 @@ describe Spinach::Runner::FeatureRunner do
   end
 
   describe '#run' do
-    it 'runs the hooks in order' do
-      hooks = sequence('hooks')
-      Spinach.hooks.expects(:run_before_feature).with(feature).in_sequence(hooks)
-      Spinach.expects(:find_step_definitions).returns(false).in_sequence(hooks)
-      Spinach.hooks.expects(:run_after_feature).with(feature).in_sequence(hooks)
+    describe "when some steps don't exist" do
+      it 'runs the hooks in order' do
+        hooks = sequence('hooks')
+        Spinach.hooks.expects(:run_before_feature).with(feature).in_sequence(hooks)
+        Spinach.expects(:find_step_definitions).returns(false).in_sequence(hooks)
+        Spinach.hooks.expects(:run_after_feature).with(feature).in_sequence(hooks)
 
-      subject.run
+        subject.run
+      end
     end
 
     describe 'when the steps exist' do
@@ -57,13 +59,15 @@ describe Spinach::Runner::FeatureRunner do
       end
 
       describe 'and the scenarios fail' do
-        it 'runs the scenarios and returns false' do
-          @scenarios.each do |scenario|
-            runner = stub(run: false)
-            Spinach::Runner::ScenarioRunner.expects(:new).with(scenario).returns runner
-          end
+        describe "without config option fail_fast set" do
+          it 'runs the scenarios and returns false' do
+            @scenarios.each do |scenario|
+              runner = stub(run: false)
+              Spinach::Runner::ScenarioRunner.expects(:new).with(scenario).returns runner
+            end
 
-          @runner.run.must_equal false
+            @runner.run.must_equal false
+          end
         end
 
         describe "with config option fail_fast set" do
