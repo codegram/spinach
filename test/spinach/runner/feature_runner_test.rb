@@ -1,14 +1,14 @@
 require_relative '../../test_helper'
 
 describe Spinach::Runner::FeatureRunner do
-  let(:feature) { 
-    stub('feature', 
-         name: 'Feature',
-         scenarios: [],
-         background_steps: []
-        )
-  }
-  subject{ Spinach::Runner::FeatureRunner.new(feature) }
+  let(:feature) do
+    stub('feature',
+      name:             'Feature',
+      scenarios:        [],
+      background_steps: []
+    )
+  end
+  subject { Spinach::Runner::FeatureRunner.new(feature) }
 
   describe '#initialize' do
     it 'initializes the given filename' do
