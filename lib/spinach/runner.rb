@@ -59,7 +59,7 @@ module Spinach
       features = filenames.map do |filename|
         file, *lines = filename.split(":") # little more complex than just a "filename"
 
-        # FIXME these two lines should be Feature.from_file(filename, lines)
+        # FIXME Feature should be instantiated directly, not through an unrelated class method
         feature          = Parser.open_file(file).parse
         feature.filename = file
 
