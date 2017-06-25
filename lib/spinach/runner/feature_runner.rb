@@ -38,13 +38,16 @@ module Spinach
       #
       # @api public
       def run
-        Spinach.hooks.run_before_feature feature
+        Spinach.hooks.run_before_feature(feature)
+
         if Spinach.find_step_definitions(feature_name)
           run_scenarios!
         else
           undefined_steps!
         end
-        Spinach.hooks.run_after_feature feature
+
+        Spinach.hooks.run_after_feature(feature)
+
         !@failed
       end
 
