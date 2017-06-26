@@ -17,7 +17,7 @@ module Spinach
     end
 
     def lines=(value)
-      @lines = value.map(&:to_i) if value
+      @lines = value.map(&:to_i) if value && value.any?
     end
 
     def only_run_scenarios_on_lines(lines)
