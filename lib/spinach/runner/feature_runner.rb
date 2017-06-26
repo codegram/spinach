@@ -81,7 +81,7 @@ module Spinach
 
       def scenarios_to_run
         feature.scenarios.select do |scenario|
-          has_a_tag_that_will_be_run = TagsMatcher.match(feature.tags + scenario.tags)
+          has_a_tag_that_will_be_run = TagsMatcher.match(feature_tags + scenario.tags)
           on_a_line_that_will_be_run = if feature.run_every_scenario?
                                          true
                                        else
