@@ -16,8 +16,8 @@ module Spinach
       @background.nil? ? [] : @background.steps
     end
 
-    def lines_to_run=(value)
-      @lines_to_run = value.map(&:to_i) if value && value.any?
+    def lines_to_run=(lines)
+      @lines_to_run = lines.map(&:to_i) if lines && lines.any?
     end
 
     def run_every_scenario?
