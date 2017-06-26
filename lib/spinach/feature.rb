@@ -4,28 +4,24 @@ module Spinach
     attr_accessor :name, :scenarios, :tags
     attr_accessor :background
     attr_accessor :description
-    attr_reader   :lines
+    attr_reader   :lines_to_run
 
     def initialize
-      @scenarios = []
-      @tags      = []
-      @lines     = []
+      @scenarios    = []
+      @tags         = []
+      @lines_to_run = []
     end
 
     def background_steps
       @background.nil? ? [] : @background.steps
     end
 
-    def lines=(value)
-      @lines = value.map(&:to_i) if value && value.any?
-    end
-
-    def only_run_scenarios_on_lines(lines)
-      self.lines = lines.map(&:to_i)
+    def lines_to_run=(value)
+      @lines_to_run = value.map(&:to_i) if value && value.any?
     end
 
     def run_every_scenario?
-      lines.empty?
+      lines_to_run.empty?
     end
 
     # Run the provided code for every step

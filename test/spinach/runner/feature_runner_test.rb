@@ -117,28 +117,28 @@ describe Spinach::Runner::FeatureRunner do
 
       it "runs exactly matching scenario" do
         Spinach::Runner::ScenarioRunner.expects(:new).with(@scenarios[1]).returns stub(run: true)
-        @feature.stubs(:lines).returns([12])
+        @feature.stubs(:lines_to_run).returns([12])
         @runner = Spinach::Runner::FeatureRunner.new(@feature)
         @runner.run
       end
 
       it "runs no scenario and returns false" do
         Spinach::Runner::ScenarioRunner.expects(:new).never
-        @feature.stubs(:lines).returns([3])
+        @feature.stubs(:lines_to_run).returns([3])
         @runner = Spinach::Runner::FeatureRunner.new(@feature)
         @runner.run
       end
 
       it "runs matching scenario" do
         Spinach::Runner::ScenarioRunner.expects(:new).with(@scenarios[0]).returns stub(run: true)
-        @feature.stubs(:lines).returns([8])
+        @feature.stubs(:lines_to_run).returns([8])
         @runner = Spinach::Runner::FeatureRunner.new(@feature)
         @runner.run
       end
 
       it "runs last scenario" do
         Spinach::Runner::ScenarioRunner.expects(:new).with(@scenarios[1]).returns stub(run: true)
-        @feature.stubs(:lines).returns([15])
+        @feature.stubs(:lines_to_run).returns([15])
         @runner = Spinach::Runner::FeatureRunner.new(@feature)
         @runner.run
       end

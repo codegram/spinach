@@ -85,7 +85,7 @@ module Spinach
           on_a_line_that_will_be_run = if feature.run_every_scenario?
                                          true
                                        else
-                                         (scenario.lines & feature.lines).any?
+                                         (scenario.lines & feature.lines_to_run).any?
                                        end
 
           has_a_tag_that_will_be_run && on_a_line_that_will_be_run

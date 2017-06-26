@@ -63,9 +63,7 @@ module Spinach
         feature          = Parser.open_file(file).parse
         feature.filename = file
 
-        if lines.any?
-          feature.only_run_scenarios_on_lines(lines)
-        end
+        feature.lines_to_run = lines if lines.any?
 
         feature
       end

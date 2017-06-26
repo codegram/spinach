@@ -2,13 +2,13 @@ require 'test_helper'
 
 module Spinach
   describe Feature do
-    describe "#only_run_scenarios_on_lines" do
+    describe "#lines_to_run=" do
       subject { Feature.new }
 
-      before { subject.only_run_scenarios_on_lines([4, 12]) }
+      before { subject.lines_to_run = [4, 12] }
 
-      it 'writes to @lines' do
-        subject.lines.must_equal [4, 12]
+      it 'writes lines_to_run' do
+        subject.lines_to_run.must_equal [4, 12]
       end
     end
 
@@ -22,7 +22,7 @@ module Spinach
       end
 
       describe 'when line constraints have been specified' do
-        before { subject.only_run_scenarios_on_lines([4, 12]) }
+        before { subject.lines_to_run = [4, 12] }
 
         it 'is false' do
           subject.run_every_scenario?.must_equal false
