@@ -100,38 +100,46 @@ describe Spinach::Runner::FeatureRunner do
       end
     end
 
-    describe "when a line is given" do
+    describe "when only running specific lines" do
       before do
-        @feature = stub('feature', name: 'Feature')
-        Spinach.stubs(:find_step_definitions).returns(true)
         @scenarios = [
-          scenario         = stub(line: 4, tags: []),
-          another_scenario = stub(line: 12, tags: [])
+          stub(tags: [], lines: (4..8).to_a),
+          stub(tags: [], lines: (12..15).to_a),
         ]
-        @feature.stubs(:scenarios).returns @scenarios
+        @feature = stub('feature',
+          name:                'Feature',
+          tags:                [],
+          scenarios:           @scenarios,
+          run_every_scenario?: false,
+        )
+        Spinach.stubs(:find_step_definitions).returns(true)
       end
 
       it "runs exactly matching scenario" do
         Spinach::Runner::ScenarioRunner.expects(:new).with(@scenarios[1]).returns stub(run: true)
-        @runner = Spinach::Runner::FeatureRunner.new(@feature, "12")
+        @feature.stubs(:lines).returns([12])
+        @runner = Spinach::Runner::FeatureRunner.new(@feature)
         @runner.run
       end
 
       it "runs no scenario and returns false" do
         Spinach::Runner::ScenarioRunner.expects(:new).never
-        @runner = Spinach::Runner::FeatureRunner.new(@feature, "3")
+        @feature.stubs(:lines).returns([3])
+        @runner = Spinach::Runner::FeatureRunner.new(@feature)
         @runner.run
       end
 
       it "runs matching scenario" do
         Spinach::Runner::ScenarioRunner.expects(:new).with(@scenarios[0]).returns stub(run: true)
-        @runner = Spinach::Runner::FeatureRunner.new(@feature, "8")
+        @feature.stubs(:lines).returns([8])
+        @runner = Spinach::Runner::FeatureRunner.new(@feature)
         @runner.run
       end
 
       it "runs last scenario" do
         Spinach::Runner::ScenarioRunner.expects(:new).with(@scenarios[1]).returns stub(run: true)
-        @runner = Spinach::Runner::FeatureRunner.new(@feature, "15")
+        @feature.stubs(:lines).returns([15])
+        @runner = Spinach::Runner::FeatureRunner.new(@feature)
         @runner.run
       end
     end
