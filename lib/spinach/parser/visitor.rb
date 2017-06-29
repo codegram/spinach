@@ -5,7 +5,7 @@ module Spinach
     #
     # @example
     #
-    #   ast     = GherkinRuby.parse(File.read('some.feature')
+    #   ast     = GherkinRuby.parse(File.read('some.feature'))
     #   visitor = Spinach::Parser::Visitor.new
     #   feature = visitor.visit(ast)
     #
@@ -25,7 +25,8 @@ module Spinach
       #
       # @api public
       def visit(ast)
-        ast.accept self
+        ast.accept(self)
+
         @feature
       end
 
@@ -36,12 +37,13 @@ module Spinach
       #
       # @api public
       def visit_Feature(node)
-        @feature.name = node.name
+        @feature.name        = node.name
         @feature.description = node.description
+
         node.background.accept(self) if node.background
 
         @current_tag_set = @feature
-        node.tags.each  { |tag|  tag.accept(self)  }
+        node.tags.each { |tag| tag.accept(self) }
         @current_tag_set = nil
 
         node.scenarios.each { |scenario| scenario.accept(self) }
@@ -54,7 +56,7 @@ module Spinach
       #
       # @api public
       def visit_Background(node)
-        background = Background.new(@feature)
+        background      = Background.new(@feature)
         background.line = node.line
 
         @current_step_set = background
@@ -71,12 +73,15 @@ module Spinach
       #
       # @api public
       def visit_Scenario(node)
-        scenario      = Scenario.new(@feature)
-        scenario.name = node.name
-        scenario.line = node.line
+        scenario       = Scenario.new(@feature)
+        scenario.name  = node.name
+        scenario.lines = [
+          node.line,
+          *node.steps.map(&:line)
+        ].uniq.sort
 
         @current_tag_set = scenario
-        node.tags.each  { |tag|  tag.accept(self)  }
+        node.tags.each { |tag| tag.accept(self) }
         @current_tag_set = nil
 
         @current_step_set = scenario
@@ -103,7 +108,7 @@ module Spinach
       #
       # @api public
       def visit_Step(node)
-        step = Step.new(@current_scenario)
+        step         = Step.new(@current_step_set)
         step.name    = node.name
         step.line    = node.line
         step.keyword = node.keyword

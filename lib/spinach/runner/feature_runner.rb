@@ -10,14 +10,9 @@ module Spinach
       # @param [GherkinRuby::AST::Feature] feature
       #   The feature to run.
       #
-      # @param [#to_i] line
-      #   If a scenario line is passed, then only the scenario defined on that
-      #   line will be run.
-      #
       # @api public
-      def initialize(feature, line=nil)
+      def initialize(feature)
         @feature = feature
-        @line    = line.to_i if line
       end
 
       # @return [String]
@@ -25,7 +20,7 @@ module Spinach
       #
       # @api public
       def feature_name
-        @feature.name
+        feature.name
       end
 
       # @return [Array<GherkinRuby::AST::Scenario>]
@@ -33,7 +28,7 @@ module Spinach
       #
       # @api public
       def scenarios
-        @feature.scenarios
+        feature.scenarios
       end
 
       # Runs this feature.
@@ -43,52 +38,58 @@ module Spinach
       #
       # @api public
       def run
-        Spinach.hooks.run_before_feature @feature
+        Spinach.hooks.run_before_feature(feature)
+
         if Spinach.find_step_definitions(feature_name)
           run_scenarios!
         else
           undefined_steps!
         end
-        Spinach.hooks.run_after_feature @feature
+
+        Spinach.hooks.run_after_feature(feature)
+
+        # FIXME The feature & scenario runners should have the same structure.
+        #       They should either both return inverted failure or both return
+        #       raw success.
         !@failed
       end
 
       private
 
       def feature_tags
-        if @feature.respond_to?(:tags)
-          @feature.tags
+        if feature.respond_to?(:tags)
+          feature.tags
         else
           []
         end
       end
 
       def run_scenarios!
-        scenarios.each_with_index do |scenario, current_scenario_index|
-          if run_scenario?(scenario, current_scenario_index)
-            success = ScenarioRunner.new(scenario).run
-            @failed = true unless success
-            break if Spinach.config.fail_fast && @failed
-          end
+        scenarios_to_run.each do |scenario|
+          success = ScenarioRunner.new(scenario).run
+          @failed = true unless success
+
+          break if Spinach.config.fail_fast && @failed
         end
       end
 
-      def run_scenario?(scenario, current_scenario_index)
-        match_line(current_scenario_index) && 
-          TagsMatcher.match(feature_tags + scenario.tags)
-      end
-
-      def match_line(current_scenario_index)
-        return true unless @line
-        return false if @line < scenarios[current_scenario_index].line
-        next_scenario = scenarios[current_scenario_index+1]
-        !next_scenario || @line < next_scenario.line
-      end
-
-
       def undefined_steps!
-        Spinach.hooks.run_on_undefined_feature @feature
+        Spinach.hooks.run_on_undefined_feature(feature)
+
         @failed = true
+      end
+
+      def scenarios_to_run
+        feature.scenarios.select do |scenario|
+          has_a_tag_that_will_be_run = TagsMatcher.match(feature_tags + scenario.tags)
+          on_a_line_that_will_be_run = if feature.run_every_scenario?
+                                         true
+                                       else
+                                         (scenario.lines & feature.lines_to_run).any?
+                                       end
+
+          has_a_tag_that_will_be_run && on_a_line_that_will_be_run
+        end
       end
     end
   end

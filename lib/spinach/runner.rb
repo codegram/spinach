@@ -37,15 +37,6 @@ module Spinach
         Spinach.config.support_path
     end
 
-    # The feature files to run
-    attr_reader :filenames
-
-    # The default path where the steps are located
-    attr_reader :step_definitions_path
-
-    # The default path where the support files are located
-    attr_reader :support_path
-
     # Inits the reporter with a default one.
     #
     # @api public
@@ -65,34 +56,32 @@ module Spinach
       require_frameworks
       init_reporter
 
+      features = filenames.map do |filename|
+        file, *lines = filename.split(":") # little more complex than just a "filename"
+
+        # FIXME Feature should be instantiated directly, not through an unrelated class method
+        feature          = Parser.open_file(file).parse
+        feature.filename = file
+
+        feature.lines_to_run = lines if lines.any?
+
+        feature
+      end
+
+      suite_passed = true
+
       Spinach.hooks.run_before_run
 
-      successful = true
+      features.each do |feature|
+        feature_passed = FeatureRunner.new(feature).run
+        suite_passed &&= feature_passed
 
-      filenames.map! do |filename|
-        file, *lines = filename.split(":")
-        [file, lines]
+        break if fail_fast? && !feature_passed
       end
 
-      catch :fail do
-        filenames.each do |filename, lines|
-          lines = [nil] if lines.empty?
+      Spinach.hooks.run_after_run(suite_passed)
 
-          feature = Parser.open_file(filename).parse
-          feature.filename = filename
-          feature.lines = lines
-
-          lines.each do |line|
-            success = FeatureRunner.new(feature, line).run
-            successful = false unless success
-            throw :fail if fail_fast? && !successful
-          end
-        end
-      end
-
-      Spinach.hooks.run_after_run(successful)
-
-      successful
+      suite_passed
     end
 
     # Loads support files and step definitions, ensuring that env.rb is loaded

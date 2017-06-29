@@ -107,7 +107,7 @@ describe Spinach::Runner do
       let(:filenames) { ["#{filename}:#{line}"] }
       let(:runner) { Spinach::Runner.new(filenames) }
 
-      it 'sets filename and line on the feature' do
+      it 'sets filename and lines_to_run on the feature' do
         @feature_runner = stub
         Spinach::Parser.stubs(:open_file).with(filename).returns parser = stub
         parser.stubs(:parse).returns feature = Spinach::Feature.new
@@ -119,7 +119,7 @@ describe Spinach::Runner do
 
         runner.run.must_equal true
         feature.filename.must_equal filename
-        feature.lines.must_equal [line]
+        feature.lines_to_run.must_equal [line]
       end
     end
 
@@ -139,11 +139,11 @@ describe Spinach::Runner do
         runner.stubs(required_files: [])
       end
 
-      it "sets filename and lines on the feature" do
+      it "sets filename and lines_to_run on the feature" do
         @feature_runner.stubs(:run).returns(true)
         runner.run.must_equal true
         @feature.filename.must_equal filename
-        @feature.lines.must_equal line.split(":").map(&:to_i)
+        @feature.lines_to_run.must_equal line.split(":").map(&:to_i)
       end
 
       it "returns false if it fails" do
