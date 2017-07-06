@@ -15,7 +15,7 @@ class UseCustomizedReporter < Spinach::FeatureSteps
 
     def initialize(*args)
       super(*args)
-        @out = options[:output] || $stdout
+      @out = options[:output] || $stdout
       @error = options[:error] || $stderr
       @max_step_name_length = 0
     end
