@@ -46,11 +46,14 @@ module Filesystem
   #
   # @param [String] command
   #   The command to run.
+  # @param [Hash] env
+  #   Hash of environment variables to use with command
   #
   # @api public
-  def run(command)
+  def run(command, env = nil)
     in_current_dir do
       args = command.strip.split(" ")
+      args = args.unshift(env) if env
       @stdout, @stderr, @last_exit_status = Open3.capture3(*args)
     end
 

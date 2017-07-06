@@ -36,25 +36,25 @@ describe Spinach::Runner do
     end
   end
 
-  describe '#init_reporter' do
-    describe "when no reporter_class option is passed in" do
+  describe '#init_reporters' do
+    describe "when no reporter_classes option is passed in" do
       it 'inits the default reporter' do
         reporter = stub
         reporter.expects(:bind)
         Spinach::Reporter::Stdout.stubs(new: reporter)
-        runner.init_reporter
+        runner.init_reporters
       end
     end
 
-    describe "when reporter_class option is passed in" do
-      it "inits the reporter class" do
+    describe "when reporter_classes option is passed in" do
+      it "inits the reporter classes" do
         config = Spinach::Config.new
         Spinach.stubs(:config).returns(config)
-        config.reporter_class = "String"
+        config.reporter_classes = ["String"]
         reporter = stub
         reporter.expects(:bind)
         String.stubs(new: reporter)
-        runner.init_reporter
+        runner.init_reporters
       end
     end
 
@@ -66,7 +66,7 @@ describe Spinach::Runner do
         reporter = stub
         reporter.stubs(:bind)
         Spinach::Reporter::Stdout.expects(new: reporter).with(backtrace: true)
-        runner.init_reporter
+        runner.init_reporters
       end
     end
   end
@@ -86,8 +86,8 @@ describe Spinach::Runner do
       runner.stubs(required_files: [])
     end
 
-    it "inits reporter" do
-      runner.expects(:init_reporter)
+    it "inits reporters" do
+      runner.expects(:init_reporters)
       runner.run
     end
 

@@ -40,9 +40,11 @@ module Spinach
     # Inits the reporter with a default one.
     #
     # @api public
-    def init_reporter
-      reporter = Support.constantize(Spinach.config[:reporter_class]).new(Spinach.config.reporter_options)
-      reporter.bind
+    def init_reporters
+      Spinach.config[:reporter_classes].each do |reporter_class|
+        reporter = Support.constantize(reporter_class).new(Spinach.config.reporter_options)
+        reporter.bind
+      end
     end
 
     # Runs this runner and outputs the results in a colorful manner.
@@ -54,7 +56,7 @@ module Spinach
     def run
       require_dependencies
       require_frameworks
-      init_reporter
+      init_reporters
 
       features = filenames.map do |filename|
         file, *lines = filename.split(":") # little more complex than just a "filename"
