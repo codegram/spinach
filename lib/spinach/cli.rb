@@ -125,9 +125,10 @@ module Spinach
             config[:features_path] = path
           end
 
-          opts.on('-r', '--reporter CLASS_NAME',
-                  'Formatter class name') do |class_name|
-            config[:reporter_class] = reporter_class(class_name)
+          opts.on('-r', '--reporter CLASS_NAMES',
+                  'Formatter class names, separated by commas') do |class_names|
+            names = class_names.split(',').map { |c| reporter_class(c) }
+            config[:reporter_classes] = names
           end
 
           opts.on_tail('--fail-fast',
