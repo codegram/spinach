@@ -8,7 +8,7 @@ module Spinach
     class Stdout < Reporter
       include Reporting
 
-      # Initialitzes the runner
+      # Initializes the reporter
       #
       # @param [Hash] options
       #  Sets a custom output buffer by setting options[:output]
