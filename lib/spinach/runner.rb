@@ -30,10 +30,10 @@ module Spinach
     def initialize(filenames, options = {})
       @filenames = filenames
 
-      @step_definitions_path = options.delete(:step_definitions_path ) ||
+      @step_definitions_path = options.delete(:step_definitions_path) ||
         Spinach.config.step_definitions_path
 
-      @support_path = options.delete(:support_path ) ||
+      @support_path = options.delete(:support_path) ||
         Spinach.config.support_path
     end
 
