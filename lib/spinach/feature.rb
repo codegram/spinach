@@ -24,6 +24,14 @@ module Spinach
       lines_to_run.empty?
     end
 
+    # Identifier used by orderers.
+    #
+    # Needs to involve the relative file path so that the ordering
+    # a seed generates is stable across both runs and machines.
+    #
+    # @api public
+    alias ordering_id filename
+
     # Run the provided code for every step
     def each_step
       scenarios.each { |scenario| scenario.steps.each { |step| yield step } }

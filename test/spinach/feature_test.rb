@@ -29,5 +29,15 @@ module Spinach
         end
       end
     end
+
+    describe "#ordering_id" do
+      subject { Feature.new }
+
+      before { subject.filename = "features/foo/bar.feature" }
+
+      it 'is the filename' do
+        subject.ordering_id.must_equal "features/foo/bar.feature"
+      end
+    end
   end
 end
