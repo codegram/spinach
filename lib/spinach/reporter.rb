@@ -10,6 +10,7 @@ module Spinach
     def initialize(options = {})
       @errors = []
       @options = options
+      @orderer = options[:orderer]
       @undefined_features = []
       @successful_steps = []
       @undefined_steps = []

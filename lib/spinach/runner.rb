@@ -41,7 +41,11 @@ module Spinach
     #
     # @api public
     def init_reporter
-      reporter = Support.constantize(Spinach.config[:reporter_class]).new(Spinach.config.reporter_options)
+      reporter_class   = Support.constantize(Spinach.config[:reporter_class])
+      reporter_options = default_reporter_options.merge(Spinach.config.reporter_options)
+
+      reporter = reporter_class.new(reporter_options)
+
       reporter.bind
     end
 
@@ -135,6 +139,21 @@ module Spinach
     # @api public
     def required_files
       support_files + step_definition_files
+    end
+
+    # The orderer for this run.
+    #
+    # @api public
+    def orderer
+      @orderer ||= Support.constantize(Spinach.config[:orderer_class]).new(
+        seed: Spinach.config.seed
+      )
+    end
+
+    # Default initialization options for the reporter
+    #
+    def default_reporter_options
+      {orderer: orderer}
     end
 
     private

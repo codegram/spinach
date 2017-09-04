@@ -62,13 +62,41 @@ Feature: A test feature
     @feature = "features/test_feature.feature"
   end
 
-  When "I run it" do
+  When "I run it without randomization" do
     run_feature @feature
   end
 
   Then "I should see a summary with steps status information" do
     @stdout.must_match(
       /Summary:.*4.*Successful.*1.*Undefined.*1.*Failed.*1.*Error/
+    )
+  end
+
+  And "I shouldn't see a randomization seed" do
+    @stdout.wont_match(
+      /Randomized\ with\ seed\ \d+/
+    )
+  end
+
+  When "I run it with randomization" do
+    run_feature @feature, {append: "--rand"}
+  end
+
+  And "I should see a randomization seed" do
+    @stdout.must_match(
+      /Randomized\ with\ seed\ \d+/
+    )
+  end
+
+  When "I run it with a specific randomization seed" do
+    @seed = rand(0xFFFF)
+
+    run_feature @feature, {append: "--seed #{@seed}"}
+  end
+
+  And "I should see that specific randomization seed" do
+    @stdout.must_match(
+      /Randomized\ with\ seed\ #{@seed}/
     )
   end
 end

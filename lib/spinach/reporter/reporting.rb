@@ -221,7 +221,9 @@ module Spinach
         error_summary      = format_summary(:red,    error_steps,      'Error')
 
         out.puts "Steps Summary: #{successful_summary}, #{pending_summary}, #{undefined_summary}, #{failed_summary}, #{error_summary}\n\n"
-        out.puts "Finished in #{Time.now - @start_time} seconds" if @start_time
+        out.puts "Finished in #{Time.now - @start_time} seconds\n\n" if @start_time
+
+        @orderer.attach_summary(out) if @orderer
       end
     end
   end
