@@ -22,6 +22,9 @@ module Spinach
     end
   end
 
+  # This class represents the exception raised when Spinach find a step
+  # which claims to be pending for a {FeatureSteps}.
+  #
   class StepPendingException < StandardError
     attr_reader :reason
     attr_accessor :step
@@ -40,6 +43,29 @@ module Spinach
     # @api public
     def message
       "Step '#{@step.name}' pending"
+    end
+  end
+
+  # This class represents the exception raised when Spinach detects
+  # that the around_scenario hook does not yield.
+  #
+  class HookNotYieldException < StandardError
+    attr_reader :hook
+
+    # @param [String] hook
+    #   The hook which did not yield
+    #
+    # @api public
+    def initialize(hook)
+      @hook = hook
+    end
+
+    # @return [String]
+    #   A custom message when a hook did not yield.
+    #
+    # @api public
+    def message
+      "#{@hook} hooks *must* yield"
     end
   end
 end

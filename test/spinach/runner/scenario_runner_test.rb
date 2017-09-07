@@ -37,6 +37,31 @@ module Spinach
       end
 
       describe '#run' do
+        describe 'hooks (no #run_step stub)' do
+          before(:each) do
+            subject.stubs(:step_definitions).returns step_definitions = stub
+            step_definitions.stubs(:before_each)
+            step_definitions.stubs(:after_each)
+            step_definitions.stubs(:step_location_for)
+          end
+
+          let(:scenario) { stub(feature: feature, steps: [steps.first], name: 'test' ) }
+
+          it 'runs hooks in order (no #run_step stub)' do
+            hooks = sequence('hooks')
+
+            Spinach.hooks.expects(:run_before_scenario).with(scenario, step_definitions).in_sequence(hooks)
+            Spinach.hooks.expects(:run_around_scenario).with(scenario, step_definitions).in_sequence(hooks).yields
+
+            Spinach.hooks.expects(:run_before_step).with(steps.first, step_definitions).in_sequence(hooks)
+            Spinach.hooks.expects(:run_around_step).with(steps.first, step_definitions).in_sequence(hooks).yields
+            Spinach.hooks.expects(:run_after_step).with(steps.first, step_definitions).in_sequence(hooks)
+
+            Spinach.hooks.expects(:run_after_scenario).with(scenario, step_definitions).in_sequence(hooks)
+            subject.run
+          end
+        end
+
         describe 'hooks' do
           before(:each) do
             subject.stubs(:step_definitions).returns step_definitions = stub
@@ -78,14 +103,26 @@ module Spinach
             subject.run
           end
 
-          it 'raises if around hook does not yield' do
+          it 'raises if around_scenario hook does not yield' do
             subject.stubs(:step_definitions).returns stub
 
             Spinach.hooks.stubs(:run_around_scenario).with(scenario, step_definitions)
 
-            proc do
+            e = proc do
               subject.run
-            end.must_raise RuntimeError
+            end.must_raise Spinach::HookNotYieldException
+            e.hook.must_match /around_scenario/
+          end
+
+          it 'raises if around_step hook does not yield' do
+            step_definitions.stubs(:step_location_for)
+
+            Spinach.hooks.stubs(:run_around_step).with(steps.first, step_definitions)
+
+            e = proc do
+              subject.run
+            end.must_raise Spinach::HookNotYieldException
+            e.hook.must_match /around_step/
           end
         end
       end

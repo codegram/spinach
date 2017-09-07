@@ -59,6 +59,24 @@ describe Spinach::Hooks do
       end
     end
 
+    describe "around_step" do
+      it "responds to around_step" do
+        subject.must_respond_to :around_step
+      end
+
+      it "executes the hook with params" do
+        array = []
+        block = Proc.new do |arg1, arg2|
+          array << arg1
+          array << arg2
+        end
+        subject.send(:around_step, &block)
+        subject.send("run_around_step", 1, 2) do
+        end
+        array.must_equal [1, 2]
+      end
+    end
+
     describe "#on_tag" do
       let(:scenario) do
         stub(tags: ['javascript', 'capture'])

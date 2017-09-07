@@ -61,7 +61,7 @@ module Spinach
           end
           step_definitions.after_each
         end
-        raise "around_scenario hooks *must* yield" if !scenario_run && !@exception
+        raise Spinach::HookNotYieldException.new('around_scenario') if !scenario_run && !@exception
         Spinach.hooks.run_after_scenario @scenario, step_definitions
         !@exception
       end
@@ -74,8 +74,15 @@ module Spinach
       # @api semipublic
       def run_step(step)
         step_location = step_definitions.step_location_for(step.name)
-        step_definitions.execute(step)
+        step_run = false
+        Spinach.hooks.run_around_step step, step_definitions do
+          step_run = true
+          step_definitions.execute(step)
+        end
+        raise Spinach::HookNotYieldException.new('around_step') if !step_run
         Spinach.hooks.run_on_successful_step step, step_location, step_definitions
+      rescue Spinach::HookNotYieldException => e
+        raise e
       rescue *Spinach.config[:failure_exceptions] => e
         @exception = e
         Spinach.hooks.run_on_failed_step step, @exception, step_location, step_definitions
