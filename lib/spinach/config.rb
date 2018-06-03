@@ -31,7 +31,7 @@ module Spinach
                 :tags,
                 :generate,
                 :save_and_open_page_on_failure,
-                :reporter_class,
+                :reporter_classes,
                 :reporter_options,
                 :orderer_class,
                 :seed,
@@ -50,18 +50,18 @@ module Spinach
       @features_path || 'features'
     end
 
-    # The "reporter class" holds the reporter class name
-    # Default to Spinach::Reporter::Stdout
+    # The "reporter classes" holds an array of reporter class name
+    # Default to ["Spinach::Reporter::Stdout"]
     #
-    # @return [reporter object]
-    #    The reporter that responds to specific messages.
+    # @return [Array<reporter object>]
+    #    The reporters that respond to specific messages.
     #
     # @api public
-    def reporter_class
-      @reporter_class || "Spinach::Reporter::Stdout"
+    def reporter_classes
+      @reporter_classes || ["Spinach::Reporter::Stdout"]
     end
 
-    # The "reporter_options" holds the options of reporter_class
+    # The "reporter_options" holds the options passed to reporter_classes
     #
     # @api public
     def reporter_options

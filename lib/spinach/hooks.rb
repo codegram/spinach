@@ -57,6 +57,7 @@ module Spinach
     hook :before_scenario
 
     # Runs around every scenario
+    #
     # @example
     #   Spinach.hooks.around_scenario do |scenario_data, step_definitions, &block|
     #     # feature_data is a hash of the parsed scenario data
@@ -79,6 +80,15 @@ module Spinach
     #     # step_data contains a hash with this step's data
     #   end
     hook :before_step
+
+    # Runs around every step
+    #
+    # @example
+    #   Spinach.hooks.around_step do |step_data, step_definitions, &block|
+    #     # step_data contains a hash with this step's data
+    #     block.call
+    #   end
+    around_hook :around_step
 
     # Runs after every step execution
     #

@@ -76,7 +76,15 @@ tags:
           Spinach.stubs(:config).returns(config)
           cli = Spinach::Cli.new([opt, 'progress'])
           cli.options
-          config.reporter_class.must_equal 'Spinach::Reporter::Progress'
+          config.reporter_classes.must_equal ['Spinach::Reporter::Progress']
+        end
+
+        it 'sets multiple reporter classes' do
+          config = Spinach::Config.new
+          Spinach.stubs(:config).returns(config)
+          cli = Spinach::Cli.new([opt, 'progress,stdout'])
+          cli.options
+          config.reporter_classes.must_equal ['Spinach::Reporter::Progress', 'Spinach::Reporter::Stdout']
         end
       end
     end

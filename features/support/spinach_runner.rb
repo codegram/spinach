@@ -20,7 +20,7 @@ module Integration
       use_minitest if options[:framework] == :minitest
       use_rspec if options[:framework] == :rspec
       spinach = File.expand_path("bin/spinach")
-      run "#{ruby} #{spinach} #{feature} #{options[:append]}"
+      run "#{ruby} #{spinach} #{feature} #{options[:append]}", options[:env]
     end
 
     def ruby
