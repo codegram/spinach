@@ -108,7 +108,7 @@ describe Spinach::Hooks do
         subject.on_tag('screenshot') do
           assertion = true
         end
-        subject.run_before_scenario(scenario)
+        subject.run_before_scenario(scenario, step_definitions)
         assertion.wont_equal true
       end
     end
