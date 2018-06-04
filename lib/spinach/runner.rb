@@ -60,24 +60,12 @@ module Spinach
       require_frameworks
       init_reporters
 
-      features = filenames.map do |filename|
-        file, *lines = filename.split(":") # little more complex than just a "filename"
-
-        # FIXME Feature should be instantiated directly, not through an unrelated class method
-        feature          = Parser.open_file(file).parse
-        feature.filename = file
-
-        feature.lines_to_run = lines if lines.any?
-
-        feature
-      end
-
       suite_passed = true
 
       Spinach.hooks.run_before_run
 
-      features.each do |feature|
-        feature_passed = FeatureRunner.new(feature).run
+      features_to_run.each do |feature|
+        feature_passed = FeatureRunner.new(feature, orderer: orderer).run
         suite_passed &&= feature_passed
 
         break if fail_fast? && !feature_passed
@@ -160,6 +148,22 @@ module Spinach
 
     def fail_fast?
       Spinach.config.fail_fast
+    end
+
+    def features_to_run
+      unordered_features = filenames.map do |filename|
+        file, *lines = filename.split(":") # little more complex than just a "filename"
+
+        # FIXME Feature should be instantiated directly, not through an unrelated class method
+        feature          = Parser.open_file(file).parse
+        feature.filename = file
+
+        feature.lines_to_run = lines if lines.any?
+
+        feature
+      end
+
+      orderer.order(unordered_features)
     end
   end
 end
