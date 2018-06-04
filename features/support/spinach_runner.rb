@@ -23,6 +23,17 @@ module Integration
       run "#{ruby} #{spinach} #{feature} #{options[:append]}", options[:env]
     end
 
+    def run_spinach(options = {})
+      options[:framework] ||= :minitest
+
+      use_minitest if options[:framework] == :minitest
+      use_rspec    if options[:framework] == :rspec
+
+      spinach = File.expand_path("bin/spinach")
+
+      run "#{ruby} #{spinach} #{options[:append]}"
+    end
+
     def ruby
       return @ruby if defined?(@ruby)
 
