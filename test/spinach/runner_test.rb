@@ -65,7 +65,10 @@ describe Spinach::Runner do
         config.reporter_options = {backtrace: true}
         reporter = stub
         reporter.stubs(:bind)
-        Spinach::Reporter::Stdout.expects(new: reporter).with(backtrace: true)
+        Spinach::Reporter::Stdout.expects(new: reporter).with(
+          backtrace: true,
+          **runner.default_reporter_options
+        )
         runner.init_reporters
       end
     end

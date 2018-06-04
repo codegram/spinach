@@ -131,6 +131,16 @@ module Spinach
             config[:reporter_classes] = names
           end
 
+          opts.on('--rand', "Randomize the order of features and scenarios") do
+            config[:orderer_class] = orderer_class(:random)
+          end
+
+          opts.on('--seed SEED', Integer,
+                  "Provide a seed for randomizing the order of features and scenarios") do |seed|
+            config[:orderer_class] = orderer_class(:random)
+            config[:seed]          = seed
+          end
+
           opts.on_tail('--fail-fast',
                        'Terminate the suite run on the first failure') do |class_name|
             config[:fail_fast] = true
@@ -164,7 +174,7 @@ and obsolete steps") do
     # Builds the class name to use an output reporter.
     #
     # @param [String] klass
-    #   The class name fo the reporter.
+    #   The class name of the reporter.
     #
     # @return [String]
     #   The full name of the reporter class.
@@ -176,6 +186,23 @@ and obsolete steps") do
     # @api private
     def reporter_class(klass)
       "Spinach::Reporter::" + Spinach::Support.camelize(klass)
+    end
+
+    # Builds the class to use an orderer.
+    #
+    # @param [String] klass
+    #   The class name of the orderer.
+    #
+    # @return [String]
+    #   The full name of the orderer class.
+    #
+    # @example
+    #   orderer_class('random')
+    #   # => Spinach::Orderers::Random
+    #
+    # @api private
+    def orderer_class(klass)
+      "Spinach::Orderers::" + Spinach::Support.camelize(klass)
     end
   end
 end

@@ -89,6 +89,40 @@ tags:
       end
     end
 
+    describe 'rand' do
+      let(:config) { Spinach::Config.new }
+
+      before do
+        Spinach.stubs(:config).returns(config)
+        Spinach::Cli.new(%w(--rand)).options
+      end
+
+      it 'uses the Random orderer' do
+        config.orderer_class.must_equal 'Spinach::Orderers::Random'
+      end
+
+      it 'sets a numeric seed' do
+        config.seed.must_equal config.seed.to_i
+      end
+    end
+
+    describe 'seed' do
+      let(:config) { Spinach::Config.new }
+
+      before do
+        Spinach.stubs(:config).returns(config)
+        Spinach::Cli.new(%w(--seed 42)).options
+      end
+
+      it 'uses the random orderer' do
+        config.orderer_class.must_equal 'Spinach::Orderers::Random'
+      end
+
+      it 'sets the seed' do
+        config.seed.must_equal 42
+      end
+    end
+
     describe 'features_path' do
       %w{-f --features_path}.each do |opt|
         it 'sets the given features_path' do

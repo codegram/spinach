@@ -33,6 +33,8 @@ module Spinach
                 :save_and_open_page_on_failure,
                 :reporter_classes,
                 :reporter_options,
+                :orderer_class,
+                :seed,
                 :fail_fast,
                 :audit
 
@@ -64,6 +66,29 @@ module Spinach
     # @api public
     def reporter_options
       @reporter_options || {}
+    end
+
+    # The "orderer class" holds the orderer class name
+    # Defaults to Spinach::Orderers::Default
+    #
+    # @return [orderer object]
+    #    The orderer that responds to specific messages.
+    #
+    # @api public
+    def orderer_class
+      @orderer_class || "Spinach::Orderers::Default"
+    end
+
+    # A randomization seed. This is what spinach uses for test run
+    # randomization, so if you call `Kernel.srand(Spinach.config.seed)`
+    # in your support environment file, not only will the test run
+    # order be guaranteed to be stable under a specific seed, all
+    # the Ruby-generated random numbers produced during your test
+    # run will also be stable under that seed.
+    #
+    # @api public
+    def seed
+      @seed ||= rand(0xFFFF)
     end
 
     # The "step definitions path" holds the place where your feature step

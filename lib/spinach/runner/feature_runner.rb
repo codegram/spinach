@@ -1,18 +1,20 @@
 require_relative '../tags_matcher'
+require 'spinach/orderers/default'
 
 module Spinach
   class Runner
     # A feature runner handles a particular feature run.
     #
     class FeatureRunner
-      attr_reader :feature
+      attr_reader :feature, :orderer
 
       # @param [GherkinRuby::AST::Feature] feature
       #   The feature to run.
       #
       # @api public
-      def initialize(feature)
+      def initialize(feature, orderer: Spinach::Orderers::Default.new)
         @feature = feature
+        @orderer = orderer
       end
 
       # @return [String]
@@ -80,7 +82,7 @@ module Spinach
       end
 
       def scenarios_to_run
-        feature.scenarios.select do |scenario|
+        unordered_scenarios = feature.scenarios.select do |scenario|
           has_a_tag_that_will_be_run = TagsMatcher.match(feature_tags + scenario.tags)
           on_a_line_that_will_be_run = if feature.run_every_scenario?
                                          true
@@ -90,6 +92,8 @@ module Spinach
 
           has_a_tag_that_will_be_run && on_a_line_that_will_be_run
         end
+
+        orderer.order(unordered_scenarios)
       end
     end
   end

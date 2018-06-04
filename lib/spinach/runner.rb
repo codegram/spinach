@@ -30,10 +30,10 @@ module Spinach
     def initialize(filenames, options = {})
       @filenames = filenames
 
-      @step_definitions_path = options.delete(:step_definitions_path ) ||
+      @step_definitions_path = options.delete(:step_definitions_path) ||
         Spinach.config.step_definitions_path
 
-      @support_path = options.delete(:support_path ) ||
+      @support_path = options.delete(:support_path) ||
         Spinach.config.support_path
     end
 
@@ -42,7 +42,9 @@ module Spinach
     # @api public
     def init_reporters
       Spinach.config[:reporter_classes].each do |reporter_class|
-        reporter = Support.constantize(reporter_class).new(Spinach.config.reporter_options)
+        reporter_options = default_reporter_options.merge(Spinach.config.reporter_options)
+        reporter         = Support.constantize(reporter_class).new(reporter_options)
+
         reporter.bind
       end
     end
@@ -58,24 +60,12 @@ module Spinach
       require_frameworks
       init_reporters
 
-      features = filenames.map do |filename|
-        file, *lines = filename.split(":") # little more complex than just a "filename"
-
-        # FIXME Feature should be instantiated directly, not through an unrelated class method
-        feature          = Parser.open_file(file).parse
-        feature.filename = file
-
-        feature.lines_to_run = lines if lines.any?
-
-        feature
-      end
-
       suite_passed = true
 
       Spinach.hooks.run_before_run
 
-      features.each do |feature|
-        feature_passed = FeatureRunner.new(feature).run
+      features_to_run.each do |feature|
+        feature_passed = FeatureRunner.new(feature, orderer: orderer).run
         suite_passed &&= feature_passed
 
         break if fail_fast? && !feature_passed
@@ -139,10 +129,41 @@ module Spinach
       support_files + step_definition_files
     end
 
+    # The orderer for this run.
+    #
+    # @api public
+    def orderer
+      @orderer ||= Support.constantize(Spinach.config[:orderer_class]).new(
+        seed: Spinach.config.seed
+      )
+    end
+
+    # Default initialization options for the reporter
+    #
+    def default_reporter_options
+      {orderer: orderer}
+    end
+
     private
 
     def fail_fast?
       Spinach.config.fail_fast
+    end
+
+    def features_to_run
+      unordered_features = filenames.map do |filename|
+        file, *lines = filename.split(":") # little more complex than just a "filename"
+
+        # FIXME Feature should be instantiated directly, not through an unrelated class method
+        feature          = Parser.open_file(file).parse
+        feature.filename = file
+
+        feature.lines_to_run = lines if lines.any?
+
+        feature
+      end
+
+      orderer.order(unordered_features)
     end
   end
 end
