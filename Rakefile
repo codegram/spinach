@@ -11,7 +11,7 @@ end
 
 desc 'Run spinach features'
 task :spinach do
-  exec "bin/spinach"
+  exec "bin/spinach --rand"
 end
 
 task :default => [:test, :spinach]
