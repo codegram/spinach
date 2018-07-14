@@ -265,6 +265,28 @@ the `--tags` option:
 $ spinach --tags @wip
 ```
 
+## Feature and Scenario Randomization
+
+If you want to randomize the order in which features and the scenarios inside features are run, you have 2 options:
+
+```bash
+$ spinach --rand
+```
+
+will use a random numeric seed to deterministically create a run order for your features and the scenarios inside your features.
+
+```bash
+$ spinach --seed <seed>
+```
+
+will use the given numeric seed to deterministically create a run order for your features and the scenarios inside your features.
+
+If you use either option, Spinach will output the seed used in the test report so you can reproduce Spinach runs.
+
+Neither option will randomize step order inside a scenario, as doing so would be at odds with the entire point of steps.
+
+Neither option will make scenarios run "outside" of their parent features. Inside each Spinach run, all the scenarios of a particular feature will complete before the next feature is started.
+
 ## Hook architecture
 
 Spinach provides several hooks to allow you performing certain steps before or
