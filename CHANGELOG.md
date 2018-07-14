@@ -1,3 +1,9 @@
+== 0.11.0
+* added the feature #196: ability to randomize feature and scenario order
+  * Added `--rand` cli flag. This will use a random numeric seed to deterministically create a run order for features and the scenarios inside each feature.
+  * Added `--seed <seed>` cli option. This will use the given numeric seed to deterministically create a run order for features and the scenarios inside each feature.
+  * The seed used in a random or seeded run will be output in the report so it can be used to reproduce runs.
+
 == 0.8.6
 * add total run time after each run
 * fixed #145: Issue with step autoloading
