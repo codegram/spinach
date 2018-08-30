@@ -64,9 +64,9 @@ module Spinach
       alias_method :Then, :step
       alias_method :And, :step
       alias_method :But, :step
-      
+
       # Defines a before hook for each scenario. The scope is limited only to the current
-      # step class (thus the current feature). 
+      # step class (thus the current feature).
       #
       # When a scenario is executed, the before each block will be run first before any steps
       #
@@ -98,7 +98,7 @@ module Spinach
       end
 
       # Defines a after hook for each scenario. The scope is limited only to the current
-      # step class (thus the current feature). 
+      # step class (thus the current feature).
       #
       # When a scenario is executed, the after each block will be run after any steps
       #
@@ -151,10 +151,8 @@ module Spinach
       private
 
       def before_or_after_private_method_name(location)
-        hash_value = hash
-        class_name = self.name || ""
-        class_name = class_name.gsub("::", "__").downcase
-        private_method_name = "_#{location}_each_block_#{hash.abs}_#{class_name}" #uniqueness
+        class_name = self.name.to_s.gsub("::", "__").downcase
+        return "_#{location}_each_block_#{hash.abs}_#{class_name}" #uniqueness
       end
 
       def define_before_or_after_method_with_block(location, &block)
@@ -193,7 +191,7 @@ module Spinach
       #   The file and line where the step was defined.
       def step_location_for(step)
         underscored_step = Spinach::Support.underscore(step)
-        location = method(underscored_step).source_location if self.respond_to?(underscored_step)
+        method(underscored_step).source_location if self.respond_to?(underscored_step)
       end
 
       # @return [String]

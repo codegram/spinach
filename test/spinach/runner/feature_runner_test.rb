@@ -37,10 +37,7 @@ describe Spinach::Runner::FeatureRunner do
 
     describe 'when all the steps exist' do
       before do
-        @scenarios = [
-          scenario         = stub(tags: []),
-          another_scenario = stub(tags: [])
-        ]
+        @scenarios = [stub(tags: []), stub(tags: []) ]
         @feature = stub('feature',
           name:                "Feature",
           tags:                [],
