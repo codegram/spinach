@@ -64,6 +64,10 @@ describe Spinach::Support do
     it 'changes spaces to underscores' do
       Spinach::Support.underscore('feature name').must_equal 'feature_name'
     end
+
+    it 'knows how to handle digits' do
+      Spinach::Support.underscore('Feature1Name').must_equal 'feature1_name'
+    end
   end
 
   describe "#escape" do
