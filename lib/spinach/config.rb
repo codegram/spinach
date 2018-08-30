@@ -47,7 +47,7 @@ module Spinach
     #
     # @api public
     def features_path
-      @features_path || 'features'
+      @features_path ||= 'features'
     end
 
     # The "reporter classes" holds an array of reporter class name
@@ -58,14 +58,14 @@ module Spinach
     #
     # @api public
     def reporter_classes
-      @reporter_classes || ["Spinach::Reporter::Stdout"]
+      @reporter_classes ||= ["Spinach::Reporter::Stdout"]
     end
 
     # The "reporter_options" holds the options passed to reporter_classes
     #
     # @api public
     def reporter_options
-      @reporter_options || {}
+      @reporter_options ||= {}
     end
 
     # The "orderer class" holds the orderer class name
@@ -76,7 +76,7 @@ module Spinach
     #
     # @api public
     def orderer_class
-      @orderer_class || "Spinach::Orderers::Default"
+      @orderer_class ||= "Spinach::Orderers::Default"
     end
 
     # A randomization seed. This is what spinach uses for test run
@@ -99,7 +99,7 @@ module Spinach
     #
     # @api public
     def step_definitions_path
-      @step_definitions_path || "#{self.features_path}/steps"
+      @step_definitions_path ||= "#{self.features_path}/steps"
     end
 
     # The "support path" helds the place where you can put your configuration
@@ -110,11 +110,11 @@ module Spinach
     #
     # @api public
     def support_path
-      @support_path || "#{self.features_path}/support"
+      @support_path ||= "#{self.features_path}/support"
     end
 
     def generate
-      @generate || false
+      @generate ||= false
     end
 
     # Allows you to read the config object using a hash-like syntax.
@@ -166,7 +166,7 @@ module Spinach
     #
     # @api public
     def fail_fast
-      @fail_fast
+      @fail_fast ||= false
     end
 
     # "audit" enables step auditing mode
