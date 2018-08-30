@@ -13,7 +13,7 @@ module Spinach::Generators
 
     describe "#generate" do
       it "generates a step" do
-        subject.generate.must_match /step.*I has a sad/
+        subject.generate.must_match(/step.*I has a sad/)
       end
 
       it "generates a pending step" do

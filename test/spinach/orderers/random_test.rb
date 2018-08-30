@@ -9,7 +9,7 @@ describe Spinach::Orderers::Random do
     it 'appends the seed' do
       orderer.attach_summary(io)
 
-      io.string.must_match /Randomized\ with\ seed\ #{orderer.seed}/
+      io.string.must_match(/Randomized\ with\ seed\ #{orderer.seed}/)
     end
   end
 

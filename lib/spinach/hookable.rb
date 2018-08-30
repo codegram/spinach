@@ -29,7 +29,7 @@ module Spinach
         end
       end
 
-      # Adds a new around_hook to this class. Every hook defines two methods 
+      # Adds a new around_hook to this class. Every hook defines two methods
       # used to add new callbacks and to run them around a given block of code
       # passing a bunch of parameters and invoking them in the order they were
       # defined.
@@ -77,7 +77,7 @@ module Spinach
         if callbacks = hooks[name.to_sym]
           callbacks.reverse.inject(block) do |blk, callback|
             proc do
-              callback.call *args do
+              callback.call(*args) do
                 blk.call
               end
             end

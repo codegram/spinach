@@ -111,7 +111,7 @@ module Spinach
             e = proc do
               subject.run
             end.must_raise Spinach::HookNotYieldException
-            e.hook.must_match /around_scenario/
+            e.hook.must_match(/around_scenario/)
           end
 
           it 'raises if around_step hook does not yield' do
@@ -122,7 +122,7 @@ module Spinach
             e = proc do
               subject.run
             end.must_raise Spinach::HookNotYieldException
-            e.hook.must_match /around_step/
+            e.hook.must_match(/around_step/)
           end
         end
       end
