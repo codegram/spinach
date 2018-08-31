@@ -6,9 +6,9 @@ module Spinach
     class << self
 
       # Matches an array of tags (e.g. of a scenario) against the tags present
-      # in Spinach' runtime options.
+      # in Spinach's runtime options.
       #
-      # Spinach' tag option is an array which consists of (possibly) multiple
+      # Spinach's tag option is an array which consists of (possibly) multiple
       # arrays containing tags provided by the user running the features and
       # scenarios. Each of these arrays is considered a tag group.
       #
