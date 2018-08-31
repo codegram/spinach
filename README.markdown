@@ -16,7 +16,7 @@ Conceived as an alternative to Cucumber, here are some of its design goals:
 * Step reusability: In case you want to reuse steps across features, you can
   always wrap those in plain ol' Ruby modules.
 
-Spinach is tested against **2.0, 2.1, 2.2 and 2.3** as well as **JRuby 9000**.
+Spinach is tested against **2.1, 2.2, 2.3, 2.4 and 2.5** as well as **JRuby 9000**.
 
 ## Getting started
 
@@ -184,7 +184,7 @@ end
 ## Audit
 
 Over time, the definitions of your features will change. When you add, remove
-or change steps in the feature files, you can easily audit your existing step 
+or change steps in the feature files, you can easily audit your existing step
 files with:
 
 ```shell
@@ -198,8 +198,8 @@ This does not modify the step files, so you will need to paste the boilerplate
 into the appropriate places. If a new feature file is detected, you will be
 asked to run `spinach --generate` beforehand.
 
-**Important**: If auditing individual files, common steps (as above) may be 
-reported as unused when they are actually used in a feature file that is not 
+**Important**: If auditing individual files, common steps (as above) may be
+reported as unused when they are actually used in a feature file that is not
 currently being audited. To avoid this, run the audit with no arguments to
 audit all step files simultaneously.
 
