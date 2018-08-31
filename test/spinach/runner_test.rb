@@ -77,15 +77,21 @@ describe Spinach::Runner do
   describe '#run' do
     before(:each) do
       @feature_runner = stub
+      @feature_runner.stubs(:run).returns(true)
+
       filenames.each do |filename|
-        Spinach::Parser.stubs(:open_file).with(filename).returns parser = stub
-        parser.stubs(:parse).returns feature = Spinach::Feature.new
+        parser = stub
+        Spinach::Parser.stubs(:open_file).with(filename).returns(parser)
+
+        feature = Spinach::Feature.new
+        feature.scenarios << Spinach::Scenario.new(feature)
+        parser.stubs(:parse).returns(feature)
+
         Spinach::Runner::FeatureRunner.stubs(:new).
           with(feature, anything).
           returns(@feature_runner)
       end
 
-      @feature_runner.stubs(:run).returns(true)
       runner.stubs(required_files: [])
     end
 
@@ -133,12 +139,18 @@ describe Spinach::Runner do
       let(:runner) { Spinach::Runner.new(filenames) }
 
       before(:each) do
+        parser = stub
+        Spinach::Parser.stubs(:open_file).with(filename).returns(parser)
+
+        @feature = Spinach::Feature.new
+        @feature.scenarios << Spinach::Scenario.new(@feature)
+        parser.stubs(:parse).returns(@feature)
+
         @feature_runner = stub
-        Spinach::Parser.stubs(:open_file).with(filename).returns parser = stub
-        parser.stubs(:parse).returns @feature = Spinach::Feature.new
         Spinach::Runner::FeatureRunner.stubs(:new).
           with(@feature, anything).
           returns(@feature_runner)
+
         runner.stubs(required_files: [])
       end
 
@@ -174,8 +186,13 @@ describe Spinach::Runner do
 
       before(:each) do
         filenames.each_with_index do |filename, i|
-          Spinach::Parser.stubs(:open_file).with(filename).returns parser = stub
-          parser.stubs(:parse).returns feature = Spinach::Feature.new
+          parser = stub
+          Spinach::Parser.stubs(:open_file).with(filename).returns(parser)
+
+          feature = Spinach::Feature.new
+          feature.scenarios << Spinach::Scenario.new(feature)
+          parser.stubs(:parse).returns(feature)
+
           Spinach::Runner::FeatureRunner.stubs(:new).
             with(feature, anything).
             returns(feature_runners[i])

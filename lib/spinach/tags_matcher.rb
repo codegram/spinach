@@ -23,6 +23,15 @@ module Spinach
         }
       end
 
+      # Matches the tags of a feature (and its scenarios) against the tags present
+      # in Spinach's runtime options.
+      #
+      # A feature matches when, for any of its scenarios, the combination of the
+      # feature's tags and that scenario's tags match the configured tags.
+      def match_feature(feature)
+        feature.scenarios.any? { |scenario| match(feature.tags + scenario.tags) }
+      end
+
       private
 
       def tag_groups
