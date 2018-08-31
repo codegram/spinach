@@ -238,19 +238,19 @@ Feature: So something great
   Scenario: Ensure no regression on this
 ```
 
-  Then you can run all Scenarios in your suite related to `@feat-1` using:
+  Then you can run all Scenarios in your suite tagged `@feat-1` using:
 
 ```shell
 $ spinach --tags @feat-1
 ```
 
-  Or only Scenarios related to `@feat-1` and `@bug-12` using:
+  Or only Scenarios tagged either `@feat-1` or `@bug-12` using:
 
 ```shell
 $ spinach --tags @feat-1,@bug-12
 ```
 
-  Or only Scenarios related to `@feat-1` excluding `@bug-12` using:
+  Or only Scenarios tagged `@feat-1` that aren't tagged `@bug-12` using:
 
 ```shell
 $ spinach --tags @feat-1,~@bug-12
