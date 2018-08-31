@@ -126,7 +126,7 @@ module Spinach
       #  The coplete error report
       #
       def full_error(error)
-        _, _, step, exception = error
+        feature, scenario, step, exception = error
         output = "\n"
         output += report_exception(exception)
         output +="\n"
