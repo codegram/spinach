@@ -23,6 +23,8 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'minitest', '< 5.0'
   gem.add_development_dependency 'fakefs', ">= 0.5.2"
 
+  gem.required_ruby_version = Gem::Requirement.new(">= 2.4".freeze)
+
   gem.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   gem.files         = `git ls-files`.split("\n")
   gem.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
