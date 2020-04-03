@@ -13,7 +13,7 @@ end
 
 require 'minitest/autorun'
 require 'minitest/spec'
-require 'mocha/mini_test'
+require 'mocha/minitest'
 require 'ostruct'
 require 'stringio'
 require 'pry'
