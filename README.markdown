@@ -1,4 +1,5 @@
 # Spinach - BDD framework on top of Gherkin
+
 [![Gem Version](https://badge.fury.io/rb/spinach.png)](http://badge.fury.io/rb/spinach)
 [![Build Status](https://secure.travis-ci.org/codegram/spinach.png)](http://travis-ci.org/codegram/spinach)
 [![Dependency Status](https://gemnasium.com/codegram/spinach.png)](http://gemnasium.com/codegram/spinach)
@@ -10,13 +11,13 @@ executable specifications of your application or library's acceptance criteria.
 
 Conceived as an alternative to Cucumber, here are some of its design goals:
 
-* Step maintainability: since features map to their own classes, their steps are
+- Step maintainability: since features map to their own classes, their steps are
   just methods of that class. This encourages step encapsulation.
 
-* Step reusability: In case you want to reuse steps across features, you can
+- Step reusability: In case you want to reuse steps across features, you can
   always wrap those in plain ol' Ruby modules.
 
-Spinach is tested against **2.0, 2.1, 2.2 and 2.3** as well as **JRuby 9000**.
+Spinach is tested against Ruby MRI **2.4, 2.5, 2.6 and 2.7** as well as **latest JRuby 9000**.
 
 ## Getting started
 
@@ -184,7 +185,7 @@ end
 ## Audit
 
 Over time, the definitions of your features will change. When you add, remove
-or change steps in the feature files, you can easily audit your existing step 
+or change steps in the feature files, you can easily audit your existing step
 files with:
 
 ```shell
@@ -198,11 +199,10 @@ This does not modify the step files, so you will need to paste the boilerplate
 into the appropriate places. If a new feature file is detected, you will be
 asked to run `spinach --generate` beforehand.
 
-**Important**: If auditing individual files, common steps (as above) may be 
-reported as unused when they are actually used in a feature file that is not 
+**Important**: If auditing individual files, common steps (as above) may be
+reported as unused when they are actually used in a feature file that is not
 currently being audited. To avoid this, run the audit with no arguments to
 audit all step files simultaneously.
-
 
 ## Tags
 
@@ -238,19 +238,19 @@ Feature: So something great
   Scenario: Ensure no regression on this
 ```
 
-  Then you can run all Scenarios in your suite related to `@feat-1` using:
+Then you can run all Scenarios in your suite related to `@feat-1` using:
 
 ```shell
 $ spinach --tags @feat-1
 ```
 
-  Or only Scenarios related to `@feat-1` and `@bug-12` using:
+Or only Scenarios related to `@feat-1` and `@bug-12` using:
 
 ```shell
 $ spinach --tags @feat-1,@bug-12
 ```
 
-  Or only Scenarios related to `@feat-1` excluding `@bug-12` using:
+Or only Scenarios related to `@feat-1` excluding `@bug-12` using:
 
 ```shell
 $ spinach --tags @feat-1,~@bug-12
@@ -292,7 +292,7 @@ Full hook documentation is here:
 
 ## Local Before and After Hooks
 
-Sometimes it feels awkward to add steps into feature file just because you need to do some test setup and cleanup. And it is equally awkward to add a global hooks for this purpose. For example, if you want to add a session timeout feature, to do so, you want to set the session timeout time to 1 second just for this feature, and put the normal timeout back after this feature. It doesn't make sense to add two steps in the feature file just to change the session timeout value. In this scenario, a ```before``` and ```after``` blocks are perfect for this kind of tasks. Below is an example implementation:
+Sometimes it feels awkward to add steps into feature file just because you need to do some test setup and cleanup. And it is equally awkward to add a global hooks for this purpose. For example, if you want to add a session timeout feature, to do so, you want to set the session timeout time to 1 second just for this feature, and put the normal timeout back after this feature. It doesn't make sense to add two steps in the feature file just to change the session timeout value. In this scenario, a `before` and `after` blocks are perfect for this kind of tasks. Below is an example implementation:
 
 ```ruby
 class Spinach::Features::SessionTimeout < Spinach::FeatureSteps
@@ -329,8 +329,8 @@ When no reporter is specified, `stdout` will be used by default.
 
 Other reporters:
 
-* For a console reporter with no colors, try [spinach-console-reporter][spinach-console-reporter] (to be used with Jenkins)
-* For a rerun reporter, try [spinach-rerun-reporter][spinach-rerun-reporter] (writes failed scenarios in a file)
+- For a console reporter with no colors, try [spinach-console-reporter][spinach-console-reporter] (to be used with Jenkins)
+- For a rerun reporter, try [spinach-rerun-reporter][spinach-rerun-reporter] (writes failed scenarios in a file)
 
 ## Wanna use it with Rails 3?
 
@@ -342,46 +342,45 @@ Check out our [spinach-sinatra demo](https://github.com/codegram/spinach-sinatra
 
 ## Resources
 
-* [Landing page](http://codegram.github.com/spinach)
-* [Slides](http://codegram.github.com/spinach-presentation)
-* [Blog post](http://blog.codegram.com/2011/10/how-to-achieve-more-clean-encapsulated-modular-step-definitions-with-spinach)
-* [API Documentation](http://rubydoc.info/github/codegram/spinach/master/frames)
-* [Google group](https://groups.google.com/forum/#!forum/spinach_bdd)
+- [Landing page](http://codegram.github.com/spinach)
+- [Slides](http://codegram.github.com/spinach-presentation)
+- [Blog post](http://blog.codegram.com/2011/10/how-to-achieve-more-clean-encapsulated-modular-step-definitions-with-spinach)
+- [API Documentation](http://rubydoc.info/github/codegram/spinach/master/frames)
+- [Google group](https://groups.google.com/forum/#!forum/spinach_bdd)
 
 ### Related gems
 
-* [guard-spinach](http://github.com/codegram/guard-spinach)
-* [spinach-rails](http://github.com/codegram/spinach-rails)
-* [spinach-console-reporter][spinach-console-reporter] (to be used with Jenkins)
-* [spinach-rerun-reporter][spinach-rerun-reporter] (writes failed scenarios in a file)
-* [spring-commands-spinach](https://github.com/jvanbaarsen/spring-commands-spinach) (to be used with spring)
+- [guard-spinach](http://github.com/codegram/guard-spinach)
+- [spinach-rails](http://github.com/codegram/spinach-rails)
+- [spinach-console-reporter][spinach-console-reporter] (to be used with Jenkins)
+- [spinach-rerun-reporter][spinach-rerun-reporter] (writes failed scenarios in a file)
+- [spring-commands-spinach](https://github.com/jvanbaarsen/spring-commands-spinach) (to be used with spring)
 
 ### Demos
 
-* [spinach rails demo](https://github.com/codegram/spinach-rails-demo)
-* [spinach sinatra demo](https://github.com/codegram/spinach-sinatra-demo)
-* [simple todo Rails app](https://github.com/codegram/tasca-spinach-demo)
+- [spinach rails demo](https://github.com/codegram/spinach-rails-demo)
+- [spinach sinatra demo](https://github.com/codegram/spinach-sinatra-demo)
+- [simple todo Rails app](https://github.com/codegram/tasca-spinach-demo)
 
 ## Contributing
 
-* [List of spinach contributors](https://github.com/codegram/spinach/contributors)
+- [List of spinach contributors](https://github.com/codegram/spinach/contributors)
 
 You can easily contribute to Spinach. Its codebase is simple and
 [extensively documented][documentation].
 
-* Fork the project.
-* Make your feature addition or bug fix.
-* Add specs for it. This is important so we don't break it in a future
+- Fork the project.
+- Make your feature addition or bug fix.
+- Add specs for it. This is important so we don't break it in a future
   version unintentionally.
-* Commit, do not mess with rakefile, version, or history.
+- Commit, do not mess with rakefile, version, or history.
   If you want to have your own version, that is fine but bump version
   in a commit by itself I can ignore when I pull.
-* Send me a pull request. Bonus points for topic branches.
+- Send me a pull request. Bonus points for topic branches.
 
 ## License
 
 MIT (Expat) License. Copyright 2011-2016 [Codegram Technologies](http://codegram.com)
-
 
 [gherkin]: http://github.com/codegram/gherkin-ruby
 [cucumber]: http://github.com/cucumber/cucumber
