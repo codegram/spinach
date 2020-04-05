@@ -3,6 +3,7 @@
 [![Gem Version](https://badge.fury.io/rb/spinach.svg)](https://badge.fury.io/rb/spinach)
 ![Tests](https://github.com/codegram/spinach/workflows/Tests/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/codegram/spinach/badge.png?branch=master)](https://coveralls.io/r/codegram/spinach)
+![](https://ruby-gem-downloads-badge.herokuapp.com/rails)
 
 Spinach is a high-level BDD framework that leverages the expressive
 [Gherkin language][gherkin] (used by [Cucumber][cucumber]) to help you define
