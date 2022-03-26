@@ -12,7 +12,6 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'gherkin-ruby', '>= 0.3.2'
   gem.add_runtime_dependency 'colorize'
-  gem.add_runtime_dependency 'json'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'mocha', "~> 1.5.0"
   gem.add_development_dependency 'sinatra'
