@@ -26,6 +26,5 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-      - run: bundle install --jobs 4 --retry 3
-        name: Install Ruby deps
+          bundler-cache: true
       - run: bundle exec rake
