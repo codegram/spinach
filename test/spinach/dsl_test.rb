@@ -157,7 +157,7 @@ describe Spinach::DSL do
         end
 
         @feature.new.step_location_for('I say goodbye').first.must_include '/dsl_test.rb'
-        @feature.new.step_location_for('I say goodbye').last.must_be_kind_of Fixnum
+        @feature.new.step_location_for('I say goodbye').last.must_be_kind_of Integer
       end
     end
   end
