@@ -2,8 +2,6 @@
 
 [![Gem Version](https://badge.fury.io/rb/spinach.svg)](https://badge.fury.io/rb/spinach)
 ![Tests](https://github.com/codegram/spinach/workflows/Tests/badge.svg)
-[![Coverage Status](https://coveralls.io/repos/codegram/spinach/badge.png?branch=master)](https://coveralls.io/r/codegram/spinach)
-![](https://ruby-gem-downloads-badge.herokuapp.com/rails)
 
 Spinach is a high-level BDD framework that leverages the expressive
 [Gherkin language][gherkin] (used by [Cucumber][cucumber]) to help you define
@@ -17,7 +15,7 @@ Conceived as an alternative to Cucumber, here are some of its design goals:
 - Step reusability: In case you want to reuse steps across features, you can
   always wrap those in plain ol' Ruby modules.
 
-Spinach is tested against Ruby MRI **2.4, 2.5, 2.6 and 2.7** as well as **latest JRuby 9000**.
+Spinach is tested against Ruby MRI **2.4, 2.5, 2.6, 2.7, 3.0, 3.1, 3.2** as well as **JRuby **.
 
 ## Getting started
 
@@ -380,7 +378,7 @@ You can easily contribute to Spinach. Its codebase is simple and
 
 ## License
 
-MIT (Expat) License. Copyright 2011-2016 [Codegram Technologies](http://codegram.com)
+MIT (Expat) License. Copyright 2011-2023 [Codegram Technologies](http://codegram.com)
 
 [gherkin]: http://github.com/codegram/gherkin-ruby
 [cucumber]: http://github.com/cucumber/cucumber

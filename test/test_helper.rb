@@ -1,16 +1,3 @@
-require 'simplecov'
-require 'coveralls'
-
-SimpleCov.formatter = Coveralls::SimpleCov::Formatter
-if ENV['CI'] && !defined?(Rubinius)
-  require 'simplecov'
-
-  SimpleCov.start do
-    add_filter '/test/'
-    add_filter '/features/'
-  end
-end
-
 require 'minitest/autorun'
 require 'minitest/spec'
 require 'mocha/minitest'
