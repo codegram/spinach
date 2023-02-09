@@ -56,7 +56,7 @@ module Spinach
 
       @args.each do |arg|
         if arg.match(/\.feature/)
-          if File.exists? arg.gsub(/:\d*/, '')
+          if File.exist? arg.gsub(/:\d*/, '')
             files_to_run << arg
           else
             fail! "#{arg} could not be found"
