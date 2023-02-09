@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 begin
-  require "bundler/setup" 
+  require "bundler/setup"
 rescue LoadError
 end
 

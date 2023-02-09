@@ -3,8 +3,7 @@ require File.expand_path('../lib/spinach/version', __FILE__)
 
 Gem::Specification.new do |gem|
   gem.authors       = ["Josep Jaume Rey", "Josep M. Bach", "Oriol Gual", "Marc Divins Castellvi"]
-  gem.email         = ["info@codegram.com", "josep.m.bach@gmail.com",
-    "oriolgual@gmail.com", "josepjaume@gmail.com", "marcdivc@gmail.com"]
+  gem.email         = ["josep.m.bach@gmail.com", "oriolgual@gmail.com", "josepjaume@gmail.com", "marcdivc@gmail.com"]
   gem.description   = %q{Spinach is a BDD framework on top of gherkin}
   gem.summary       = %q{Spinach is a BDD framework on top of gherkin}
   gem.homepage      = "http://github.com/codegram/spinach"
@@ -12,13 +11,11 @@ Gem::Specification.new do |gem|
 
   gem.add_runtime_dependency 'gherkin-ruby', '>= 0.3.2'
   gem.add_runtime_dependency 'colorize'
-  gem.add_runtime_dependency 'json'
   gem.add_development_dependency 'rake'
   gem.add_development_dependency 'mocha', "~> 1.5.0"
   gem.add_development_dependency 'sinatra'
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'pry'
-  gem.add_development_dependency 'simplecov'
   gem.add_development_dependency 'rspec'
   gem.add_development_dependency 'minitest', '< 5.0'
   gem.add_development_dependency 'fakefs', ">= 0.5.2"
