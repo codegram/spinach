@@ -6,9 +6,9 @@ module Spinach
     class << self
 
       # Matches an array of tags (e.g. of a scenario) against the tags present
-      # in Spinach' runtime options.
+      # in Spinach's runtime options.
       #
-      # Spinach' tag option is an array which consists of (possibly) multiple
+      # Spinach's tag option is an array which consists of (possibly) multiple
       # arrays containing tags provided by the user running the features and
       # scenarios. Each of these arrays is considered a tag group.
       #
@@ -21,6 +21,15 @@ module Spinach
           res = match_tag_group(Array(tag_group), tags) 
           res
         }
+      end
+
+      # Matches the tags of a feature (and its scenarios) against the tags present
+      # in Spinach's runtime options.
+      #
+      # A feature matches when, for any of its scenarios, the combination of the
+      # feature's tags and that scenario's tags match the configured tags.
+      def match_feature(feature)
+        feature.scenarios.any? { |scenario| match(feature.tags + scenario.tags) }
       end
 
       private

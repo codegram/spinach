@@ -151,7 +151,7 @@ module Spinach
     end
 
     def features_to_run
-      unordered_features = filenames.map do |filename|
+      unordered_features = filenames.reduce([]) do |features, filename|
         file, *lines = filename.split(":") # little more complex than just a "filename"
 
         # FIXME Feature should be instantiated directly, not through an unrelated class method
@@ -160,7 +160,9 @@ module Spinach
 
         feature.lines_to_run = lines if lines.any?
 
-        feature
+        features << feature if TagsMatcher.match_feature(feature)
+
+        features
       end
 
       orderer.order(unordered_features)
