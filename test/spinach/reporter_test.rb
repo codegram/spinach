@@ -89,8 +89,8 @@ module Spinach
 
         it "binds a callback around every scenario" do
           @reporter.expects(:around_scenario_run)
-          Spinach.hooks.run_around_scenario(anything) do
-            yield
+          Spinach.hooks.run_around_scenario(anything) do |&block|
+            block.call
           end
         end
 

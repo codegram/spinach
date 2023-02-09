@@ -71,7 +71,7 @@ Feature: Cheezburger can I has
         in_current_dir do
           subject.store
           File.directory?("features/steps/").must_equal true
-          File.exists?("features/steps/cheezburger_can_i_has.rb").must_equal true
+          File.exist?("features/steps/cheezburger_can_i_has.rb").must_equal true
           File.read("features/steps/cheezburger_can_i_has.rb").strip.must_equal(
             subject.generate.strip
           )

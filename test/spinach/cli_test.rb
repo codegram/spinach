@@ -276,14 +276,14 @@ tags:
       describe 'the feature really exists' do
         it 'runs the feature' do
           cli = Spinach::Cli.new(['features/some_feature.feature'])
-          File.stubs(:exists?).returns(true)
+          File.stubs(:exist?).returns(true)
           cli.feature_files.must_equal ['features/some_feature.feature']
         end
       end
 
       it 'it fails if the feature does not exist' do
         cli = Spinach::Cli.new(['features/some_feature.feature'])
-        File.stubs(:exists?).returns(false)
+        File.stubs(:exist?).returns(false)
         cli.expects(:fail!).with('features/some_feature.feature could not be found')
 
         cli.feature_files
@@ -293,7 +293,7 @@ tags:
     describe 'when a particular feature list is passed with line' do
       it 'returns the feature with the line number' do
         cli = Spinach::Cli.new(['features/some_feature.feature:10'])
-        File.stubs(:exists?).returns(true)
+        File.stubs(:exist?).returns(true)
 
         cli.feature_files.must_equal ['features/some_feature.feature:10']
       end
@@ -302,7 +302,7 @@ tags:
     describe "when a particular feature list is passed with multiple lines" do
       it "returns the feature with the line numbers" do
         cli = Spinach::Cli.new(['features/some_feature.feature:10:20'])
-        File.stubs(:exists?).returns(true)
+        File.stubs(:exist?).returns(true)
 
         cli.feature_files.must_equal ["features/some_feature.feature:10:20"]
       end
@@ -337,7 +337,7 @@ tags:
           Dir.expects(:glob).with('path/to/features/**/*.feature')
           .returns(['several features'])
 
-          File.stubs(:exists?).returns(true)
+          File.stubs(:exist?).returns(true)
 
           cli.feature_files.must_equal ['several features', 'some_feature.feature']
         end

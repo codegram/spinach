@@ -20,7 +20,7 @@ Feature: Cheezburger can I has
   Then 'I a feature should exist named "features/steps/cheezburger_can_i_has.rb"' do
     in_current_dir do
       @file = 'features/steps/cheezburger_can_i_has.rb'
-      File.exists?(@file).must_equal true
+      File.exist?(@file).must_equal true
     end
   end
 
