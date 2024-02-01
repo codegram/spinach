@@ -12,12 +12,12 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency 'gherkin-ruby', '>= 0.3.2'
   gem.add_runtime_dependency 'colorize'
   gem.add_development_dependency 'rake'
-  gem.add_development_dependency 'mocha', "~> 1.5.0"
+  gem.add_development_dependency 'mocha'
   gem.add_development_dependency 'sinatra'
   gem.add_development_dependency 'capybara'
   gem.add_development_dependency 'pry'
   gem.add_development_dependency 'rspec'
-  gem.add_development_dependency 'minitest', '< 5.0'
+  gem.add_development_dependency 'minitest'
   gem.add_development_dependency 'fakefs', ">= 0.5.2"
 
   gem.required_ruby_version = Gem::Requirement.new(">= 2.4".freeze)

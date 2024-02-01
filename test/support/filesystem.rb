@@ -10,4 +10,8 @@ module Filesystem
   end
 end
 
-MiniTest::Spec.send(:include, Filesystem)
+if defined? MiniTest::Spec
+  MiniTest::Spec.send(:include, Filesystem)
+elsif defined? Minitest::Spec
+  Minitest::Spec.send(:include, Filesystem)
+end
